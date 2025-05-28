@@ -1,11 +1,12 @@
 "use client"
 import { Nav } from '@/components/configuration'
-import { ButtonSubmit, Card, Input, Select, Spinner } from '@/components/ui'
+import { Button, ButtonSubmit, Card, Input, Select, Spinner } from '@/components/ui'
 import { IStoreData } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { AiOutlineClose } from 'react-icons/ai'
 
 export default function Page () {
 
@@ -14,9 +15,11 @@ export default function Page () {
     nameContact: '',
     email: '',
     phone: '',
-    address: '',
-    region: '',
-    city: '',
+    locations: [{
+      address: '',
+      region: '',
+      city: ''
+    }],
     schedule: {
       monday: {
         state: false,
@@ -133,22 +136,6 @@ export default function Page () {
     }
   }
 
-  const regionChange = async (e: any) => {
-    const region: any = regions?.find((region: any) => region.regionName === e.target.value)
-    const request = await axios.get(`https://testservices.wschilexpress.com/georeference/api/v1.0/coverage-areas?RegionCode=${region?.regionId}&type=0`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Ocp-Apim-Subscription-Key': '4ebbe4e737b54bfe94307bca9e36ac4d'
-      }
-    })
-    setCitys(request.data.coverageAreas)
-    setStoreData({...storeData, region: e.target.value})
-  }
-
-  const cityChange = async (e: any) => {
-    setStoreData({...storeData, city: e.target.value})
-  }
-
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     if (!loading) {
@@ -189,7 +176,7 @@ export default function Page () {
           <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
             <Nav />
             <div className='w-full lg:w-3/4 flex flex-col gap-6'>
-              <h2 className='text-lg font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Información del negocio</h2>
+              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Información del negocio</h2>
               <Card title='Información general'>
                 <div className='flex flex-col gap-2'>
                   <p className='text-sm'>Nombre del negocio</p>
@@ -254,38 +241,87 @@ export default function Page () {
                 </div>
               </Card>
               <Card title='Ubicación del negocio'>
-                <div className='flex flex-col gap-2'>
-                  <p className='text-sm'>Dirección</p>
-                  <Input name='address' value={storeData.address} change={inputChange} placeholder='Dirección' />
-                </div>
-                <div className='flex flex-col gap-2'>
-                  <p className='text-sm'>Departamento, local, etc. (opcional)</p>
-                  <Input name='departament' value={storeData.departament} change={inputChange} placeholder='Detalles' />
-                </div>
-                <div className='flex gap-4'>
-                  <div className='flex flex-col gap-2 w-1/2'>
-                    <p className='text-sm'>Región</p>
-                    <Select change={regionChange}>
-                      <option>Seleccionar Región</option>
-                      {
-                        regions !== undefined
-                          ? regions.map((region: any) => <option key={region.regionId}>{region.regionName}</option>)
-                          : ''
-                      }
-                    </Select>
-                  </div>
-                  <div className='flex flex-col gap-2 w-1/2'>
-                    <p className='text-sm'>Ciudad</p>
-                    <Select change={cityChange}>
-                      <option>Seleccionar Ciudad</option>
-                      {citys?.map((city: any) => <option key={city.countyCode}>{city.countyName}</option>)}
-                    </Select>
-                  </div>
-                </div>
-                <div className='flex flex-col gap-2'>
-                  <p className='text-sm'>Link Google Maps</p>
-                  <Input name='mapsLink' value={storeData.mapsLink} change={inputChange} placeholder='Link Google Maps' />
-                </div>
+                {
+                  storeData.locations?.map((location, index) => (
+                    <>
+                      <div className='flex gap-2 justify-between'>
+                        <p className='font-medium'>Dirección {index + 1}</p>
+                        <button onClick={(e: any) => {
+                          e.preventDefault()
+                          const beforeLocations = storeData.locations ? [...storeData.locations] : []
+                          beforeLocations.splice(index, 1)
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }}><AiOutlineClose /></button>
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm'>Dirección</p>
+                        <Input name='address' value={location.address} change={(e: any) => {
+                          const beforeLocations = [...storeData.locations!]
+                          beforeLocations[index].address = e.target.value
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }} placeholder='Dirección' />
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm'>Departamento, local, etc. (opcional)</p>
+                        <Input name='departament' value={location.details} change={(e: any) => {
+                          const beforeLocations = [...storeData.locations!]
+                          beforeLocations[index].details = e.target.value
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }} placeholder='Detalles' />
+                      </div>
+                      <div className='flex gap-4'>
+                        <div className='flex flex-col gap-2 w-1/2'>
+                          <p className='text-sm'>Región</p>
+                          <Select change={async (e: any) => {
+                            const region: any = regions?.find((region: any) => region.regionName === e.target.value)
+                            const request = await axios.get(`https://testservices.wschilexpress.com/georeference/api/v1.0/coverage-areas?RegionCode=${region?.regionId}&type=0`, {
+                              headers: {
+                                'Cache-Control': 'no-cache',
+                                'Ocp-Apim-Subscription-Key': '4ebbe4e737b54bfe94307bca9e36ac4d'
+                              }
+                            })
+                            setCitys(request.data.coverageAreas)
+                            const beforeLocations = [...storeData.locations!]
+                            beforeLocations[index].region = e.target.value
+                            setStoreData({ ...storeData, locations: beforeLocations })
+                          }} value={location.region}>
+                            <option>Seleccionar Región</option>
+                            {
+                              regions !== undefined
+                                ? regions.map((region: any) => <option key={region.regionId}>{region.regionName}</option>)
+                                : ''
+                            }
+                          </Select>
+                        </div>
+                        <div className='flex flex-col gap-2 w-1/2'>
+                          <p className='text-sm'>Ciudad</p>
+                          <Select change={(e: any) => {
+                          const beforeLocations = [...storeData.locations!]
+                          beforeLocations[index].city = e.target.value
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }} value={location.city}>
+                            <option>Seleccionar Ciudad</option>
+                            {citys?.map((city: any) => <option key={city.countyCode}>{city.countyName}</option>)}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm'>Link Google Maps</p>
+                        <Input name='mapsLink' value={location.mapsLink} change={(e: any) => {
+                          const beforeLocations = [...storeData.locations!]
+                          beforeLocations[index].mapsLink = e.target.value
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }} placeholder='Link Google Maps' />
+                      </div>
+                    </>
+                  ))
+                }
+                <Button action={(e: any) => {
+                  e.preventDefault()
+                  const beforeLocations = storeData.locations ? [...storeData.locations] : []
+                  beforeLocations.push({ address: '', city: '', region: '' })
+                  setStoreData({ ...storeData, locations: beforeLocations })
+                }}>Agregar ubicación</Button>
                 <div className='flex flex-col gap-2'>
                   <p className='text-sm'>Horario de atención</p>
                   <div className='flex flex-col gap-2'>

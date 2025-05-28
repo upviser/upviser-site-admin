@@ -50,18 +50,18 @@ export default function Page () {
         <Popup popup={popup} setPopup={setPopup}>
           <p>Estas seguro que deseas eliminar el post: <span className='font-semibold'>{postSelect.title}</span></p>
           <div className='flex gap-6'>
-            <ButtonSubmit action={deleteProduct} color='red-500' submitLoading={loading} textButton='Eliminar blog' config='w-40' />
+            <ButtonSubmit action={deleteProduct} color='red-500' submitLoading={loading} textButton='Eliminar blog' config='w-36' />
             <button onClick={() => {
               setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
               setTimeout(() => {
                 setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
               }, 200)
-            }}>Cancelar</button>
+            }} className='text-sm'>Cancelar</button>
           </div>
         </Popup>
         <div className='p-4 lg:p-6 w-full flex flex-col gap-6 min-h-full overflow-y-auto bg-bg dark:bg-neutral-900'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
-            <h1 className='text-2xl font-medium my-auto'>Blog</h1>
+            <h1 className='text-lg font-medium my-auto'>Blog</h1>
             <ButtonLink href='/blog/nuevo-post'>Agregar post</ButtonLink>
           </div>
           <div className='w-full max-w-[1280px] mx-auto'>
@@ -79,7 +79,7 @@ export default function Page () {
                     <Table th={['Imagen', 'Titulo', 'Estado', 'Fecha']}>
                       {
                         posts.map((post, index) => (
-                          <tr className={`${index + 1 < posts.length ? 'border-b border-border' : ''} bg-white cursor-pointer transition-colors duration-150 w-full dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={post._id}>
+                          <tr className={`${index + 1 < posts.length ? 'border-b border-border' : ''} text-sm bg-white cursor-pointer transition-colors duration-150 w-full dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={post._id}>
                             <td className='p-3 w-3/12' onClick={() => router.push(`/blog/${post._id}`)}>
                               <Image className='w-20 object-contain' src={post.image!} alt={`Imagen post ${post.title}`} width={100} height={100} />
                             </td>

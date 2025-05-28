@@ -6,6 +6,8 @@ export interface Design {
     pages: IPage[]
     productPage: IProductPage
     categoryPage: ICategoryPage[]
+    cartPage: { bgColor: string, textColor: string, detailsColor: string }
+    checkoutPage: { bgColor: string, textColor: string, detailsColor: string }
     popup: IPopupWeb
     whatsapp: boolean
     instagram: boolean

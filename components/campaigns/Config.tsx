@@ -40,7 +40,7 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
 
   return (
     <div className='p-5 flex flex-col gap-4 m-auto bg-white w-full max-w-96 rounded-xl border border-black/5 dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-      <h2 className='text-lg font-medium'>Contenido</h2>
+      <h2 className='font-medium'>Contenido</h2>
       <div className='flex flex-col gap-2'>
         <div className='flex gap-2 justify-between'>
           <p className='text-sm my-auto'>Titulo</p>

@@ -67,9 +67,9 @@ export default function AvaliableCallsPage () {
             setPopupDeleteCalendar({ ...popupDeleteCalendar, view: 'hidden', opacity: 'opacity-0' })
           }, 200)
         }
-      }} className={`${popupDeleteCalendar.view} ${popupDeleteCalendar.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/20 flex top-0 left-0 z-50 p-4`}>
-        <div onMouseEnter={() => setPopupDeleteCalendar({ ...popupDeleteCalendar, mouse: true })} onMouseLeave={() => setPopupDeleteCalendar({ ...popupDeleteCalendar, mouse: false })} className={`${popupDeleteCalendar.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[500px] max-h-[600px] overflow-y-auto p-6 lg:p-8 rounded-2xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
-          <p className="text-lg font-medium">Eliminar calendario &quot;{calendars.find((calendar: any) => calendar._id === selectedCalendar)?.name}&quot;</p>
+      }} className={`${popupDeleteCalendar.view} ${popupDeleteCalendar.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/30 flex top-0 left-0 z-50 p-4`}>
+        <div onMouseEnter={() => setPopupDeleteCalendar({ ...popupDeleteCalendar, mouse: true })} onMouseLeave={() => setPopupDeleteCalendar({ ...popupDeleteCalendar, mouse: false })} className={`${popupDeleteCalendar.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[500px] max-h-[600px] overflow-y-auto p-5 rounded-xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+          <p className="font-medium">Eliminar calendario &quot;{calendars.find((calendar: any) => calendar._id === selectedCalendar)?.name}&quot;</p>
           <div className="flex gap-4">
             <ButtonRedSubmit action={async (e: any) => {
               e.preventDefault()
@@ -93,7 +93,7 @@ export default function AvaliableCallsPage () {
               setTimeout(() => {
                 setPopupDeleteCalendar({ ...popupDeleteCalendar, view: 'hidden', opacity: 'opacity-0' })
               }, 200)
-            }}>Cancelar</button>
+            }} className="text-sm">Cancelar</button>
           </div>
         </div>
       </div>
@@ -117,10 +117,10 @@ export default function AvaliableCallsPage () {
               setLoading(false)
             }
           }
-        }} onMouseEnter={() => setPopupNewCalendar({ ...popupNewCalendar, mouse: true })} onMouseLeave={() => setPopupNewCalendar({ ...popupNewCalendar, mouse: false })} className={`${popupNewCalendar.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[600px] max-h-[600px] overflow-y-auto p-6 lg:p-8 rounded-2xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
-          <p className="text-lg font-medium">Nuevo calendario</p>
+        }} onMouseEnter={() => setPopupNewCalendar({ ...popupNewCalendar, mouse: true })} onMouseLeave={() => setPopupNewCalendar({ ...popupNewCalendar, mouse: false })} className={`${popupNewCalendar.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[500px] max-h-[600px] overflow-y-auto p-6 rounded-xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+          <p className="font-medium">Nuevo calendario</p>
           <div className="flex flex-col gap-2">
-            <p>Nombre del calendario</p>
+            <p className="text-sm">Nombre del calendario</p>
             <Input change={(e: any) => setNewCalendar({ name: e.target.value })} placeholder="Nombre del calendario" />
           </div>
           <Button type='submit' loading={loading} config="w-full">Crear calendario</Button>
@@ -131,14 +131,14 @@ export default function AvaliableCallsPage () {
           <div className="w-full flex flex-col gap-4">
             <div className="flex gap-4">
               <Link href='/reuniones' className='border rounded-xl p-2 h-fit my-auto bg-white transition-colors duration-150 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
-              <h1 className='text-2xl font-medium my-auto'>Horario reuniones</h1>
+              <h1 className='text-lg font-medium my-auto'>Horario reuniones</h1>
             </div>
             {
               calendars.length
                 ? (
                   <>
                     <div className="flex flex-col gap-2">
-                      <p>Seleccionar calendario</p>
+                      <p className="text-sm">Seleccionar calendario</p>
                       <Select change={(e: any) => setSelectedCalendar(e.target.value)} config="w-fit">
                         <option>Seleccionar calendario</option>
                         {
@@ -150,7 +150,7 @@ export default function AvaliableCallsPage () {
                     </div>
                   </>
                 )
-                : <p>No hay calendarios creados</p>
+                : <p className="text-sm">No hay calendarios creados</p>
             }
             <div className="flex gap-2 flex-col lg:flex-row">
               {

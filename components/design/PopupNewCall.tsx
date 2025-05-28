@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Button2, ButtonSubmit2, Calendar, Input, Select, Textarea } from '../ui'
-import { ICall, IClientData, IFunnel, ITag } from '@/interfaces'
+import { ICall, IClientData, IFunnel, IStoreData, ITag } from '@/interfaces'
 import { AiOutlineClose } from 'react-icons/ai'
 import { useSession } from 'next-auth/react'
 import { IoMdClose } from 'react-icons/io'
@@ -25,9 +25,10 @@ interface Props {
   clientData: IClientData[]
   getClientData: any
   calls?: ICall[]
+  storeData?: IStoreData
 }
 
-export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMeeting, newCall, setNewCall, getCalls, tags, getTags, error, setError, funnels, newData, setNewData, loadingNewData, setLoadingNewData, clientData, getClientData, calls }) => {
+export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMeeting, newCall, setNewCall, getCalls, tags, getTags, error, setError, funnels, newData, setNewData, loadingNewData, setLoadingNewData, clientData, getClientData, calls, storeData }) => {
 
   const [loadingNewCall, setLoadingNewCall] = useState(false)
   const [newTag, setNewTag] = useState('')
@@ -64,7 +65,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
   }, [popupCall, setPopupCall]);
 
   return (
-    <div className={`${popupCall.view} ${popupCall.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/20 flex top-0 left-0 z-50 p-4`}>
+    <div className={`${popupCall.view} ${popupCall.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/30 flex top-0 left-0 z-50 p-4`}>
         <form ref={popupRef} onSubmit={async (e: any) => {
           e.preventDefault()
           if (!loadingNewCall) {
@@ -93,7 +94,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
               }, 200)
             }
           }
-        }} onMouseEnter={() => setPopupCall({ ...popupCall, mouse: true })} onMouseLeave={() => setPopupCall({ ...popupCall, mouse: false })} onMouseMove={() => setPopupCall({ ...popupCall, mouse: true })} className={`${popupCall.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[700px] max-h-[600px] overflow-y-auto p-6 lg:p-8 rounded-2xl m-auto border flex flex-col gap-4 border-white bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+        }} onMouseEnter={() => setPopupCall({ ...popupCall, mouse: true })} onMouseLeave={() => setPopupCall({ ...popupCall, mouse: false })} onMouseMove={() => setPopupCall({ ...popupCall, mouse: true })} className={`${popupCall.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[700px] max-h-[600px] overflow-y-auto p-6 rounded-xl m-auto border flex flex-col gap-4 border-white bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
           {
             error !== ''
               ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{ error }</p>
@@ -101,7 +102,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
           }
           <p className="text-lg font-medium">{titleMeeting}</p>
           <div className="flex flex-col gap-2">
-            <p>Tipo</p>
+            <p className='text-sm font-medium'>Tipo</p>
             <div className='flex gap-2'>
               <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const zoomCallType = 'Llamada por Zoom';
@@ -117,7 +118,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                 }
                 setNewCall({ ...newCall, type: newTypes });
               }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Llamada por Zoom') ? true : false : false} />
-              <p>Llamada por Zoom</p>
+              <p className='text-sm'>Llamada por Zoom</p>
             </div>
             <div className='flex gap-2'>
               <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,32 +135,38 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                 }
                 setNewCall({ ...newCall, type: newTypes });
               }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Visita a domicilio') ? true : false : false} />
-              <p>Visita a domicilio</p>
+              <p className='text-sm'>Visita a domicilio</p>
             </div>
-            <div className='flex gap-2'>
-              <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const zoomCallType = 'Visita al local';
-                const newTypes = newCall.type ? [...newCall.type] : [];
-                if (e.target.checked && !newTypes.includes(zoomCallType)) {
-                  newTypes.push(zoomCallType);
-                } else {
-                  // Si desmarcas el checkbox, se elimina el tipo
-                  const index = newTypes.indexOf(zoomCallType);
-                  if (index !== -1) {
-                    newTypes.splice(index, 1);
-                  }
-                }
-                setNewCall({ ...newCall, type: newTypes });
-              }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Visita al local') ? true : false : false} />
-              <p>Visita al local</p>
-            </div>
+            {
+              storeData?.locations?.length
+                ? (
+                  <div className='flex gap-2'>
+                    <input type='checkbox' onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const zoomCallType = 'Visita al local';
+                      const newTypes = newCall.type ? [...newCall.type] : [];
+                      if (e.target.checked && !newTypes.includes(zoomCallType)) {
+                        newTypes.push(zoomCallType);
+                      } else {
+                        // Si desmarcas el checkbox, se elimina el tipo
+                        const index = newTypes.indexOf(zoomCallType);
+                        if (index !== -1) {
+                          newTypes.splice(index, 1);
+                        }
+                      }
+                      setNewCall({ ...newCall, type: newTypes });
+                    }} checked={newCall.type?.length ? newCall.type.find(typ => typ === 'Visita al local') ? true : false : false} />
+                    <p className='text-sm'>Visita al local</p>
+                  </div>
+                )
+                : ''
+            }
           </div>
           <div className="flex flex-col gap-2">
-            <p>Nombre de la llamada</p>
+            <p className='text-sm'>Nombre de la llamada</p>
             <Input change={(e: any) => setNewCall({ ...newCall, nameMeeting: e.target.value })} placeholder='Nombre de la llamada' value={newCall.nameMeeting} />
           </div>
           <div className="flex flex-col gap-2">
-            <p>Seleccionar calendario</p>
+            <p className='text-sm'>Seleccionar calendario</p>
             <Select change={(e: any) => setNewCall({ ...newCall, calendar: e.target.value })} value={newCall.calendar}>
               <option>Seleccionar calendario</option>
               {
@@ -167,12 +174,27 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
               }
             </Select>
           </div>
+          {
+            newCall.type?.includes('Visita al local')
+              ? (
+                <div className="flex flex-col gap-2">
+                  <p className='text-sm'>Seleccionar ubicación</p>
+                  <Select change={(e: any) => setNewCall({ ...newCall, address: e.target.value.split(',')[0], details: e.target.value.split(',')[3], city: e.target.value.split(',')[1], region: e.target.value.split(',')[2] })} value={newCall.calendar}>
+                    <option>Seleccionar ubicación</option>
+                    {
+                      storeData?.locations?.map(location => <option key={location.address} value={`${location.address},${location.city},${location.region},${location.details}`}>{location.address}{location.details && location.details !== '' ? `, ${location.details}` : ''}, {location.city}, {location.region}</option>)
+                    }
+                  </Select>
+                </div>
+              )
+              : ''
+          }
           <div className="flex flex-col gap-2">
-            <p>Titulo</p>
+            <p className='text-sm'>Titulo</p>
             <Input change={(e: any) => setNewCall({ ...newCall, title: e.target.value })} placeholder='Titulo' value={newCall.title} />
           </div>
           <div className="flex flex-col gap-2">
-            <p>Duración</p>
+            <p className='text-sm'>Duración</p>
             <Select change={(e: any) => setNewCall({ ...newCall, duration: e.target.value })} value={newCall.duration}>
               <option value='15 minutos'>15 minutos</option>
               <option value='20 minutos'>20 minutos</option>
@@ -199,7 +221,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             </Select>
           </div>
           <div className="flex flex-col gap-2">
-            <p>Tiempo reservado por hora</p>
+            <p className='text-sm'>Tiempo reservado por hora</p>
             <Select change={(e: any) => setNewCall({ ...newCall, intervals: e.target.value })} value={newCall.intervals}>
               <option value=''>Igual que la duración de la hora</option>
               <option value='15 minutos'>15 minutos</option>
@@ -219,21 +241,21 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             </Select>
           </div>
           <div className="flex flex-col gap-2">
-            <p>Descripción</p>
+            <p className='text-sm'>Descripción</p>
             <Textarea change={(e: any) => setNewCall({ ...newCall, description: e.target.value })} placeholder='Descripción' value={newCall.description!} />
           </div>
           <div className="flex flex-col gap-2">
-            <p>Precio</p>
+            <p className='text-sm'>Precio</p>
             <Input change={(e: any) => setNewCall({ ...newCall, price: e.target.value })} placeholder='Precio' value={newCall.price} />
           </div>
           <div className="flex flex-col gap-2">
-            <p className='font-medium'>Formulario</p>
+            <p className='font-medium text-[15px]'>Formulario</p>
             {
               newCall.labels?.length
                 ? newCall.labels.map((label, i) => (
                   <>
                     <div className='flex gap-4 justify-between'>
-                      <p className='font-medium'>Campo {i + 1}</p>
+                      <p className='text-sm font-medium'>Campo {i + 1}</p>
                       <button onClick={(e: any) => {
                         e.preventDefault()
                         const oldLabels = [...newCall.labels!]
@@ -241,13 +263,13 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                         setNewCall({ ...newCall, labels: oldLabels })
                       }}><AiOutlineClose /></button>
                     </div>
-                    <p>Pregunta</p>
+                    <p className='text-sm'>Pregunta</p>
                     <Input change={(e: any) => {
                       const oldData = [...newCall.labels!]
                       oldData[i].text = e.target.value
                       setNewCall({ ...newCall, data: oldData })
                     }} value={label.text} placeholder='Pregunta' />
-                    <p>Dato</p>
+                    <p className='text-sm'>Dato</p>
                     <Select change={(e: any) => {
                       const oldData = [...newCall.labels!]
                       oldData[i].data = e.target.value
@@ -262,7 +284,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                           : ''
                       }
                     </Select>
-                    <p>Tipo de respuesta</p>
+                    <p className='text-sm'>Tipo de respuesta</p>
                     <Select change={(e: any) => {
                       const oldData = [...newCall.labels!]
                       oldData[i].type = e.target.value
@@ -279,7 +301,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                       label.type === 'Selector'
                         ? (
                           <>
-                            <p>Respuestas</p>
+                            <p className='text-sm'>Respuestas</p>
                             {
                               label.datas?.map((data, indexx) => (
                                 <div key={indexx} className='flex gap-2'>
@@ -325,7 +347,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             }}>Agregar campo</Button2>
           </div>
           <div className='flex flex-col gap-2'>
-            <p>Crear dato personalizado</p>
+            <p className='text-sm'>Crear dato personalizado</p>
             <div className='flex gap-2'>
               <Input change={(e: any) => setNewData(e.target.value)} value={newData} placeholder='Nuevo dato' />
               <ButtonSubmit2 color='main' action={async (e: any) => {
@@ -341,11 +363,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <p>Texto boton</p>
+            <p className='text-sm'>Texto boton</p>
             <Input change={(e: any) => setNewCall({ ...newCall, buttonText: e.target.value })} value={newCall.buttonText} placeholder='Texto boton' />
           </div>
           <div className="flex flex-col gap-2">
-            <p>Tags</p>
+            <p className='text-sm'>Tags</p>
             {
               tags.length
                 ? (
@@ -369,9 +391,9 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                     }
                   </div>
                 )
-                : <p>No tienes tags creados</p>
+                : <p className='text-sm'>No tienes tags creados</p>
             }
-            <p>Nuevo tag</p>
+            <p className='text-sm'>Nuevo tag</p>
             <div className='flex gap-2'>
               <Input placeholder='Nuevo tag' change={(e: any) => setNewTag(e.target.value)} value={newTag} />
               <ButtonSubmit2 submitLoading={loadingTag} textButton='Crear tag' action={async (e: any) => {
@@ -387,7 +409,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <p>Acción al agendar llamada</p>
+            <p className='text-sm'>Acción al agendar llamada</p>
             <Select change={(e: any) => setNewCall({ ...newCall, action: e.target.value })} value={newCall.action}>
               <option>Mostrar mensaje</option>
               <option>Ir a una pagina</option>
@@ -397,7 +419,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             newCall.action === 'Mostrar mensaje'
               ? (
                 <div className="flex flex-col gap-2">
-                  <p>Mensaje despues de agendar</p>
+                  <p className='text-sm'>Mensaje despues de agendar</p>
                   <Textarea placeholder="Mensaje" change={(e: any) => setNewCall({ ...newCall, message: e.target.value })} value={newCall.message!} />
                 </div>
               )
@@ -407,7 +429,7 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             newCall.action === 'Ir a una pagina'
               ? (
                 <div className="flex flex-col gap-2">
-                  <p>Mensaje despues de agendar</p>
+                  <p className='text-sm'>Mensaje despues de agendar</p>
                   <Select change={(e: any) => setNewCall({ ...newCall, redirect: e.target.value })}>
                     <option value=''>Seleccionar pagina</option>
                     {

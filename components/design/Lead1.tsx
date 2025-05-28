@@ -1,20 +1,22 @@
 "use client"
-import { IDesign, IForm, IFunnel, IPage, IService, IStoreData } from '@/interfaces'
+import { ICategoryPage, IDesign, IForm, IFunnel, IPage, IService, IStoreData } from '@/interfaces'
 import React, { useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
-import { Button, Button2, Button2Secondary, Input, Select, Spinner } from '../ui'
+import { Button, Button2, Button2Red, Button2Secondary, ButtonSubmit, Input, Popup, Select, Spinner } from '../ui'
 import axios from 'axios'
 import Image from 'next/image'
 
 interface Props {
   edit: any
-  pages: IPage[]
+  pages: IPage[] | ICategoryPage[]
   setPages: any
   design: IDesign
   index: number
   ind: number
   inde?: number
   indx?: number
+  inx?: any
+  inxx?: any
   funnels?: IFunnel[]
   setFunnels?: any
   forms?: IForm[]
@@ -32,17 +34,47 @@ interface Props {
   setServices?: any
   storeData?: IStoreData
   style?: any
+  newForm?: IForm
+  getForms: any
 }
 
-export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, funnels, setFunnels, forms, popupForm, setPopupForm, setTitleForm, selectFunnel, setSelectFunnel, selectStep, setNewForm, responsive, error, setError, services, setServices, storeData, style }) => {
+export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, inx, inxx, funnels, setFunnels, forms, popupForm, setPopupForm, setTitleForm, selectFunnel, setSelectFunnel, selectStep, setNewForm, responsive, error, setError, services, setServices, storeData, style, newForm, getForms }) => {
   
   const [gradient, setGradient] = useState('')
   const [firstColor, setFirstColor] = useState('')
   const [lastColor, setLastColor] = useState('')
   const [loadingImage, setLoadingImage] = useState(false)
   const [errorImage, setErrorImage] = useState('')
+  const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [loadingDeleteForm, setLoadingDeleteForm] = useState(false)
   
   return (
+    <>
+    <Popup popup={popup} setPopup={setPopup}>
+      <p>¿Estas seguro que deseas eliminar el formulario: <span className='font-medium'>{newForm?.nameForm}</span>?</p>
+      <div className='flex gap-6'>
+        <ButtonSubmit submitLoading={loadingDeleteForm} textButton='Eliminar' action={async (e: any) => {
+          e.preventDefault()
+          if (!loadingDeleteForm) {
+            setLoadingDeleteForm(true)
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/form/${newForm?._id}`)
+            getForms()
+            setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+            setTimeout(() => {
+              setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+            }, 200)
+            setLoadingDeleteForm(false)
+          }
+        }} color='red-500' config='w-28' />
+        <button onClick={(e: any) => {
+          e.preventDefault()
+          setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+          setTimeout(() => {
+            setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+          }, 200)
+        }} className='my-auto'>Cancelar</button>
+      </div>
+    </Popup>
     <div className={`flex ${responsive === '400px' ? 'flex-col gap-4' : 'flex-row'} p-4 flex-wrap`} style={{ background: `${design.info.typeBackground === 'Degradado' ? design.info.background : design.info.typeBackground === 'Color' ? design.info.background : ''}` }}>
       {
         edit === 'Lead 1'
@@ -61,12 +93,20 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.typeBackground = e.target.value
                         setPages(oldPages)
                       }
-                    }} value={design.info.typeBackground} config='w-fit m-auto'>
+                    }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                       <option>Sin fondo</option>
                       <option>Imagen</option>
                       <option>Color</option>
@@ -115,6 +155,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.background = data
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.background = data
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.background = data
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.background = data
@@ -142,6 +190,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.background = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.background = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.background = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.background = e.target.value
@@ -164,15 +220,26 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                 setFunnels(oldFunnels)
                               } else if (indx !== undefined) {
                                 const oldServices = [...services!]
+                                setGradient(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setGradient(e.target.value)
                                 oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setPages(oldPages)
                               }
-                            }}>
+                            }} config='bg-transparent dark:border-neutral-100'>
                               <option>Seleccionar tipo</option>
                               <option value='135'>Lineal</option>
                               <option value='circle'>Radial</option>
@@ -191,6 +258,16 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                   setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
@@ -213,6 +290,16 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                 setFirstColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setFirstColor(e.target.value)
@@ -234,6 +321,16 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                 setLastColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setLastColor(e.target.value)
@@ -257,6 +354,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.textColor = e.target.value
@@ -275,12 +380,20 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.titleForm = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.titleForm = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.titleForm = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.titleForm = e.target.value
                         setPages(oldPages)
                       }
-                    }} config='w-fit m-auto' value={design.info.titleForm}>
+                    }} config='w-fit m-auto bg-transparent dark:border-neutral-100' value={design.info.titleForm}>
                       <option>Seleccionar color logo</option>
                       <option>Logo principal</option>
                       <option>Logo blanco</option>
@@ -307,6 +420,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.description2 = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.description2 = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.description2 = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.description2 = e.target.value
@@ -323,6 +444,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.title = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.title = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.title = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.title = e.target.value
@@ -338,6 +467,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.description = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.description = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.description = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.description = e.target.value
@@ -355,6 +492,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.subTitle = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.subTitle = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.subTitle = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.subTitle = e.target.value
@@ -373,6 +518,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.subTitle2 = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.subTitle2 = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.subTitle2 = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.subTitle2 = e.target.value
@@ -391,6 +544,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.subTitle3 = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.subTitle3 = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.subTitle3 = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.subTitle3 = e.target.value
@@ -409,6 +570,14 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.subTitle4 = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.subTitle4 = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.subTitle4 = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.subTitle4 = e.target.value
@@ -432,12 +601,20 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                               const oldServices = [...services!]
                               oldServices[indx].steps[ind].design![index].form = e.target.value
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inx].design[index].form = e.target.value
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inxx].design[index].form = e.target.value
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               oldPages[ind].design[index].form = e.target.value
                               setPages(oldPages)
                             }
-                          }} value={design.form}>
+                          }} config='bg-transparent dark:border-neutral-100' value={design.form}>
                             <option>Seleccionar formulario</option>
                             {
                               forms?.map(form => (
@@ -461,16 +638,28 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       }}>Crear un formulario</Button2>
                       {
                         design.form && design.form !== ''
-                          ? <Button2Secondary color='main' action={(e: any) => {
-                            e.preventDefault()
-                            setError('')
-                            setTitleForm(forms?.find(form => form._id === design.form)?.nameForm)
-                            setNewForm(forms?.find(form => form._id === design.form))
-                            setPopupForm({ ...popupForm, view: 'flex', opacity: 'opacity-0' })
-                            setTimeout(() => {
-                              setPopupForm({ ...popupForm, view: 'flex', opacity: 'opacity-1' })
-                            }, 10)
-                          }}>Editar formulario</Button2Secondary>
+                          ? (
+                            <>
+                              <Button2Secondary color='main' action={(e: any) => {
+                                e.preventDefault()
+                                setError('')
+                                setTitleForm(forms?.find(form => form._id === design.form)?.nameForm)
+                                setNewForm(forms?.find(form => form._id === design.form))
+                                setPopupForm({ ...popupForm, view: 'flex', opacity: 'opacity-0' })
+                                setTimeout(() => {
+                                  setPopupForm({ ...popupForm, view: 'flex', opacity: 'opacity-1' })
+                                }, 10)
+                              }}>Editar formulario</Button2Secondary>
+                              <Button2Red action={(e: any) => {
+                                e.preventDefault()
+                                setNewForm(forms?.find(form => form._id === design.form))
+                                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                                setTimeout(() => {
+                                  setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                                }, 10);
+                              }}>Eliminar formulario</Button2Red>
+                            </>
+                          )
                           : ''
                       }
                     </div>
@@ -500,7 +689,7 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                             forms?.find(form => form._id === design.form)?.labels.map(label => (
                               <div key={label.data} className="flex flex-col gap-2">
                                 <p>{label.text !== '' ? label.text : label.name}</p>
-                                <Input placeholder={label.name} change={undefined} value={undefined} />
+                                <Input placeholder={label.name} change={undefined} value={undefined} config='bg-white dark:border-neutral-100' />
                               </div>
                             ))
                           }
@@ -617,7 +806,7 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                             forms?.find(form => form._id === design.form)?.labels.map(label => (
                               <div key={label.data} className="flex flex-col gap-2">
                                 <p>{label.text !== '' ? label.text : label.name}</p>
-                                <Input placeholder={label.name} change={undefined} value={undefined} config='dark:bg-white dark:border-neutral-200' />
+                                <Input placeholder={label.name} change={undefined} value={undefined} config='dark:bg-white dark:border-neutral-100' />
                               </div>
                             ))
                           }
@@ -632,5 +821,6 @@ export const Lead1: React.FC<Props> = ({ edit, pages, setPages, design, index, i
           )
       }
     </div>
+    </>
   )
 }

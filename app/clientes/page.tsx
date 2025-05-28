@@ -45,7 +45,7 @@ export default function Page () {
       <div className='w-full h-full bg-bg flex flex-col gap-6 dark:bg-neutral-900'>
         <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
-            <h1 className='text-2xl font-medium my-auto'>Clientes</h1>
+            <h1 className='text-lg font-medium my-auto'>Clientes</h1>
             <ButtonLink href='/clientes/nuevo-cliente'>Agregar cliente</ButtonLink>
           </div>
           <div className='w-full max-w-[1280px] mx-auto flex flex-col gap-4'>
@@ -62,7 +62,7 @@ export default function Page () {
                   ? (
                     <>
                       <div className='flex flex-col gap-2'>
-                        <p>Segmentar por tags</p>
+                        <p className='text-sm'>Segmentar por tags</p>
                         <Select change={(e: any) => setSelectedTag(e.target.value)} config='w-fit'>
                           <option value=''>Seleccionar tag</option>
                           {
@@ -76,7 +76,7 @@ export default function Page () {
                         {
                           selectedTag !== ''
                             ? clients.filter(client => client.tags?.includes(selectedTag)).map((client, index) => (
-                              <tr onClick={() => router.push(`/clientes/${client.email}`)} className={`${index + 1 < clients.length ? 'border-b border-border' : ''} bg-white cursor-pointer w-full transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={client._id}>
+                              <tr onClick={() => router.push(`/clientes/${client.email}`)} className={`${index + 1 < clients.length ? 'border-b border-border' : ''} text-sm bg-white cursor-pointer w-full transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={client._id}>
                                 <td className='p-3'>
                                   <p>{client.email}</p>
                                 </td>
@@ -90,7 +90,7 @@ export default function Page () {
                             ))
                             : (
                               clients.map((client, index) => (
-                                <tr onClick={() => router.push(`/clientes/${client.email}`)} className={`${index + 1 < clients.length ? 'border-b border-border' : ''} bg-white cursor-pointer w-full transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={client._id}>
+                                <tr onClick={() => router.push(`/clientes/${client.email}`)} className={`${index + 1 < clients.length ? 'border-b border-border' : ''} text-sm bg-white cursor-pointer w-full transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={client._id}>
                                   <td className='p-3'>
                                     <p>{client.email}</p>
                                   </td>
@@ -107,7 +107,7 @@ export default function Page () {
                       </Table>
                     </>
                   )
-                  : <p>Aun no tienes clientes</p>
+                  : <p className='text-sm'>Aun no tienes clientes</p>
             }
           </div>
         </div>

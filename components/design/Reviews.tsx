@@ -1,4 +1,4 @@
-import { IPage, IDesign, IFunnel, ICall, IService } from '@/interfaces'
+import { IPage, IDesign, IFunnel, ICall, IService, ICategoryPage } from '@/interfaces'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { IoIosArrowDown } from 'react-icons/io'
@@ -7,13 +7,15 @@ import { FaRegStar, FaRegStarHalfStroke, FaStar } from 'react-icons/fa6'
 
 interface Props {
     edit: any
-    pages: IPage[]
+    pages: IPage[] | ICategoryPage[]
     setPages: any
     design: IDesign
     index: number
     ind: number
     inde?: number
     indx?: number
+    inx?: any
+    inxx?: any
     funnels?: IFunnel[]
     setFunnels?: any
     calls?: ICall[]
@@ -24,7 +26,7 @@ interface Props {
     style?: any
 }
 
-export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, funnels, setFunnels, calls, services, setServices, responsive, pageNeed, style }) => {
+export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, inx, inxx, funnels, setFunnels, calls, services, setServices, responsive, pageNeed, style }) => {
   
     const [gradient, setGradient] = useState('')
     const [firstColor, setFirstColor] = useState('')
@@ -53,12 +55,20 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.typeBackground = e.target.value
                         setPages(oldPages)
                       }
-                    }} value={design.info.typeBackground} config='w-fit m-auto'>
+                    }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                       <option>Sin fondo</option>
                       <option>Imagen</option>
                       <option>Color</option>
@@ -107,6 +117,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.background = data
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.background = data
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.background = data
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.background = data
@@ -134,6 +152,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.background = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.background = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.background = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.background = e.target.value
@@ -156,15 +182,26 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   setFunnels(oldFunnels)
                                 } else if (indx !== undefined) {
                                   const oldServices = [...services!]
+                                  setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
                                   oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                   setPages(oldPages)
                                 }
-                              }}>
+                              }} config='bg-transparent dark:border-neutral-100'>
                               <option>Seleccionar tipo</option>
                               <option value='135'>Lineal</option>
                               <option value='circle'>Radial</option>
@@ -183,6 +220,16 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
@@ -205,6 +252,16 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   setFirstColor(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setFirstColor(e.target.value)
+                                  oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setFirstColor(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setFirstColor(e.target.value)
@@ -226,6 +283,16 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   setLastColor(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setLastColor(e.target.value)
+                                  oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setLastColor(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setLastColor(e.target.value)
@@ -249,6 +316,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.textColor = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.textColor = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.textColor = e.target.value
@@ -266,6 +341,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.title = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.title = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.title = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.title = e.target.value
@@ -281,6 +364,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.description = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.description = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.description = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.description = e.target.value
@@ -307,6 +398,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '0.5'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '0.5'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '0.5'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '0.5'
@@ -323,6 +422,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '1'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '1'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '1'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '1'
@@ -339,6 +446,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '1.5'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '1.5'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '1.5'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '1.5'
@@ -355,6 +470,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '2'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '2'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '2'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '2'
@@ -371,6 +494,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '2.5'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '2.5'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '2.5'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '2.5'
@@ -387,6 +518,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '3'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '3'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '3'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '3'
@@ -403,6 +542,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '3.5'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '3.5'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '3.5'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '3.5'
@@ -419,6 +566,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '4'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '4'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '4'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '4'
@@ -435,6 +590,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '4.5'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '4.5'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '4.5'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '4.5'
@@ -451,6 +614,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                       const oldServices = [...services!]
                                       oldServices[indx].steps[ind].design![index].info.reviews![i].stars = '5'
                                       setServices(oldServices)
+                                    } else if (inx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inx].design[index].info.reviews![i].stars = '5'
+                                      setPages(oldPages)
+                                    } else if (inxx !== undefined) {
+                                      const oldPages = [...pages]
+                                      oldPages[inxx].design[index].info.reviews![i].stars = '5'
+                                      setPages(oldPages)
                                     } else {
                                       const oldPages = [...pages]
                                       oldPages[ind].design[index].info.reviews![i].stars = '5'
@@ -468,12 +639,20 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.reviews![i].review = e.target.value
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.reviews![i].review = e.target.value
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.reviews![i].review = e.target.value
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.reviews![i].review = e.target.value
                                   setPages(oldPages)
                                 }
-                              }} value={review.review} placeholder='Reseña' className='p-1.5 border text-center' />
+                              }} value={review.review} placeholder='Reseña' className='p-1.5 border text-center bg-white' />
                               <input type='text' onChange={(e: any) => {
                                 if (inde !== undefined) {
                                   const oldFunnels = [...funnels!]
@@ -483,12 +662,20 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.reviews![i].name = e.target.value
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.reviews![i].name = e.target.value
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.reviews![i].name = e.target.value
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.reviews![i].name = e.target.value
                                   setPages(oldPages)
                                 }
-                              }} placeholder='Nombre' value={review.name} className='p-1.5 border' />
+                              }} placeholder='Nombre' value={review.name} className='p-1.5 border bg-white' />
                               <Button2Red action={(e: any) => {
                                 if (inde !== undefined) {
                                   const oldFunnels = [...funnels!]
@@ -498,6 +685,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.reviews?.splice(i, 1)
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.reviews?.splice(i, 1)
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.reviews?.splice(i, 1)
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.reviews?.splice(i, 1)
@@ -520,6 +715,14 @@ export const Reviews: React.FC<Props> = ({ edit, pages, setPages, design, index,
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.reviews?.push({ review: 'Lorem ipsum', stars: '5', name: 'Lorem ipsum' })
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.reviews?.push({ review: 'Lorem ipsum', stars: '5', name: 'Lorem ipsum' })
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.reviews?.push({ review: 'Lorem ipsum', stars: '5', name: 'Lorem ipsum' })
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.reviews?.push({ review: 'Lorem ipsum', stars: '5', name: 'Lorem ipsum' })

@@ -63,7 +63,7 @@ export default function Page ({ params }: { params: { id: string } }) {
                   <>
                     <div className='flex gap-2 w-full max-w-[1280px] mx-auto'>
                       <Link href='/blog' className='border rounded-lg transition-colors duration-150 p-2 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
-                      <h1 className='text-2xl font-medium my-auto'>Post {contentData._id}</h1>
+                      <h1 className='text-lg font-medium my-auto'>Post {contentData._id}</h1>
                     </div>
                     <form onSubmit={handleSubmit} className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
                       <div className='flex gap-6 flex-col w-full lg:w-2/3'>

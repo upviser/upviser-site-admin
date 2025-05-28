@@ -1,5 +1,5 @@
 "use client"
-import { Button, Spinner } from '@/components/ui'
+import { Button, MessagesCategories, Spinner } from '@/components/ui'
 import { IChatId, IChatMessage } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
@@ -69,7 +69,8 @@ export default function Page () {
       </Head>
         <div className='p-4 lg:p-6 w-full flex flex-col gap-6 min-h-full overflow-y-auto bg-bg dark:bg-neutral-900'>
           <div className='w-full flex flex-col gap-4 max-w-[1280px] mx-auto'>
-            <h1 className='text-2xl font-medium'>Mensajes</h1>
+            <h1 className='text-lg font-medium'>Mensajes</h1>
+            <MessagesCategories />
           </div>
           <div className='w-full max-w-[1280px] flex mx-auto gap-6 flex-col lg:flex-row'>
             <div className='w-full lg:w-1/2 flex flex-col gap-2'>
@@ -105,7 +106,7 @@ export default function Page () {
                         </button>
                       )
                     })
-                    : <p>No hay chats</p>
+                    : <p className='text-sm'>No hay chats</p>
               }
             </div>
             <div className='w-full lg:w-1/2'>

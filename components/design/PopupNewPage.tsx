@@ -38,8 +38,8 @@ export const PopupNewPage: React.FC<Props> = ({ popupPage, setPopupPage, setLoad
   }, [popupPage, setPopupPage]);
 
   return (
-    <div className={`${popupPage.view} ${popupPage.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 bg-black/20 fixed z-50`}>
-        <div ref={popupRef} onMouseEnter={() => setPopupPage({ ...popupPage, mouse: true })} onMouseLeave={() => setPopupPage({ ...popupPage, mouse: false })} className={`${popupPage.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 p-8 bg-white m-auto rounded-xl border border-black/5 w-[500px] flex flex-col gap-4 shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+    <div className={`${popupPage.view} ${popupPage.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 bg-black/30 fixed z-50`}>
+        <div ref={popupRef} onMouseEnter={() => setPopupPage({ ...popupPage, mouse: true })} onMouseLeave={() => setPopupPage({ ...popupPage, mouse: false })} className={`${popupPage.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 p-5 bg-white m-auto rounded-xl border border-black/5 w-[500px] flex flex-col gap-4 shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
           {
             error !== ''
               ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{ error }</p>
@@ -47,11 +47,11 @@ export const PopupNewPage: React.FC<Props> = ({ popupPage, setPopupPage, setLoad
           }
           <h2 className='font-medium text-lg'>Nueva pagina</h2>
           <div className='flex flex-col gap-2'>
-            <p>Nombre de la pagina</p>
+            <p className='text-sm'>Nombre de la pagina</p>
             <Input placeholder='Nombre' value={newPage.page} change={(e: any) => setNewPage({ ...newPage, page: e.target.value })} />
           </div>
           <div className='flex flex-col gap-2'>
-            <p>Slug</p>
+            <p className='text-sm'>Slug</p>
             <Input placeholder='Slug' value={newPage.slug} change={(e: any) => setNewPage({ ...newPage, slug: e.target.value })} />
           </div>
           <ButtonSubmit action={async (e: any) => {

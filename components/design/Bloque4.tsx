@@ -15,6 +15,8 @@ interface Props {
     ind: number
     inde?: number
     indx?: number
+    inx?: number
+    inxx?: number
     pageNeed: IPage[]
     funnels?: IFunnel[]
     setFunnels?: any
@@ -26,7 +28,7 @@ interface Props {
     style?: any
 }
 
-export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index, ind, inde, indx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style }) => {
+export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index, ind, inde, indx, inx, inxx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style }) => {
 
   const [gradient, setGradient] = useState('')
   const [firstColor, setFirstColor] = useState('')
@@ -170,12 +172,20 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.typeBackground = e.target.value
                         setPages(oldPages)
                       }
-                    }} value={design.info.typeBackground} config='w-fit m-auto'>
+                    }} value={design.info.typeBackground} config='w-fit m-auto bg-white dark:border-neutral-100'>
                       <option>Sin fondo</option>
                       <option>Imagen</option>
                       <option>Color</option>
@@ -224,6 +234,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.background = data
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.background = data
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.background = data
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.background = data
@@ -251,6 +269,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.background = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.background = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.background = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.background = e.target.value
@@ -275,13 +301,23 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                 const oldServices = [...services!]
                                 oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setGradient(e.target.value)
                                 oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setPages(oldPages)
                               }
-                            }}>
+                            }} config=' bg-white dark:border-neutral-100'>
                               <option>Seleccionar tipo</option>
                               <option value='135'>Lineal</option>
                               <option value='circle'>Radial</option>
@@ -300,6 +336,16 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                   setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
@@ -322,6 +368,16 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                 setFirstColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setFirstColor(e.target.value)
@@ -343,6 +399,16 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                 setLastColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setLastColor(e.target.value)
@@ -366,6 +432,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.textColor = e.target.value
@@ -383,6 +457,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.title = e.target.value
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.title = e.target.value
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.title = e.target.value
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.title = e.target.value
@@ -400,6 +482,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.subTitle = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.subTitle = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.subTitle = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.subTitle = e.target.value
@@ -415,13 +505,21 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.description = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.description = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.description = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.description = e.target.value
                         setPages(oldPages)
                       }
                     }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent text-center`} style={{ color: design.info.textColor }} />
-                    <div className='flex gap-4 m-auto'>
+                    <div className='flex gap-4 m-auto flex-wrap'>
                       <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                         <input type='text' placeholder='Boton' value={design.info.button} onChange={(e: any) => {
                           if (inde !== undefined) {
@@ -432,6 +530,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.button = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.button = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.button = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.button = e.target.value
@@ -448,12 +554,20 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.buttonLink = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.buttonLink = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.buttonLink = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.buttonLink = e.target.value
                           setPages(oldPages)
                         }
-                      }} className='rounded border w-full'>
+                      }} className='rounded border w-full bg-transparent py-1.5'>
                         <option>Acción boton</option>
                         {
                           pageNeed.map(page => (
@@ -487,6 +601,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.subTitle2 = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.subTitle2 = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.subTitle2 = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.subTitle2 = e.target.value
@@ -502,13 +624,21 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.description2 = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.description2 = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.description2 = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.description2 = e.target.value
                         setPages(oldPages)
                       }
                     }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent text-center`} style={{ color: design.info.textColor }} />
-                    <div className='flex gap-4 m-auto'>
+                    <div className='flex gap-4 m-auto flex-wrap'>
                       <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                         <input type='text' placeholder='Boton' value={design.info.button2} onChange={(e: any) => {
                           if (inde !== undefined) {
@@ -519,6 +649,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.button2 = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.button2 = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.button2 = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.button2 = e.target.value
@@ -535,12 +673,20 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.buttonLink2 = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.buttonLink2 = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.buttonLink2 = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.buttonLink2 = e.target.value
                           setPages(oldPages)
                         }
-                      }} className='rounded border w-full'>
+                      }} className='rounded border w-full bg-transparent py-1.5'>
                         <option>Acción boton</option>
                         {
                           pageNeed.map(page => (
@@ -574,6 +720,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.subTitle3 = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.subTitle3 = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.subTitle3 = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.subTitle3 = e.target.value
@@ -589,13 +743,21 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.description3 = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.description3 = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.description3 = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.description3 = e.target.value
                         setPages(oldPages)
                       }
                     }} className={`${responsive === '400px' ? 'text-base' : 'text-lg'} p-1.5 rounded border bg-transparent text-center`} style={{ color: design.info.textColor }} />
-                    <div className='flex gap-4 m-auto'>
+                    <div className='flex gap-4 m-auto flex-wrap'>
                       <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
                         <input type='text' placeholder='Boton' value={design.info.button3} onChange={(e: any) => {
                           if (inde !== undefined) {
@@ -606,6 +768,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.button3 = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.button3 = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.button3 = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.button3 = e.target.value
@@ -622,12 +792,20 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.buttonLink3 = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.buttonLink3 = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.buttonLink3 = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.buttonLink3 = e.target.value
                           setPages(oldPages)
                         }
-                      }} className='rounded border w-full'>
+                      }} className='rounded border w-full bg-transparent py-1.5'>
                         <option>Acción boton</option>
                         {
                           pageNeed.map(page => (
@@ -695,6 +873,14 @@ export const Bloque4: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.image = data
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.image = data
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.image = data
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.image = data

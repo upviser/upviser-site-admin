@@ -1,7 +1,7 @@
 "use client"
 import { PopupNewCall } from "@/components/design"
 import { Button, Button2, Button2Red, ButtonSecondary, ButtonSubmit, Select, Spinner, Table } from "@/components/ui"
-import { ICall, IFunnel, IMeeting, ITag } from "@/interfaces"
+import { ICall, IFunnel, IMeeting, IStoreData, ITag } from "@/interfaces"
 import axios from "axios"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
@@ -28,6 +28,7 @@ export default function CallsPage () {
   const [calendars, setCalendars] = useState<any>([])
   const [selectCaledar, setSelectCaledar] = useState('')
   const [filterCalls, setFilterCalls] = useState<ICall[]>([])
+  const [storeData, setStoreData] = useState<IStoreData>()
 
   const { data: session } = useSession()
 
@@ -82,6 +83,15 @@ export default function CallsPage () {
     getCalendars()
   }, [])
 
+  const getStoreData = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+    setStoreData(res.data)
+  }
+
+  useEffect(() => {
+    getStoreData()
+  }, [])
+
   return (
     <>
       <div onClick={() => {
@@ -91,8 +101,8 @@ export default function CallsPage () {
             setPopupDelete({ ...popupDelete, view: 'hidden', opacity: 'opacity-0' })
           }, 200)
         }
-      }} className={`${popupDelete.view} ${popupDelete.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/20 flex top-0 left-0 z-50 p-4`}>
-        <div onMouseEnter={() => setPopupDelete({ ...popupDelete, mouse: true })} onMouseLeave={() => setPopupDelete({ ...popupDelete, mouse: false })} className={`${popupDelete.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 shadow-popup w-full max-w-[500px] max-h-[600px] overflow-y-auto p-5 lg:p-6 rounded-xl flex flex-col gap-4 m-auto border bg-white dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+      }} className={`${popupDelete.view} ${popupDelete.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/30 flex top-0 left-0 z-50 p-4`}>
+        <div onMouseEnter={() => setPopupDelete({ ...popupDelete, mouse: true })} onMouseLeave={() => setPopupDelete({ ...popupDelete, mouse: false })} className={`${popupDelete.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 shadow-popup w-full max-w-[500px] max-h-[600px] overflow-y-auto p-5 rounded-xl flex flex-col gap-4 m-auto border bg-white dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
           <p>¿Estas seguro que deseas eliminar la reunion: <span className='font-medium'>{newCall?.nameMeeting}</span>?</p>
           <div className='flex gap-6'>
             <ButtonSubmit submitLoading={loading} textButton='Eliminar' action={async (e: any) => {
@@ -114,15 +124,15 @@ export default function CallsPage () {
               setTimeout(() => {
                 setPopupDelete({ ...popupDelete, view: 'hidden', opacity: 'opacity-0' })
               }, 200)
-            }} className='my-auto'>Cancelar</button>
+            }} className='my-auto text-sm'>Cancelar</button>
           </div>
         </div>
       </div>
-      <PopupNewCall popupCall={popupCall} setPopupCall={setPopupCall} titleMeeting={title} newCall={newCall} setNewCall={setNewCall} getCalls={getMeetings} tags={tags} getTags={getTags} error={error} setError={setError} funnels={funnels} newData={newData} setNewData={setNewData} loadingNewData={loadingNewData} setLoadingNewData={setLoadingNewData} clientData={clientData} getClientData={getClientData} />
+      <PopupNewCall popupCall={popupCall} setPopupCall={setPopupCall} titleMeeting={title} newCall={newCall} setNewCall={setNewCall} getCalls={getMeetings} tags={tags} getTags={getTags} error={error} setError={setError} funnels={funnels} newData={newData} setNewData={setNewData} loadingNewData={loadingNewData} setLoadingNewData={setLoadingNewData} clientData={clientData} getClientData={getClientData} storeData={storeData} />
       <main className="flex flex-col p-4 lg:p-6 gap-6 h-full w-full bg-bg dark:bg-neutral-900">
         <div className="w-full flex flex-col gap-6 mx-auto max-w-[1280px]">
           <div className="flex gap-4 justify-between flex-col lg:flex-row">
-            <h1 className="text-2xl font-medium my-auto">Reuniones</h1>
+            <h1 className="text-lg font-medium my-auto">Reuniones</h1>
             <div className="flex gap-4 flex-col lg:flex-row">
               <Link href="/reuniones/disponibilidad" className="my-auto text-sm"><ButtonSecondary action={undefined}>Modificar disponibilidad</ButtonSecondary></Link>
               {
@@ -159,7 +169,7 @@ export default function CallsPage () {
                         calendars.length
                           ? (
                             <div className="flex flex-col gap-2">
-                              <p>Seleccionar calendario</p>
+                              <p className="text-sm">Seleccionar calendario</p>
                               <div className="flex gap-4 flex-col lg:flex-row">
                                 <Select change={(e: any) => {
                                   setSelectCaledar(e.target.value)
@@ -184,7 +194,7 @@ export default function CallsPage () {
                         selectCaledar !== ''
                           ? (
                             <div className="flex flex-col gap-2">
-                              <p>Seleccionar reunion</p>
+                              <p className="text-sm">Seleccionar reunion</p>
                               <div className="flex gap-4 flex-col lg:flex-row">
                                 <Select change={(e: any) => {
                                   if (e.target.value === 'Todas las reuniones') {
@@ -193,7 +203,8 @@ export default function CallsPage () {
                                     setFilteredMeetings(meetingsFiltered)
                                     setCallSelect('')
                                   } else {
-                                    setNewCall({ type: [''], nameMeeting: '', duration: '15 minutos', intervals: '', title: '', price: '', tags: [], labels: [{ data: '', text: '', type: '' }], buttonText: '', action: 'Mostrar mensaje', description: '', message: '', redirect: '', calendar: '' })
+                                    const callFind = calls.find(call => call._id === e.target.value)
+                                    setNewCall(callFind!)
                                     const filterMeetings = meetings?.filter(meeting => meeting.meeting === e.target.value)
                                     setFilteredMeetings(filterMeetings)
                                     setCallSelect(e.target.value)
@@ -296,11 +307,11 @@ export default function CallsPage () {
                             }
                           </Table>
                         )
-                        : <p>No hay reuniones agendadas</p>
+                        : <p className="text-sm">No hay reuniones agendadas</p>
                     }
                   </>
                 )
-                : <p>No hay reuniones agendadas</p>
+                : <p className="text-sm">No hay reuniones agendadas</p>
           }
         </div>
       </main>

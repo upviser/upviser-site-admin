@@ -64,7 +64,7 @@ export const Layout: React.FC<PropsWithChildren<Props>> = ({ children, edit, set
               {
                 edit === 'Header'
                   ? (
-                    <Select change={(e: any) => setHeader({ ...header, logo: e.target.value })} config='h-fit my-auto text-black' value={header.logo}>
+                    <Select change={(e: any) => setHeader({ ...header, logo: e.target.value })} config={`h-fit my-auto bg-transparent`} value={header.logo}>
                       <option>Logo</option>
                       <option>Logo blanco</option>
                     </Select>

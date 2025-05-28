@@ -19,6 +19,11 @@ export default function Page () {
       active: false,
       accessToken: '',
       publicKey: ''
+    },
+    mercadoPagoPro: {
+      active: false,
+      accessToken: '',
+      publicKey: ''
     }
   })
   const [error, setError] = useState('')
@@ -28,7 +33,7 @@ export default function Page () {
 
   const getPayment = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/payment`)
-    if (res.data?.mercadoPago || res.data?.transbank) {
+    if (res.data?.mercadoPago || res.data?.transbank || res.data?.mercadoPagoPro) {
       setPayment(res.data)
     }
   }
@@ -41,7 +46,7 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      if ((payment.mercadoPago.accessToken !== '' && payment.mercadoPago.publicKey !== '') || (payment.transbank.apiKey !== '' && payment.transbank.commerceCode !== '')) {
+      if ((payment.mercadoPago.accessToken !== '' && payment.mercadoPago.publicKey !== '') || (payment.transbank.apiKey !== '' && payment.transbank.commerceCode !== '') || (payment.mercadoPagoPro.accessToken !== '' && payment.mercadoPagoPro.publicKey !== '')) {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment`, payment)
       } else {
         setError('Debes llenar todos los datos de al menos un metodo de pago')
@@ -72,23 +77,23 @@ export default function Page () {
           <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
             <Nav />
             <div className='w-full lg:w-3/4 flex flex-col gap-6'>
-              <h2 className='text-lg font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Pasarela de pago</h2>
+              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Pasarela de pago</h2>
               <div className='flex flex-col gap-4'>
-                <p>Selecciona los metodos de pago para tu tienda</p>
+                <p className='text-sm font-medium'>Selecciona los metodos de pago para tu tienda</p>
                 <div className='flex gap-2'>
                   <input type='checkbox' checked={payment.transbank.active} onChange={(e: ChangeEvent<HTMLInputElement>) => e.target.checked ? setPayment({ ...payment, transbank: { ...payment.transbank, active: true } }) : setPayment({ ...payment, transbank: { ...payment.transbank, active: false } }) } />
-                  <p>Transbank - WebPay Plus</p>
+                  <p className='text-sm'>Transbank - WebPay Plus</p>
                 </div>
                 {
                   payment.transbank.active
                     ? (
                       <div className='flex flex-col gap-2'>
                         <div className='flex flex-col gap-2'>
-                          <p>Codigo del comercio</p>
+                          <p className='text-sm'>Codigo del comercio</p>
                           <Input change={(e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, transbank: { ...payment.transbank, commerceCode: e.target.value } })} value={payment.transbank.commerceCode} placeholder='Codigo del comercio' />
                         </div>
                         <div className='flex flex-col gap-2'>
-                          <p>Api Key</p>
+                          <p className='text-sm'>Api Key</p>
                           <Input change={(e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, transbank: { ...payment.transbank, apiKey: e.target.value } })} value={payment.transbank.apiKey} placeholder='Api Key' />
                         </div>
                       </div>
@@ -97,19 +102,39 @@ export default function Page () {
                 }
                 <div className='flex gap-2'>
                   <input type='checkbox' checked={payment.mercadoPago.active} onChange={(e: ChangeEvent<HTMLInputElement>) => e.target.checked ? setPayment({ ...payment, mercadoPago: { ...payment.mercadoPago, active: true } }) : setPayment({ ...payment, mercadoPago: { ...payment.mercadoPago, active: false } })} />
-                  <p>MercadoPago</p>
+                  <p className='text-sm'>MercadoPago - Bricks</p>
                 </div>
                 {
                   payment.mercadoPago.active
                     ? (
                       <div className='flex flex-col gap-2'>
                         <div className='flex flex-col gap-2'>
-                          <p>Token de acceso</p>
+                          <p className='text-sm'>Token de acceso</p>
                           <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, mercadoPago: { ...payment.mercadoPago, accessToken: e.target.value } }) } value={payment.mercadoPago.accessToken} placeholder='Token de acceso' />
                         </div>
                         <div className='flex flex-col gap-2'>
-                          <p>Public key</p>
+                          <p className='text-sm'>Public key</p>
                           <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, mercadoPago: { ...payment.mercadoPago, publicKey: e.target.value } }) } value={payment.mercadoPago.publicKey} placeholder='Public key' />
+                        </div>
+                      </div>
+                    )
+                    : ''
+                }
+                <div className='flex gap-2'>
+                  <input type='checkbox' checked={payment.mercadoPagoPro?.active} onChange={(e: ChangeEvent<HTMLInputElement>) => e.target.checked ? setPayment({ ...payment, mercadoPagoPro: { ...payment.mercadoPago, active: true } }) : setPayment({ ...payment, mercadoPago: { ...payment.mercadoPago, active: false } })} />
+                  <p className='text-sm'>MercadoPago - Pro</p>
+                </div>
+                {
+                  payment.mercadoPagoPro?.active
+                    ? (
+                      <div className='flex flex-col gap-2'>
+                        <div className='flex flex-col gap-2'>
+                          <p className='text-sm'>Token de acceso</p>
+                          <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, mercadoPagoPro: { ...payment.mercadoPagoPro, accessToken: e.target.value } }) } value={payment.mercadoPagoPro?.accessToken} placeholder='Token de acceso' />
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                          <p className='text-sm'>Public key</p>
+                          <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, mercadoPagoPro: { ...payment.mercadoPagoPro, publicKey: e.target.value } }) } value={payment.mercadoPagoPro?.publicKey} placeholder='Public key' />
                         </div>
                       </div>
                     )

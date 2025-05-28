@@ -14,6 +14,8 @@ interface Props {
     ind: number
     inde?: number
     indx?: number
+    inx?: number
+    inxx?: any
     funnels?: IFunnel[]
     setFunnels?: any
     responsive: string
@@ -22,7 +24,7 @@ interface Props {
     style?: any
 }
 
-export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index, ind, inde, indx, funnels, setFunnels, responsive, services, setServices, style }) => {
+export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index, ind, inde, indx, inx, inxx, funnels, setFunnels, responsive, services, setServices, style }) => {
 
   const [gradient, setGradient] = useState('')
   const [firstColor, setFirstColor] = useState('')
@@ -80,22 +82,22 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                     }
                     <div className="flex flex-col gap-2">
                       <p>Nombre</p>
-                      <input placeholder='Nombre' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border' />
+                      <input placeholder='Nombre' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border bg-white' />
                     </div>
                     <div className="flex flex-col gap-2">
                       <p>Email</p>
-                      <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border' />
+                      <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border bg-white' />
                     </div>
                     <div className="flex flex-col gap-2">
                       <p>Telefono</p>
                       <div className='flex gap-2'>
                         <p className='my-auto'>+56</p>
-                        <input placeholder='Teléfono' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border' />
+                        <input placeholder='Teléfono' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border bg-white' />
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p>Mensaje</p>
-                      <textarea placeholder='Mensaje' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border h-24' />
+                      <textarea placeholder='Mensaje' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border h-24 bg-white' />
                     </div>
                     <ButtonDesign style={style} text='Enviar' />
                   </div>
@@ -117,12 +119,20 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.typeBackground = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.typeBackground = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.typeBackground = e.target.value
                           setPages(oldPages)
                         }
-                      }} value={design.info.typeBackground} config='w-fit m-auto'>
+                      }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                         <option>Sin fondo</option>
                         <option>Imagen</option>
                         <option>Color</option>
@@ -171,6 +181,14 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                     const oldServices = [...services!]
                                     oldServices[indx].steps[ind].design![index].info.background = data
                                     setServices(oldServices)
+                                  } else if (inx !== undefined) {
+                                    const oldPages = [...pages]
+                                    oldPages[inx].design[index].info.background = data
+                                    setPages(oldPages)
+                                  } else if (inxx !== undefined) {
+                                    const oldPages = [...pages]
+                                    oldPages[inxx].design[index].info.background = data
+                                    setPages(oldPages)
                                   } else {
                                     const oldPages = [...pages]
                                     oldPages[ind].design[index].info.background = data
@@ -198,6 +216,14 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                               const oldServices = [...services!]
                               oldServices[indx].steps[ind].design![index].info.background = e.target.value
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inx].design[index].info.background = e.target.value
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inxx].design[index].info.background = e.target.value
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               oldPages[ind].design[index].info.background = e.target.value
@@ -220,15 +246,26 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                   setFunnels(oldFunnels)
                                 } else if (indx !== undefined) {
                                   const oldServices = [...services!]
+                                  setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
                                   oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                   setPages(oldPages)
                                 }
-                              }}>
+                              }} config='bg-transparent dark:border-neutral-100'>
                                 <option>Seleccionar tipo</option>
                                 <option value='135'>Lineal</option>
                                 <option value='circle'>Radial</option>
@@ -247,6 +284,16 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                     setGradient(e.target.value)
                                     oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                     setServices(oldServices)
+                                  } else if (inx !== undefined) {
+                                    const oldPages = [...pages]
+                                    setGradient(e.target.value)
+                                    oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                    setPages(oldPages)
+                                  } else if (inxx !== undefined) {
+                                    const oldPages = [...pages]
+                                    setGradient(e.target.value)
+                                    oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                    setPages(oldPages)
                                   } else {
                                     const oldPages = [...pages]
                                     setGradient(e.target.value)
@@ -269,6 +316,16 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                   setFirstColor(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setFirstColor(e.target.value)
+                                  oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setFirstColor(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setFirstColor(e.target.value)
@@ -290,6 +347,16 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                                   setLastColor(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setLastColor(e.target.value)
+                                  oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setLastColor(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setLastColor(e.target.value)
@@ -313,6 +380,14 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.textColor = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.textColor = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.textColor = e.target.value
@@ -331,6 +406,14 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.image = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.image = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.image = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.image = e.target.value
@@ -350,6 +433,14 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.title = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.title = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.title = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.title = e.target.value
@@ -365,6 +456,14 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.description = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.description = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.description = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.description = e.target.value
@@ -383,30 +482,38 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.titleForm = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.titleForm = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.titleForm = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.titleForm = e.target.value
                       setPages(oldPages)
                     }
-                  }} className='p-1.5 rounded border text-[20px] font-medium lg:text-[24px]' />
+                  }} className='p-1.5 rounded border text-[20px] font-medium bg-transparent lg:text-[24px]' />
                     <div className="flex flex-col gap-2">
                       <p>Nombre</p>
-                      <input placeholder='Nombre' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border' />
+                      <input placeholder='Nombre' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border bg-white' />
                     </div>
                     <div className="flex flex-col gap-2">
                       <p>Email</p>
-                      <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border' />
+                      <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border bg-white' />
                     </div>
                     <div className="flex flex-col gap-2">
                       <p>Telefono</p>
                       <div className='flex gap-2'>
                         <p className='my-auto'>+56</p>
-                        <input placeholder='Teléfono' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border' />
+                        <input placeholder='Teléfono' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border bg-white' />
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
                       <p>Mensaje</p>
-                      <textarea placeholder='Mensaje' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border h-24' />
+                      <textarea placeholder='Mensaje' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='p-2 text-sm border h-24 bg-white' />
                     </div>
                     <ButtonDesign style={style} text='Enviar' />
                   </div>

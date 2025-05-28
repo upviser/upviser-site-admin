@@ -20,6 +20,8 @@ interface Props {
     ind: number
     inde?: number
     indx?: number
+    inx?: any
+    inxx?: any
     pageNeed: IPage[]
     funnels?: IFunnel[]
     setFunnels?: any
@@ -32,7 +34,7 @@ interface Props {
     storeData?: any
 }
 
-export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setPages, ind, inde, indx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style, storeData }) => {
+export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setPages, ind, inde, indx, inx, inxx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style, storeData }) => {
 
   const [gradient, setGradient] = useState('')
   const [firstColor, setFirstColor] = useState('')
@@ -110,12 +112,20 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.typeBackground = e.target.value
                         setPages(oldPages)
                       }
-                    }} value={design.info.typeBackground} config='w-fit m-auto'>
+                    }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                       <option>Sin fondo</option>
                       <option>Imagen</option>
                       <option>Color</option>
@@ -164,6 +174,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.background = data
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.background = data
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.background = data
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.background = data
@@ -191,6 +209,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.background = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.background = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.background = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.background = e.target.value
@@ -213,15 +239,26 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                                 setFunnels(oldFunnels)
                               } else if (indx !== undefined) {
                                 const oldServices = [...services!]
+                                setGradient(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setGradient(e.target.value)
                                 oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setPages(oldPages)
                               }
-                            }}>
+                            }} config='bg-transparent dark:border-neutral-100'>
                               <option>Seleccionar tipo</option>
                               <option value='135'>Lineal</option>
                               <option value='circle'>Radial</option>
@@ -240,6 +277,16 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                                   setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
@@ -262,6 +309,16 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                                 setFirstColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setFirstColor(e.target.value)
@@ -283,6 +340,16 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                                 setLastColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setLastColor(e.target.value)
@@ -306,6 +373,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.textColor = e.target.value
@@ -324,12 +399,20 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.titleForm = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.titleForm = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.titleForm = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.titleForm = e.target.value
                         setPages(oldPages)
                       }
-                    }} config='w-fit m-auto' value={design.info.titleForm}>
+                    }} config='w-fit m-auto bg-transparent dark:border-neutral-100' value={design.info.titleForm}>
                       <option>Seleccionar color logo</option>
                       <option>Logo principal</option>
                       <option>Logo blanco</option>
@@ -353,6 +436,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.title = e.target.value
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.title = e.target.value
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.title = e.target.value
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.title = e.target.value
@@ -368,6 +459,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.description = e.target.value
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.description = e.target.value
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.description = e.target.value
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.description = e.target.value
@@ -409,6 +508,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                                 const oldServices = [...services!]
                                 oldServices[indx].steps[ind].design![index].info.faq![indn].question = data
                                 setServices(oldServices)
+                            } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inx].design[index].info.faq![indn].question = data
+                                setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inxx].design[index].info.faq![indn].question = data
+                                setPages(oldPages)
                             } else {
                                 const oldPages = [...pages]
                                 oldPages[ind].design[index].info.faq![indn].question = data
@@ -432,6 +539,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.faq = oldImages
                             setServices([...oldServices])
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.faq = oldImages
+                            setPages([...oldPages])
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.faq = oldImages
+                            setPages([...oldPages])
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.faq = oldImages
@@ -455,6 +570,14 @@ export const SliderImages: React.FC<Props> = ({ edit, design, index, pages, setP
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.faq = oldImages
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.faq = oldImages
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.faq = oldImages
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.faq = oldImages

@@ -1,12 +1,12 @@
 "use client"
-import { Design, ICall, IFooter, IForm, IFunnel, IHeader, IPage, IPopupWeb, IService, IStoreData } from '@/interfaces'
+import { Design, ICall, ICategory, ICategoryPage, IFooter, IForm, IFunnel, IHeader, IPage, IPopupWeb, IProduct, IProductPage, IService, IStoreData } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import Image from 'next/image'
-import { Bloque1, Bloque2, Bloque3, Bloque4, Bloque5, Call, Contact, Layout, Lead1, PopupNewCall, PopupNewForm, PopupNewPage, PopupPagesBlocks, Slider, Subscription, Video, PopupDeleteFunnel, PopupDeletePage, Bloque7, Checkout, Calls, Lead2, Services, Plans, Faq, Blocks, Reviews, Form, Lead3, Table, SliderImages } from '@/components/design'
+import { Bloque1, Bloque2, Bloque3, Bloque4, Bloque5, Call, Contact, Layout, Lead1, PopupNewCall, PopupNewForm, PopupNewPage, PopupPagesBlocks, Slider, Subscription, Video, PopupDeleteFunnel, PopupDeletePage, Bloque7, Checkout, Calls, Lead2, Services, Plans, Faq, Blocks, Reviews, Form, Lead3, Table, SliderImages, Categories, Products, PageProduct, Categories2, SliderProducts, PopupDeleteService } from '@/components/design'
 import { Button, Button2, Button2Red, ButtonSecondary2, ButtonSubmit, Input, Select, Spinner, Textarea } from '@/components/ui'
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl'
 import { PopupNewFunnel } from '@/components/funnels'
@@ -14,6 +14,12 @@ import { IoLaptopOutline, IoPhonePortraitOutline } from 'react-icons/io5'
 import { PopupNewService } from '@/components/service'
 import { SlMenu } from 'react-icons/sl'
 import { GrClose } from 'react-icons/gr'
+import { Swiper, SwiperSlide } from "swiper/react"
+import "swiper/css"
+import "swiper/css/pagination"
+import styles from  "./Slider.module.css"
+import { Pagination } from "swiper/modules"
+import { NumberFormat } from '@/utils'
 
 export default function Page () {
 
@@ -76,6 +82,7 @@ export default function Page () {
   const [titleMeeting, setTitleMeeting] = useState('')
   const [popupDeletePage, setPopupDeletePage] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [popupDeleteFunnel, setPopupDeleteFunnel] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [popupDeleteService, setPopupDeleteService] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [selectPage, setSelectPage] = useState<IPage>()
   const [responsive, setResponsive] = useState('calc(100%-350px)')
   const [id, setId] = useState<string>()
@@ -103,6 +110,24 @@ export default function Page () {
   const [chat, setChat] = useState({ bgColor: '' })
   const [instagram, setInstagram] = useState(false)
   const [chatView, setChatView] = useState(false)
+  const [categories, setCategories] = useState<ICategory[]>([])
+  const [productsOrder, setProductsOrder] = useState<IProduct[]>()
+  const [productPage, setProductPage] = useState<IProductPage[]>([{ reviews: true, title: '', text: '', design: [
+    { content: 'Carrusel productos', info: { title: 'Lorem ipsum', products: 'Todos' } },
+    { content: 'Suscripción', info: { title: 'Suscribete a nuestra lista' } }
+  ] }])
+  const [categoryPage, setCategoryPage] = useState<ICategoryPage[]>([{ 
+    design: [
+      { content: 'Bloque 6', info: { title: 'Lorem ipsum', description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.', image: '' } },
+      { content: 'Categorias 2', info: {} },
+      { content: 'Productos', info: {} },
+      { content: 'Suscripción', info: { title: 'Suscribete a nuestra lista' } }
+    ] 
+  }])
+  const [indexProduct, setIndexProduct] = useState(-1)
+  const [indexCategory, setIndexCategory] = useState(-1)
+  const [cartPage, setCartPage] = useState({ bgColor: '#ffffff', textColor: '#111111', detailsColor: '#ffffff' })
+  const [checkoutPage, setCheckoutPage] = useState({ bgColor: '#ffffff', textColor: '#111111', detailsColor: '#ffffff' })
 
   const getStoreData = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
@@ -124,6 +149,8 @@ export default function Page () {
       setChat(data.chat)
       setInstagram(data.instagram)
       setChatView(data.chatView)
+      setCartPage(data.cartPage)
+      setCheckoutPage(data.checkoutPage)
       if (data.popup) {
         setPopupWeb(data.popup)
       }
@@ -143,6 +170,24 @@ export default function Page () {
 
   useEffect(() => {
     getFunnels()
+  }, [])
+
+  const getCategories = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
+    setCategories(res.data)
+  }
+
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  const getProducts = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`)
+    setProductsOrder(res.data)
+  }
+
+  useEffect(() => {
+    getProducts()
   }, [])
 
   const getForms = async () => {
@@ -236,6 +281,34 @@ export default function Page () {
     setPages(updatedPages)
   }
 
+  const moveBlockCategories = (blockIndex: number, direction: 'up' | 'down') => {
+    const updatedPages = [...categoryPage]
+    const blocks = updatedPages[0].design
+    const temp = blocks[blockIndex]
+    if (direction === 'up' && blockIndex > 0) {
+      blocks[blockIndex] = blocks[blockIndex - 1]
+      blocks[blockIndex - 1] = temp
+    } else if (direction === 'down' && blockIndex < blocks.length - 1) {
+      blocks[blockIndex] = blocks[blockIndex + 1]
+      blocks[blockIndex + 1] = temp
+    }
+    setCategoryPage(updatedPages)
+  }
+
+  const moveBlockProduct = (blockIndex: number, direction: 'up' | 'down') => {
+    const updatePages = [...productPage]
+    const blocks = updatePages[0].design
+    const temp = blocks[blockIndex]
+    if (direction === 'up' && blockIndex > 0) {
+      blocks[blockIndex] = blocks[blockIndex - 1]
+      blocks[blockIndex - 1] = temp
+    } else if (direction === 'down' && blockIndex < blocks.length - 1) {
+      blocks[blockIndex] = blocks[blockIndex + 1]
+      blocks[blockIndex + 1] = temp
+    }
+    setProductPage(updatePages)
+  }
+
   const moveBlockFunnel = (funnelIndex: number, stepIndex: number, blockIndex: number, direction: 'up' | 'down') => {
     const updatedFunnels = [...funnels]
     const blocks = updatedFunnels[funnelIndex].steps[stepIndex].design
@@ -254,15 +327,13 @@ export default function Page () {
     <>
       <PopupNewFunnel popup={popupNewFunnel} setPopup={setPopupNewFunnel} getFunnels={getFunnels} newFunnel={newFunnel!} setNewFunnel={setNewFunnel} selectFunnel={selectFunnel!} title={title} error={error} setError={setError} services={services} funnels={funnels} />
       <PopupNewPage popupPage={popupPage} setPopupPage={setPopupPage} setLoading={setLoading} getDesign={getDesign} loading={loading} setNewPage={setNewPage} newPage={newPage} pages={pages} header={header} error={error} setError={setError} />
-      <PopupPagesBlocks popup={popup} setPopup={setPopup} pages={pages} indexPage={indexPage} indexFunnel={indexFunnel} indexStep={indexStep} indexService={indexService} indexStepService={indexStepService} setPages={setPages} funnels={funnels} setFunnels={setFunnels} services={services} setServices={setServices} />
+      <PopupPagesBlocks popup={popup} setPopup={setPopup} pages={pages} indexPage={indexPage} indexFunnel={indexFunnel} indexStep={indexStep} indexService={indexService} indexStepService={indexStepService} setPages={setPages} funnels={funnels} setFunnels={setFunnels} services={services} setServices={setServices} pageCategory={categoryPage} pageProduct={productPage} indexCategory={indexCategory} indexProduct={indexProduct} products={productsOrder} />
       <PopupNewForm popupForm={popupForm} setPopupForm={setPopupForm} titleForm={titleForm} newForm={newForm} setNewForm={setNewForm} getForms={getForms} tags={tags} funnels={funnels} getTags={getTags} error={error} setError={setError} newData={newData} setNewData={setNewData} loadingNewData={loadingNewData} setLoadingNewData={setLoadingNewData} clientData={clientData} getClientData={getClientData} style={style} />
-      <PopupNewCall popupCall={popupCall} setPopupCall={setPopupCall} titleMeeting={titleMeeting} newCall={newCall} setNewCall={setNewCall} getCalls={getCalls} tags={tags} getTags={getTags} error={error} setError={setError} funnels={funnels} newData={newData} setNewData={setNewData} loadingNewData={loadingNewData} setLoadingNewData={setLoadingNewData} clientData={clientData} getClientData={getClientData} calls={calls} />
+      <PopupNewCall popupCall={popupCall} setPopupCall={setPopupCall} titleMeeting={titleMeeting} newCall={newCall} setNewCall={setNewCall} getCalls={getCalls} tags={tags} getTags={getTags} error={error} setError={setError} funnels={funnels} newData={newData} setNewData={setNewData} loadingNewData={loadingNewData} setLoadingNewData={setLoadingNewData} clientData={clientData} getClientData={getClientData} calls={calls} storeData={storeData} />
       <PopupDeleteFunnel popupDeleteFunnel={popupDeleteFunnel} setPopupDeleteFunnel={setPopupDeleteFunnel} selectFunnel={selectFunnel!} setFunnels={setFunnels} getFunnels={getFunnels} />
       <PopupDeletePage popupDeletePage={popupDeletePage} setPopupDeletePage={setPopupDeletePage} getPages={getDesign} page={selectPage} pages={pages} header={header} color={color} popupWeb={popupWeb} />
       <PopupNewService popupService={popupService} setPopupService={setPopupService} newService={newService} setNewService={setNewService} loadingService={loadingService} setLoadingService={setLoadingService} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={services} setError={setError} />
-      <Head>
-        <title>Personalizar sitio web</title>
-      </Head>
+      <PopupDeleteService getServices={getServices} setServices={setServices} popupDeleteService={popupDeleteService} setPopupDeleteService={setPopupDeleteService} selectService={selectService} />
       <div className='flex h-full bg-white dark:bg-neutral-900'>
         <div className='p-4 fixed flex lg:hidden'>
           <button onClick={(e: any) => {
@@ -288,7 +359,7 @@ export default function Page () {
               part === ''
                 ? (
                   <div className='flex flex-col gap-4'>
-                    <h2 className='text-lg font-medium'>Paginas</h2>
+                    <h2 className='text-lg font-medium'>Páginas</h2>
                     <div className='flex flex-col gap-2'>
                       {
                         pages.map((page, index) => (
@@ -326,14 +397,20 @@ export default function Page () {
                                 }
                                 <button onClick={() => handleMoveUp(index)}><SlArrowUp className='text-lg' /></button>
                                 <button onClick={() => handleMoveDown(index)}><SlArrowDown className='text-lg' /></button>
-                                <button onClick={(e: any) => {
-                                  e.preventDefault()
-                                  setSelectPage(page)
-                                  setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-0' })
-                                  setTimeout(() => {
-                                    setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-1' })
-                                  }, 10)
-                                }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
+                                {
+                                  page.slug !== 'tienda'
+                                    ? (
+                                      <button onClick={(e: any) => {
+                                        e.preventDefault()
+                                        setSelectPage(page)
+                                        setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-0' })
+                                        setTimeout(() => {
+                                          setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-1' })
+                                        }, 10)
+                                      }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
+                                    )
+                                    : ''
+                                }
                               </div>
                             </div>
                             {
@@ -353,6 +430,12 @@ export default function Page () {
                           </div>
                         ))
                       }
+                      <div className='flex gap-4'>
+                        <button onClick={() => setPart('Pagina de producto')} className='text-left w-full'>Pagina de producto</button>
+                      </div>
+                      <div className='flex gap-4'>
+                        <button onClick={() => setPart('Pagina de categorias')} className='text-left w-full'>Pagina de categorias</button>
+                      </div>
                       <div className='flex gap-4'>
                         <button onClick={() => {
                           setMenu('hidden')
@@ -408,9 +491,9 @@ export default function Page () {
                                   <button onClick={(e: any) => {
                                     e.preventDefault()
                                     setSelectService(service)
-                                    setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-0' })
+                                    setPopupDeleteService({ ...popupDeleteService, view: 'flex', opacity: 'opacity-0' })
                                     setTimeout(() => {
-                                      setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-1' })
+                                      setPopupDeleteService({ ...popupDeleteService, view: 'flex', opacity: 'opacity-1' })
                                     }, 10)
                                   }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
                                 </div>
@@ -564,6 +647,55 @@ export default function Page () {
                       <p>Color texto boton</p>
                       <input type='color' onChange={(e: any) => setStyle({ ...style, button: e.target.value })} value={style?.button} />
                     </div>
+                  </div>
+                )
+                : ''
+            }
+            {
+              part === 'Pagina de producto'
+                ? (
+                  <div className='flex flex-col gap-4 p-4 mb-[104px]'>
+                    <div className='border-b pb-4 dark:border-neutral-700'>
+                      <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl my-auto' /><p className='my-auto'>Volver</p></button>
+                    </div>
+                    <h2 className='text-lg font-medium'>Pagina de producto</h2>
+                    <div className='flex gap-2'>
+                      <input type='checkbox' checked={productPage[0].reviews} onChange={(e: any) => {
+                        const beforeProductPage = [...productPage]
+                        beforeProductPage[0].reviews = e.target.checked
+                        setProductPage(beforeProductPage)
+                      }} />
+                      <p>Activar reseñas</p>
+                    </div>
+                    <p className='font-medium'>Agregar zona informativa</p>
+                    <div className='flex flex-col gap-2'>
+                      <p>titulo</p>
+                      <Input placeholder='Titulo' value={productPage[0].title} change={(e: any) => {
+                        const beforeProductPage = [...productPage]
+                        beforeProductPage[0].title = e.target.value
+                        setProductPage(beforeProductPage)
+                      }} />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                      <p>Descripción</p>
+                      <Textarea placeholder='Descripción' value={productPage[0].text} change={(e: any) => {
+                        const beforeProductPage = [...productPage]
+                        beforeProductPage[0].text = e.target.value
+                        setProductPage(beforeProductPage)
+                      }} />
+                    </div>
+                  </div>
+                )
+                : ''
+            }
+            {
+              part === 'Pagina de categorias'
+                ? (
+                  <div className='flex flex-col gap-4 p-4 mb-[104px]'>
+                    <div className='border-b pb-4 dark:border-neutral-700'>
+                      <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl my-auto' /><p className='my-auto'>Volver</p></button>
+                    </div>
+                    <h2 className='text-lg font-medium'>Pagina de categorias</h2>
                   </div>
                 )
                 : ''
@@ -860,7 +992,7 @@ export default function Page () {
             }
             {
               pages.map((page, i) => {
-                if (part === page.page && type === 'Page') {
+                if ((part === page.page && type === 'Page')) {
                   return (
                     <div key={page._id} className='p-4 flex flex-col gap-2 fixed bg-white w-[349px] bottom-0 border-t dark:border-neutral-700 dark:bg-neutral-800'>
                       <ButtonSubmit action={async () => {
@@ -868,7 +1000,7 @@ export default function Page () {
                           setLoading(true)
                           if (id) {
                             await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/page/${id}`, page)
-                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { color: color, header: header, footer: footer })
+                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { color: color, header: header, footer: footer, productPage: productPage, categoryPage: categoryPage })
                           }
                           setLoading(false)
                         }
@@ -878,6 +1010,24 @@ export default function Page () {
                   )
                 }
               })
+            }
+            {
+              part === 'Pagina de producto' || part === 'Pagina de categorias'
+                ? (
+                  <div className='p-4 flex flex-col gap-2 fixed bg-white w-[349px] bottom-0 border-t dark:border-neutral-700 dark:bg-neutral-800'>
+                    <ButtonSubmit action={async () => {
+                      if (!loading) {
+                        setLoading(true)
+                        if (id) {
+                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { color: color, header: header, footer: footer, productPage: productPage, categoryPage: categoryPage })
+                        }
+                        setLoading(false)
+                      }
+                    }} color='main' submitLoading={loading} textButton='Guardar' config='w-full' />
+                    <button className='text-sm'>Cancelar</button>
+                  </div>
+                )
+                : ''
             }
             {
               part === 'Popup'
@@ -978,105 +1128,135 @@ export default function Page () {
             part === ''
               ? (
                 <div className='flex flex-col gap-4 p-4'>
-                  <h2 className='text-lg font-medium'>Paginas</h2>
+                  <h2 className='text-lg font-medium'>Páginas</h2>
                   <div className='flex flex-col gap-2'>
                     {
-                      pages.map((page, index) => (
-                        <div key={page.slug} className='flex flex-col gap-2'>
-                          <div className='flex gap-4' draggable onDragStart={() => setNewPage({ ...newPage, page: page.page, slug: page.slug })} onDragOver={(e) => e.preventDefault()} onDrop={async () => {
-                            const oldPages = [...pages]
-                            if (oldPages[index].subPage?.length) {
-                              oldPages[index].subPage?.push({ page: newPage.page, slug: newPage.slug })
-                            } else {
-                              oldPages[index].subPage = [{ page: newPage.page, slug: newPage.slug }]
-                            }
-                            setPages(oldPages)
-                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: oldPages })
-                          }}>
-                            <button onClick={() => {
-                              setType('Page')
-                              setPart(page.page)
-                            }} className='text-left w-full'>{page.page}</button>
-                            <div className='flex gap-2'>
-                              <div className='flex gap-1'>
-                                <input type='checkbox' checked={page.header} onChange={async (e: any) => {
-                                  const newPages = [...pages]
-                                  newPages[index].header = e.target.checked
-                                  setPages(newPages)
-                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
-                                }} />
-                                <p className='my-auto'>Menu</p>
+                      pages.map((page, index) => {
+                        if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length)) {
+                          return (
+                            <div key={page.slug} className='flex flex-col gap-2'>
+                              <div className='flex gap-4' draggable onDragStart={() => setNewPage({ ...newPage, page: page.page, slug: page.slug })} onDragOver={(e) => e.preventDefault()} onDrop={async () => {
+                                const oldPages = [...pages]
+                                if (oldPages[index].subPage?.length) {
+                                  oldPages[index].subPage?.push({ page: newPage.page, slug: newPage.slug })
+                                } else {
+                                  oldPages[index].subPage = [{ page: newPage.page, slug: newPage.slug }]
+                                }
+                                setPages(oldPages)
+                                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: oldPages })
+                              }}>
+                                <button onClick={() => {
+                                  setType('Page')
+                                  setPart(page.page)
+                                }} className='text-left w-full text-[15px]'>{page.page}</button>
+                                <div className='flex gap-2'>
+                                  <div className='flex gap-1'>
+                                    <input type='checkbox' checked={page.header} onChange={async (e: any) => {
+                                      const newPages = [...pages]
+                                      newPages[index].header = e.target.checked
+                                      setPages(newPages)
+                                      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
+                                    }} />
+                                    <p className='my-auto text-sm'>Menu</p>
+                                  </div>
+                                  {
+                                    page.header === true
+                                      ? (
+                                        <div className='flex gap-1'>
+                                          <input type='checkbox' checked={page.button === true ? true : false} onChange={async (e: any) => {
+                                            const newPages = [...pages]
+                                            newPages[index].button = e.target.checked
+                                            setPages(newPages)
+                                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
+                                          }} />
+                                          <p className='my-auto text-sm'>Boton</p>
+                                        </div>
+                                      )
+                                      : ''
+                                  }
+                                  <button onClick={() => handleMoveUp(index)}><SlArrowUp className='text-lg' /></button>
+                                  <button onClick={() => handleMoveDown(index)}><SlArrowDown className='text-lg' /></button>
+                                  {
+                                    page.slug !== 'tienda'
+                                      ? (
+                                        <button onClick={(e: any) => {
+                                          e.preventDefault()
+                                          setSelectPage(page)
+                                          setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-0' })
+                                          setTimeout(() => {
+                                            setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-1' })
+                                          }, 10)
+                                        }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
+                                      )
+                                      : ''
+                                  }
+                                </div>
                               </div>
                               {
-                                page.header === true
-                                  ? (
-                                    <div className='flex gap-1'>
-                                      <input type='checkbox' checked={page.button === true ? true : false} onChange={async (e: any) => {
-                                        const newPages = [...pages]
-                                        newPages[index].button = e.target.checked
-                                        setPages(newPages)
-                                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: newPages })
-                                      }} />
-                                      <p className='my-auto'>Boton</p>
-                                    </div>
-                                  )
-                                  : ''
+                                page.subPage?.map((subPage, i) => (
+                                  <div key={subPage.slug} className='flex gap-2 ml-10 justify-between'>
+                                    {
+                                      editSubPage === i
+                                        ? (
+                                          <div className='flex gap-2'>
+                                            <Input value={subPage.page} change={(e: any) => {
+                                              const newPages = [...pages]
+                                              newPages[index].subPage![i].page = e.target.value
+                                              setPages(newPages)
+                                            }} />
+                                            <Button2 action={async (e: any) => {
+                                              e.preventDefault()
+                                              if (!loadingSubPage) {
+                                                setLoadingSubPage(true)
+                                                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: pages })
+                                                setEditSubPage(-1)
+                                                setLoadingSubPage(false)
+                                              }
+                                            }} loading={loadingSubPage}>Guardar</Button2>
+                                          </div>
+                                        )
+                                        : <p onClick={() => setEditSubPage(i)} className='text-[15px]'>{subPage.page}</p>
+                                    }
+                                    <button onClick={async (e: any) => {
+                                      e.preventDefault()
+                                      const oldPages = [...pages]
+                                      oldPages[index].subPage?.splice(i, 1)
+                                      setPages(oldPages)
+                                      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: oldPages })
+                                    }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
+                                  </div>
+                                ))
                               }
-                              <button onClick={() => handleMoveUp(index)}><SlArrowUp className='text-lg' /></button>
-                              <button onClick={() => handleMoveDown(index)}><SlArrowDown className='text-lg' /></button>
-                              <button onClick={(e: any) => {
-                                e.preventDefault()
-                                setSelectPage(page)
-                                setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-0' })
-                                setTimeout(() => {
-                                  setPopupDeletePage({ ...popupDeletePage, view: 'flex', opacity: 'opacity-1' })
-                                }, 10)
-                              }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
                             </div>
-                          </div>
-                          {
-                            page.subPage?.map((subPage, i) => (
-                              <div key={subPage.slug} className='flex gap-2 ml-10 justify-between'>
-                                {
-                                  editSubPage === i
-                                    ? (
-                                      <div className='flex gap-2'>
-                                        <Input value={subPage.page} change={(e: any) => {
-                                          const newPages = [...pages]
-                                          newPages[index].subPage![i].page = e.target.value
-                                          setPages(newPages)
-                                        }} />
-                                        <Button2 action={async (e: any) => {
-                                          e.preventDefault()
-                                          if (!loadingSubPage) {
-                                            setLoadingSubPage(true)
-                                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: pages })
-                                            setEditSubPage(-1)
-                                            setLoadingSubPage(false)
-                                          }
-                                        }} loading={loadingSubPage}>Guardar</Button2>
-                                      </div>
-                                    )
-                                    : <p onClick={() => setEditSubPage(i)}>{subPage.page}</p>
-                                }
-                                <button onClick={async (e: any) => {
-                                  e.preventDefault()
-                                  const oldPages = [...pages]
-                                  oldPages[index].subPage?.splice(i, 1)
-                                  setPages(oldPages)
-                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { pages: oldPages })
-                                }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
-                              </div>
-                            ))
-                          }
-                        </div>
-                      ))
+                          )
+                        }
+                      })
+                    }
+                    {
+                      productsOrder?.length
+                        ? (
+                          <>
+                            <div className='flex gap-4'>
+                              <button onClick={() => setPart('Pagina de producto')} className='text-left w-full text-[15px]'>Pagina de producto</button>
+                            </div>
+                            <div className='flex gap-4'>
+                              <button onClick={() => setPart('Pagina de categorias')} className='text-left w-full text-[15px]'>Pagina de categorias</button>
+                            </div>
+                            <div className='flex gap-4'>
+                              <button onClick={() => setPart('Pagina de carrito')} className='text-left w-full text-[15px]'>Pagina de Carrito</button>
+                            </div>
+                            <div className='flex gap-4'>
+                              <button onClick={() => setPart('Pagina de checkout')} className='text-left w-full text-[15px]'>Pagina de checkout</button>
+                            </div>
+                          </>
+                        )
+                        : ''
                     }
                     <div className='flex gap-4'>
-                      <button onClick={() => setPart('Popup')} className='text-left w-full'>Popup</button>
+                      <button onClick={() => setPart('Popup')} className='text-left w-full text-[15px]'>Popup</button>
                     </div>
                     <div className='flex gap-4'>
-                      <button onClick={() => setPart('Chat')} className='text-left w-full'>Chat</button>
+                      <button onClick={() => setPart('Chat')} className='text-left w-full text-[15px]'>Chat</button>
                     </div>
                   </div>
                   <h2 className='text-lg font-medium'>Embudos</h2>
@@ -1090,7 +1270,7 @@ export default function Page () {
                                 setType('Funnel')
                                 setPart(funnel.funnel)
                                 setSelectFunnel(funnel)
-                              }} className='text-left w-full'>{funnel.funnel}</button>
+                              }} className='text-left w-full text-[15px]'>{funnel.funnel}</button>
                               <button onClick={(e: any) => {
                                 e.preventDefault()
                                 setSelectFunnel(funnel)
@@ -1102,7 +1282,7 @@ export default function Page () {
                             </div>
                           ))
                         )
-                        : <p>No hay embudos creados</p>
+                        : <p className='text-[15px]'>No hay embudos creados</p>
                     }
                   </div>
                   <h2 className='text-lg font-medium'>Servicios</h2>
@@ -1117,20 +1297,22 @@ export default function Page () {
                                   setType('Service')
                                   setPart(service.name)
                                   setSelectService(service)
-                                }} className='text-left w-full'>{service.name}</button>
+                                }} className='text-left w-full text-[15px]'>{service.name}</button>
                                 <button onClick={(e: any) => {
                                   e.preventDefault()
                                   setSelectService(service)
-                                  setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-0' })
+                                  setPopupDeleteService({ ...popupDeleteService, view: 'flex', opacity: 'opacity-0' })
                                   setTimeout(() => {
-                                    setPopupDeleteFunnel({ ...popupDeleteFunnel, view: 'flex', opacity: 'opacity-1' })
+                                    setPopupDeleteService({ ...popupDeleteService, view: 'flex', opacity: 'opacity-1' })
                                   }, 10)
                                 }}><svg className="m-auto w-[17px]" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
                               </div>
                             )
+                          } else {
+                            return ''
                           }
                         })
-                        : <p>No hay servicios creados</p>
+                        : <p className='text-[15px]'>No hay servicios creados</p>
                     }
                   </div>
                   <div className='flex flex-col gap-2'>
@@ -1214,10 +1396,10 @@ export default function Page () {
                 return (
                   <div key={page.slug} className='flex flex-col gap-4 p-4 mb-[104px]'>
                     <div className='border-b pb-4 dark:border-neutral-700'>
-                      <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl my-auto' /><p className='my-auto'>Volver</p></button>
+                      <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
                     </div>
                     <h2 className='text-lg font-medium'>{page.page}</h2>
-                    <h3 className='font-medium'>Seo</h3>
+                    <h3 className='font-medium text-[15px]'>Seo</h3>
                     <div className='flex flex-col gap-2'>
                       <p className='text-sm'>Meta titulo</p>
                       <Input placeholder='Meta titulo' value={page.metaTitle} change={(e: any) => {
@@ -1281,11 +1463,11 @@ export default function Page () {
               ? (
                 <div className='flex flex-col gap-4 p-4 mb-[104px]'>
                   <div className='border-b pb-4 dark:border-neutral-700'>
-                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl my-auto' /><p className='my-auto'>Volver</p></button>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto'>Volver</p></button>
                   </div>
                   <h2 className='text-lg font-medium'>Estilo del sitio web</h2>
                   <div className='flex flex-col gap-2'>
-                    <p>Tipo de diseño</p>
+                    <p className='text-sm'>Tipo de diseño</p>
                     <Select change={(e: any) => setStyle({ ...style, design: e.target.value })} value={style?.design}>
                       <option>Borde</option>
                       <option>Sombreado</option>
@@ -1293,7 +1475,7 @@ export default function Page () {
                     </Select>
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Tipo de formas</p>
+                    <p className='text-sm'>Tipo de formas</p>
                     <Select change={(e: any) => setStyle({ ...style, form: e.target.value })} value={style?.form}>
                       <option>Redondeadas</option>
                       <option>Cuadradas</option>
@@ -1304,11 +1486,11 @@ export default function Page () {
                       ? (
                         <>
                           <div className='flex flex-col gap-2'>
-                            <p>Esquinas botones</p>
+                            <p className='text-sm'>Esquinas botones</p>
                             <Input type='number' change={(e: any) => setStyle({ ...style, borderButton: e.target.value })} value={style.borderButton} />
                           </div>
                           <div className='flex flex-col gap-2'>
-                            <p>Esquinas bloques</p>
+                            <p className='text-sm'>Esquinas bloques</p>
                             <Input type='number' change={(e: any) => setStyle({ ...style, borderBlock: e.target.value })} value={style.borderBlock} />
                           </div>
                         </>
@@ -1316,20 +1498,117 @@ export default function Page () {
                       : ''
                   }
                   <div className='flex flex-col gap-2'>
-                    <p>Color principal</p>
+                    <p className='text-sm'>Color principal</p>
                     <input type='color' onChange={(e: any) => setStyle({ ...style, primary: e.target.value })} value={style?.primary} />
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Color segundario</p>
+                    <p className='text-sm'>Color segundario</p>
                     <input type='color' onChange={(e: any) => setStyle({ ...style, secondary: e.target.value })} value={style?.secondary} />
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Color texto boton</p>
+                    <p className='text-sm'>Color texto boton</p>
                     <input type='color' onChange={(e: any) => setStyle({ ...style, button: e.target.value })} value={style?.button} />
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Color borde</p>
+                    <p className='text-sm'>Color borde</p>
                     <input type='color' onChange={(e: any) => setStyle({ ...style, borderColor: e.target.value })} value={style?.borderColor} />
+                  </div>
+                </div>
+              )
+              : ''
+          }
+          {
+            part === 'Pagina de producto'
+              ? (
+                <div className='flex flex-col gap-4 p-4 mb-[104px]'>
+                  <div className='border-b pb-4 dark:border-neutral-700'>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
+                  </div>
+                  <h2 className='text-lg font-medium'>Pagina de producto</h2>
+                  <div className='flex gap-2'>
+                    <input type='checkbox' checked={productPage[0].reviews} onChange={(e: any) => {
+                      const beforeProductPage = [...productPage]
+                      beforeProductPage[0].reviews = e.target.checked
+                      setProductPage(beforeProductPage)
+                    }} />
+                    <p className='text-sm'>Activar reseñas</p>
+                  </div>
+                  <p className='font-medium text-[15px]'>Agregar zona informativa</p>
+                  <div className='flex flex-col gap-2'>
+                    <p className='text-sm'>titulo</p>
+                    <Input placeholder='Titulo' value={productPage[0].title} change={(e: any) => {
+                      const beforeProductPage = [...productPage]
+                      beforeProductPage[0].title = e.target.value
+                      setProductPage(beforeProductPage)
+                    }} />
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <p className='text-sm'>Descripción</p>
+                    <Textarea placeholder='Descripción' value={productPage[0].text} change={(e: any) => {
+                      const beforeProductPage = [...productPage]
+                      beforeProductPage[0].text = e.target.value
+                      setProductPage(beforeProductPage)
+                    }} />
+                  </div>
+                </div>
+              )
+              : ''
+          }
+          {
+            part === 'Pagina de categorias'
+              ? (
+                <div className='flex flex-col gap-4 p-4 mb-[104px]'>
+                  <div className='border-b pb-4 dark:border-neutral-700'>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
+                  </div>
+                  <h2 className='text-lg font-medium'>Pagina de categorias</h2>
+                </div>
+              )
+              : ''
+          }
+          {
+            part === 'Pagina de carrito'
+              ? (
+                <div className='flex flex-col gap-4 p-4 mb-[104px]'>
+                  <div className='border-b pb-4 dark:border-neutral-700'>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
+                  </div>
+                  <h2 className='text-lg font-medium'>Pagina de carrito</h2>
+                  <div className='flex flex-col gap-2'>
+                    <p>Color fondo</p>
+                    <input type='color' value={cartPage.bgColor} onChange={(e: any) => setCartPage({ ...cartPage, bgColor: e.target.value })} />
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <p>Color texto</p>
+                    <input type='color' value={cartPage.textColor} onChange={(e: any) => setCartPage({ ...cartPage, textColor: e.target.value })} />
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <p>Color detalles</p>
+                    <input type='color' value={cartPage.detailsColor} onChange={(e: any) => setCartPage({ ...cartPage, detailsColor: e.target.value })} />
+                  </div>
+                </div>
+              )
+              : ''
+          }
+          {
+            part === 'Pagina de checkout'
+              ? (
+                <div className='flex flex-col gap-4 p-4 mb-[104px]'>
+                  <div className='border-b pb-4 dark:border-neutral-700'>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
+                  </div>
+                  <h2 className='text-lg font-medium'>Pagina de checkout</h2>
+                  <div className='flex flex-col gap-2'>
+                    <p>Color fondo</p>
+                    <input type='color' value={checkoutPage.bgColor} onChange={(e: any) => setCheckoutPage({ ...checkoutPage, bgColor: e.target.value })} />
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <p>Color texto</p>
+                    <input type='color' value={checkoutPage.textColor} onChange={(e: any) => setCheckoutPage({ ...checkoutPage, textColor: e.target.value })} />
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <p>Color detalles</p>
+                    <input type='color' value={checkoutPage.detailsColor} onChange={(e: any) => setCheckoutPage({ ...checkoutPage, detailsColor: e.target.value })} />
                   </div>
                 </div>
               )
@@ -1340,34 +1619,34 @@ export default function Page () {
               ? (
                 <div className='flex flex-col gap-4 p-4 mb-[104px]'>
                   <div className='border-b pb-4 dark:border-neutral-700'>
-                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl my-auto' /><p className='my-auto'>Volver</p></button>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
                   </div>
                   <h2 className='text-lg font-medium'>Popup</h2>
                   <div className='flex gap-2'>
                     <input type='checkbox' checked={popupWeb.active} onChange={(e: any) => setPopupWeb({ ...popupWeb, active: e.target.checked })} />
-                    <p>Activar Popup</p>
+                    <p className='text-sm'>Activar Popup</p>
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Aparecer</p>
+                    <p className='text-sm'>Aparecer</p>
                     <div className='flex gap-2'>
                       <Input type='number' placeholder='Segundos' value={popupWeb.wait} change={(e: any) => setPopupWeb({ ...popupWeb, wait: e.target.value })} />
-                      <p className='my-auto'>segundos</p>
+                      <p className='my-auto text-sm'>segundos</p>
                     </div>
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Titulo</p>
+                    <p className='text-sm'>Titulo</p>
                     <Input placeholder='Titulo' value={popupWeb.title} change={(e: any) => setPopupWeb({ ...popupWeb, title: e.target.value })} />
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Parrafo</p>
+                    <p className='text-sm'>Parrafo</p>
                     <Textarea placeholder='Descripción' value={popupWeb.description!} change={(e: any) => setPopupWeb({ ...popupWeb, description: e.target.value })} />
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Texto boton</p>
+                    <p className='text-sm'>Texto boton</p>
                     <Input placeholder='Boton' value={popupWeb.buttonText} change={(e: any) => setPopupWeb({ ...popupWeb, buttonText: e.target.value })} />
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <p>Link boton</p>
+                    <p className='text-sm'>Link boton</p>
                     <Select change={(e: any) => setPopupWeb({ ...popupWeb, buttonLink: e.target.value })} value={popupWeb.buttonLink}>
                       <option value=''>Seleccionar pagina</option>
                       {
@@ -1381,8 +1660,8 @@ export default function Page () {
                       }
                     </Select>
                   </div>
-                  <p className='font-medium text-lg'>Mostrar formulario o llamada</p>
                   <div className='flex flex-col gap-2'>
+                    <p className='text-sm'>Mostrar formulario o llamada</p>
                     <Select value={popupWeb.content} change={(e: any) => setPopupWeb({ ...popupWeb, content: e.target.value })}>
                       <option>Seleccionar formulario o llamada</option>
                       {
@@ -1422,11 +1701,11 @@ export default function Page () {
               ? (
                 <div className='flex flex-col gap-4 p-4 mb-[104px]'>
                   <div className='border-b pb-4 dark:border-neutral-700'>
-                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl my-auto' /><p className='my-auto'>Volver</p></button>
+                    <button onClick={() => setPart('')} className='flex gap-2 pt-1 pb-1 pl-2 pr-2 rounded transition-colors duration-150 hover:bg-neutral-100 dark:hover:bg-neutral-700'><BiArrowBack className='text-lg my-auto' /><p className='my-auto text-sm'>Volver</p></button>
                   </div>
                   <h2 className='text-lg font-medium'>Chat</h2>
                   <div className='flex flex-col gap-2'>
-                    <p>Color de fondo</p>
+                    <p className='text-sm'>Color de fondo</p>
                     <input type='color' onChange={(e: any) => setChat({ ...chat, bgColor: e.target.value })} value={chat?.bgColor} />
                   </div>
                 </div>
@@ -1642,6 +1921,24 @@ export default function Page () {
             })
           }
           {
+            part === 'Pagina de producto' || part === 'Pagina de categorias' || part === 'Pagina de carrito' || part === 'Pagina de checkout'
+              ? (
+                <div className='p-4 flex flex-col gap-2 fixed bg-white w-[349px] bottom-0 border-t dark:border-neutral-700 dark:bg-neutral-800'>
+                  <ButtonSubmit action={async () => {
+                    if (!loading) {
+                      setLoading(true)
+                      if (id) {
+                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { color: color, header: header, footer: footer, productPage: productPage, categoryPage: categoryPage, cartPage: cartPage, checkoutPage: checkoutPage })
+                      }
+                      setLoading(false)
+                    }
+                  }} color='main' submitLoading={loading} textButton='Guardar' config='w-full' />
+                  <button className='text-sm'>Cancelar</button>
+                </div>
+              )
+              : ''
+          }
+          {
             part === 'Popup'
               ? (
                 <div className='p-4 flex flex-col gap-2 fixed bg-white w-[349px] bottom-0 border-t dark:border-neutral-700 dark:bg-neutral-800'>
@@ -1785,7 +2082,7 @@ export default function Page () {
                                                 : design.content === 'Suscripción'
                                                   ? <Subscription edit={edit} pages={pages} setPages={setPages} index={index} design={design} ind={i} responsive={responsive} style={style} />
                                                   : design.content === 'Lead 1'
-                                                    ? <Lead1 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} />
+                                                    ? <Lead1 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
                                                     : design.content === 'Video'
                                                       ? <Video edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} responsive={responsive} style={style} storeData={storeData} />
                                                       : design.content === 'Agendar llamada'
@@ -1797,7 +2094,7 @@ export default function Page () {
                                                             : design.content === 'Llamadas'
                                                               ? <Calls edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} calls={calls} style={style} />
                                                               : design.content === 'Lead 2'
-                                                                ? <Lead2 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} />
+                                                                ? <Lead2 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
                                                                 : design.content === 'Servicios'
                                                                   ? <Services edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
                                                                   : design.content === 'Planes'
@@ -1809,12 +2106,22 @@ export default function Page () {
                                                                         : design.content === 'Reseñas'
                                                                           ? <Reviews edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} responsive={responsive} pageNeed={pages} style={style} />
                                                                           : design.content === 'Formulario'
-                                                                            ? <Form edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} responsive={responsive} pageNeed={pages} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} />
+                                                                            ? <Form edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} responsive={responsive} pageNeed={pages} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} getForms={getForms} newForm={newForm} />
                                                                             : design.content === 'Lead 3'
-                                                                              ? <Lead3 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} setNewForm={setNewForm} responsive={responsive} storeData={storeData} style={style} pageNeed={pages} />
+                                                                              ? <Lead3 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} setNewForm={setNewForm} responsive={responsive} storeData={storeData} style={style} pageNeed={pages} getForms={getForms} newForm={newForm} />
                                                                               : design.content === 'Carrusel de imagenes'
                                                                                 ? <SliderImages edit={edit} design={design} index={index} pages={pages} setPages={setPages} ind={i} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} storeData={storeData} />
-                                                                                : ''
+                                                                                : design.content === 'Categorias'
+                                                                                  ? <Categories edit={edit} categories={categories} pages={pages} setPages={setPages} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} style={style} />
+                                                                                  : design.content === 'Productos'
+                                                                                    ? <Products edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setPages} design={design} categories={categories} pages={pages} index={index} ind={i} style={style} />
+                                                                                    : design.content === 'Categorias 2'
+                                                                                      ? <Categories2 edit={edit} categories={categories} pages={pages} setPages={setPages} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} style={style} />
+                                                                                      : design.content === 'Carrusel productos'
+                                                                                        ? <SliderProducts edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setPages} design={design} categories={categories} pages={pages} index={index} ind={i} style={style} />
+                                                                                        : design.content === 'Tabla comparativa'
+                                                                                          ? <Table edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
+                                                                                          : ''
                                 }
                                 <div className='m-auto mt-2 mb-6 flex gap-4 w-fit'>
                                   <p className='my-auto font-medium'>{design.content}</p>
@@ -1841,6 +2148,8 @@ export default function Page () {
                                   setIndexStep(-1)
                                   setIndexService(-1)
                                   setIndexStepService(-1)
+                                  setIndexProduct(-1)
+                                  setIndexCategory(-1)
                                   setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                                   setTimeout(() => {
                                     setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
@@ -1857,6 +2166,10 @@ export default function Page () {
                                   setIndexPage(i)
                                   setIndexFunnel(-1)
                                   setIndexStep(-1)
+                                  setIndexService(-1)
+                                  setIndexStepService(-1)
+                                  setIndexProduct(-1)
+                                  setIndexCategory(-1)
                                   setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                                   setTimeout(() => {
                                     setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
@@ -1873,6 +2186,302 @@ export default function Page () {
               )
             }
           })
+        }
+        {
+          part === 'Pagina de producto'
+            ? productPage.map((page, i) => (
+              <div key={i} className='overflow-auto bg-white text-black' style={{ width: 'calc(100% - 350px)' }}>
+                <Layout edit={edit} setEdit={setEdit} setHeader={setHeader} header={header} setPart={setPart} pages={pages} storeData={storeData} responsive={responsive} footer={footer} setFooter={setFooter} style={style}>
+                  <PageProduct productsOrder={productsOrder} productPage={productPage} style={style} />
+                  {
+                    page.design.length
+                      ? page.design.map((design, index) => (
+                        <div key={index}>
+                          {
+                            design.content === 'Carrusel'
+                              ? <Slider design={design} edit={edit} pages={productPage} setPages={setProductPage} index={index} inx={i} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} ind={0} style={style} />
+                              : design.content === 'Categorias'
+                                ? <Categories edit={edit} categories={categories} pages={productPage} setPages={setProductPage} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} style={style} />
+                                : design.content === 'Bloque 1'
+                                  ? <Bloque1 edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                  : design.content === 'Bloque 2'
+                                    ? <Bloque2 edit={edit} design={design} pages={productPage} setPages={setProductPage} index={index} inx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                    : design.content === 'Bloque 3'
+                                      ? <Bloque3 edit={edit} design={design} index={index} pages={productPage} setPages={setProductPage} inx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                      : design.content === 'Bloque 4'
+                                        ? <Bloque4 edit={edit} design={design} pages={productPage} setPages={setProductPage} index={index} inx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms}  style={style}/>
+                                        : design.content === 'Bloque 5'
+                                          ? <Bloque5 edit={edit} design={design} pages={productPage} setPages={setProductPage} index={index} inx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                          : design.content === 'Productos'
+                                            ? <Products edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setProductPage} design={design} categories={categories} pages={productPage} index={index} inx={i} ind={0} style={style} />
+                                            : design.content === 'Contacto'
+                                              ? <Contact edit={edit} design={design} pages={productPage} setPages={setProductPage} index={index} inx={i} ind={0} responsive={responsive} style={style} />
+                                              : design.content === 'Suscripción'
+                                                ? <Subscription edit={edit} pages={productPage} setPages={setProductPage} index={index} design={design} inx={i} ind={0} responsive={responsive} style={style} />
+                                                : design.content === 'Bloque 6'
+                                                  ? (
+                                                    <div className="w-full flex text-center" style={{ backgroundImage: `url(${design.info.image})` }}>
+                                                      <div className="w-full max-w-[1280px] m-auto py-28 flex flex-col gap-2">
+                                                        <h1 className={`text-[25px] font-medium lg:text-[32px]`}>Nombre de la categoria</h1>
+                                                        <p className={`text-sm lg:text-[16px]`}>Descripción de la categoria</p>
+                                                      </div>
+                                                    </div>
+                                                  )
+                                                  : design.content === 'Categorias 2'
+                                                    ? <Categories2 edit={edit} categories={categories} pages={productPage} setPages={setProductPage} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} style={style} />
+                                                    : design.content === 'Carrusel productos'
+                                                      ? <SliderProducts edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setProductPage} design={design} categories={categories} pages={productPage} index={index} inx={i} ind={0} style={style} />
+                                                      : design.content === 'Lead 1'
+                                                        ? <Lead1 edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
+                                                        : design.content === 'Video'
+                                                          ? <Video edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} responsive={responsive} style={style} storeData={storeData} />
+                                                          : design.content === 'Agendar llamada'
+                                                            ? <Call edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} calls={calls!} setNewCall={setNewCall} setTitleMeeting={setTitleMeeting} setPopupCall={setPopupCall} popupCall={popupCall} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} />
+                                                            : design.content === 'Bloque 7'
+                                                              ? <Bloque7 edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} />
+                                                              : design.content === 'Checkout'
+                                                                ? <Checkout edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} services={services} setError={setError} setTitle={setTitle} popupService={popupService} setPopupService={setPopupService} setNewService={setNewService} storeData={storeData} style={style} />
+                                                                : design.content === 'Llamadas'
+                                                                  ? <Calls edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} calls={calls} style={style} />
+                                                                  : design.content === 'Lead 2'
+                                                                    ? <Lead2 edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
+                                                                    : design.content === 'Servicios'
+                                                                      ? <Services edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
+                                                                      : design.content === 'Planes'
+                                                                        ? <Plans edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} style={style} clientData={clientData} getClientData={getClientData} setNewCall={setNewCall} setTitleMeeting={setTitleMeeting} popupCall={popupCall} setPopupCall={setPopupCall} calls={calls} />
+                                                                        : design.content === 'Preguntas frecuentes'
+                                                                          ? <Faq edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} style={style} />
+                                                                          : design.content === 'Bloques'
+                                                                            ? <Blocks edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} responsive={responsive} pageNeed={pages} style={style} forms={forms} funnels={funnels} calls={calls} />
+                                                                            : design.content === 'Reseñas'
+                                                                              ? <Reviews edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} responsive={responsive} pageNeed={pages} style={style} />
+                                                                              : design.content === 'Formulario'
+                                                                                ? <Form edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} responsive={responsive} pageNeed={pages} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} getForms={getForms} newForm={newForm} />
+                                                                                : design.content === 'Lead 3'
+                                                                                  ? <Lead3 edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} setNewForm={setNewForm} responsive={responsive} storeData={storeData} style={style} pageNeed={pages} getForms={getForms} newForm={newForm} />
+                                                                                  : design.content === 'Carrusel de imagenes'
+                                                                                    ? <SliderImages edit={edit} design={design} index={index} pages={productPage} setPages={setProductPage} inx={i} ind={0} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} storeData={storeData} />
+                                                                                    : design.content === 'Tabla comparativa'
+                                                                                      ? <Table edit={edit} pages={productPage} setPages={setProductPage} design={design} index={index} inx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
+                                                                                      : ''
+                            }
+                            <div className='m-auto mt-2 mb-6 flex gap-4 w-fit'>
+                              <p className='my-auto font-medium'>{design.content}</p>
+                              {
+                                design.content === 'Productos' || design.content === 'Bloque 6'
+                                  ? ''
+                                  : edit === design.content
+                                    ? <Button2 action={() => setEdit('')}>Guardar</Button2>
+                                    : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                              }
+                              {
+                                design.content === 'Productos' || design.content === 'Bloque 6'
+                                  ? ''
+                                  : (
+                                    <Button2Red action={() => {
+                                      const oldProductPage = [...productPage]
+                                      oldProductPage[i].design.splice(index, 1)
+                                      setProductPage(oldProductPage)
+                                    }}>Eliminar bloque</Button2Red>
+                                  )
+                              }
+                              <button onClick={() => moveBlockProduct(index, 'up')}><SlArrowUp className='text-lg' /></button>
+                              <button onClick={() => moveBlockProduct(index, 'down')}><SlArrowDown className='text-lg' /></button>
+                            </div>
+                          </div>
+                        ))
+                        : (
+                          <div className='py-10 flex'>
+                            <Button action={() => {
+                              setIndexPage(-1)
+                              setIndexFunnel(-1)
+                              setIndexStep(-1)
+                              setIndexService(-1)
+                              setIndexStepService(-1)
+                              setIndexProduct(0)
+                              setIndexCategory(-1)
+                              setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                              setTimeout(() => {
+                                setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                              }, 10)
+                            }} config='m-auto'>Agregar bloque de contenido</Button>
+                          </div>
+                        )
+                    }
+                    {
+                      page.design.length
+                        ? (
+                          <div className='py-10 flex'>
+                            <Button action={() => {
+                              setIndexPage(-1)
+                              setIndexFunnel(-1)
+                              setIndexStep(-1)
+                              setIndexService(-1)
+                              setIndexStepService(-1)
+                              setIndexProduct(0)
+                              setIndexCategory(-1)
+                              setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                              setTimeout(() => {
+                                setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                              }, 10)
+                            }} config='m-auto'>Agregar bloque de contenido</Button>
+                          </div>
+                        )
+                        : ''
+                    }
+                </Layout>
+              </div>
+            ))
+            : ''
+        }
+        {
+          part === 'Pagina de categorias'
+            ? categoryPage.map((page, i) => (
+                <div key={i} className='overflow-y-auto bg-white text-black' style={{ width: 'calc(100% - 350px' }}>
+                  <Layout edit={edit} setEdit={setEdit} setHeader={setHeader} header={header} setPart={setPart} pages={pages} storeData={storeData} responsive={responsive} footer={footer} setFooter={setFooter} style={style}>
+                  <div className='flex flex-col gap-4'>
+                    {
+                      page.design.length
+                        ? page.design.map((design, index) => (
+                          <div key={index}>
+                            {
+                                design.content === 'Carrusel'
+                                  ? <Slider design={design} edit={edit} pages={categoryPage} setPages={setCategoryPage} index={index} inxx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                  : design.content === 'Categorias'
+                                    ? <Categories edit={edit} categories={categories} pages={categoryPage} setPages={setCategoryPage} setMouse={setMouse} design={design} index={index} mouse={mouse} inxx={i} ind={0} style={style} />
+                                    : design.content === 'Bloque 1'
+                                      ? <Bloque1 edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                      : design.content === 'Bloque 2'
+                                        ? <Bloque2 edit={edit} design={design} pages={categoryPage} setPages={setCategoryPage} index={index} inxx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                        : design.content === 'Bloque 3'
+                                          ? <Bloque3 edit={edit} design={design} index={index} pages={pages} setPages={setCategoryPage} inxx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                          : design.content === 'Bloque 4'
+                                            ? <Bloque4 edit={edit} design={design} pages={categoryPage} setPages={setCategoryPage} index={index} inxx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                            : design.content === 'Bloque 5'
+                                              ? <Bloque5 edit={edit} design={design} pages={categoryPage} setPages={setCategoryPage} index={index} inxx={i} pageNeed={pages} ind={0} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                              : design.content === 'Productos'
+                                                ? <Products edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setCategoryPage} design={design} categories={categories} pages={categoryPage} index={index} inxx={i} ind={0} style={style} />
+                                                : design.content === 'Contacto'
+                                                  ? <Contact edit={edit} design={design} pages={categoryPage} setPages={setCategoryPage} index={index} inx={i} ind={0} responsive={responsive} style={style} />
+                                                  : design.content === 'Suscripción'
+                                                    ? <Subscription edit={edit} pages={categoryPage} setPages={setCategoryPage} index={index} design={design} inx={i} ind={0} responsive={responsive} style={style} />
+                                                    : design.content === 'Bloque 6'
+                                                      ? (
+                                                        <div className="w-full flex text-center" style={{ backgroundImage: `url(${design.info.image})` }}>
+                                                          <div className="w-full max-w-[1280px] m-auto py-28 flex flex-col gap-2">
+                                                            <h1 className={`text-[25px] font-medium lg:text-[32px]`}>Nombre de la categoria</h1>
+                                                            <p className={`text-sm lg:text-[16px]`}>Descripción de la categoria</p>
+                                                          </div>
+                                                        </div>
+                                                      )
+                                                      : design.content === 'Categorias 2'
+                                                        ? <Categories2 edit={edit} categories={categories} pages={categoryPage} setPages={setCategoryPage} setMouse={setMouse} design={design} index={index} mouse={mouse} inxx={i} ind={0} style={style} />
+                                                        : design.content === 'Carrusel productos'
+                                                          ? <SliderProducts edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setCategoryPage} design={design} categories={categories} pages={categoryPage} index={index} inxx={i} ind={0} style={style} />
+                                                          : design.content === 'Lead 1'
+                                                            ? <Lead1 edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
+                                                            : design.content === 'Video'
+                                                              ? <Video edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} responsive={responsive} style={style} storeData={storeData} />
+                                                              : design.content === 'Agendar llamada'
+                                                                ? <Call edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} calls={calls!} setNewCall={setNewCall} setTitleMeeting={setTitleMeeting} setPopupCall={setPopupCall} popupCall={popupCall} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} />
+                                                                : design.content === 'Bloque 7'
+                                                                  ? <Bloque7 edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} />
+                                                                  : design.content === 'Checkout'
+                                                                    ? <Checkout edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} services={services} setError={setError} setTitle={setTitle} popupService={popupService} setPopupService={setPopupService} setNewService={setNewService} storeData={storeData} style={style} />
+                                                                    : design.content === 'Llamadas'
+                                                                      ? <Calls edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} calls={calls} style={style} />
+                                                                      : design.content === 'Lead 2'
+                                                                        ? <Lead2 edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
+                                                                        : design.content === 'Servicios'
+                                                                          ? <Services edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
+                                                                          : design.content === 'Planes'
+                                                                            ? <Plans edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} style={style} clientData={clientData} getClientData={getClientData} setNewCall={setNewCall} setTitleMeeting={setTitleMeeting} popupCall={popupCall} setPopupCall={setPopupCall} calls={calls} />
+                                                                            : design.content === 'Preguntas frecuentes'
+                                                                              ? <Faq edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} style={style} />
+                                                                              : design.content === 'Bloques'
+                                                                                ? <Blocks edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} responsive={responsive} pageNeed={pages} style={style} forms={forms} funnels={funnels} calls={calls} />
+                                                                                : design.content === 'Reseñas'
+                                                                                  ? <Reviews edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} responsive={responsive} pageNeed={pages} style={style} />
+                                                                                  : design.content === 'Formulario'
+                                                                                    ? <Form edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} responsive={responsive} pageNeed={pages} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} getForms={getForms} newForm={newForm} />
+                                                                                    : design.content === 'Lead 3'
+                                                                                      ? <Lead3 edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} setNewForm={setNewForm} responsive={responsive} storeData={storeData} style={style} pageNeed={pages} getForms={getForms} newForm={newForm} />
+                                                                                      : design.content === 'Carrusel de imagenes'
+                                                                                        ? <SliderImages edit={edit} design={design} index={index} pages={categoryPage} setPages={setCategoryPage} inxx={i} ind={0} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} storeData={storeData} />
+                                                                                        : design.content === 'Tabla comparativa'
+                                                                                          ? <Table edit={edit} pages={categoryPage} setPages={setCategoryPage} design={design} index={index} inxx={i} ind={0} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
+                                                                                          : ''
+                                }
+                                <div className='m-auto mt-2 mb-6 flex gap-4 w-fit'>
+                                  <p className='my-auto font-medium'>{design.content}</p>
+                                  {
+                                    design.content === 'Productos' || design.content === 'Bloque 6'
+                                      ? ''
+                                      : edit === design.content
+                                        ? <Button2 action={() => setEdit('')}>Guardar</Button2>
+                                        : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                                  }
+                                  {
+                                    design.content === 'Productos' || design.content === 'Bloque 6'
+                                      ? ''
+                                      : (
+                                        <Button2Red action={() => {
+                                          const oldCategoryPage = [...categoryPage]
+                                          oldCategoryPage[i].design.splice(index, 1)
+                                          setCategoryPage(oldCategoryPage)
+                                        }}>Eliminar bloque</Button2Red>
+                                      )
+                                  }
+                                  <button onClick={() => moveBlockCategories(index, 'up')}><SlArrowUp className='text-lg' /></button>
+                                  <button onClick={() => moveBlockCategories(index, 'down')}><SlArrowDown className='text-lg' /></button>
+                                </div>
+                          </div>
+                        ))
+                        : (
+                          <div className='py-10 flex'>
+                            <Button action={() => {
+                              setIndexPage(-1)
+                              setIndexFunnel(-1)
+                              setIndexStep(-1)
+                              setIndexService(-1)
+                              setIndexStepService(-1)
+                              setIndexProduct(-1)
+                              setIndexCategory(0)
+                              setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                              setTimeout(() => {
+                                setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                              }, 10)
+                            }} config='m-auto'>Agregar bloque de contenido</Button>
+                          </div>
+                        )
+                    }
+                    {
+                      page.design.length
+                        ? (
+                          <div className='py-10 flex'>
+                            <Button action={() => {
+                              setIndexPage(-1)
+                              setIndexFunnel(-1)
+                              setIndexStep(-1)
+                              setIndexService(-1)
+                              setIndexStepService(-1)
+                              setIndexProduct(-1)
+                              setIndexCategory(0)
+                              setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                              setTimeout(() => {
+                                setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                              }, 10)
+                            }} config='m-auto'>Agregar bloque de contenido</Button>
+                          </div>
+                        )
+                        : ''
+                    }
+                  </div>
+                  </Layout>
+                </div>
+              )
+            )
+            : ''
         }
         {
           part === 'Popup'
@@ -2049,7 +2658,7 @@ export default function Page () {
                                                     : design.content === 'Suscripción'
                                                       ? <Subscription edit={edit} pages={pages} setPages={setPages} index={index} design={design} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} responsive={responsive} style={style} />
                                                       : design.content === 'Lead 1'
-                                                        ? <Lead1 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} />
+                                                        ? <Lead1 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
                                                         : design.content === 'Video'
                                                           ? <Video edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} responsive={responsive} style={style} storeData={storeData} />
                                                           : design.content === 'Agendar llamada'
@@ -2061,7 +2670,7 @@ export default function Page () {
                                                                 : design.content === 'Llamadas'
                                                                   ? <Calls edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} calls={calls} funnels={funnels} setFunnels={setFunnels} style={style} />
                                                                   : design.content === 'Lead 2'
-                                                                    ? <Lead2 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} />
+                                                                    ? <Lead2 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} storeData={storeData} style={style} getForms={getForms} newForm={newForm} />
                                                                     : design.content === 'Servicios'
                                                                       ? <Services edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} calls={calls} funnels={funnels} setFunnels={setFunnels} responsive={responsive} pageNeed={pages} style={style} />
                                                                       : design.content === 'Planes'
@@ -2071,14 +2680,22 @@ export default function Page () {
                                                                           : design.content === 'Reseñas'
                                                                             ? <Reviews edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
                                                                             : design.content === 'Formulario'
-                                                                              ? <Form edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} />
+                                                                              ? <Form edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} getForms={getForms} newForm={newForm} />
                                                                               : design.content === 'Lead 3'
-                                                                                ? <Lead3 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} storeData={storeData} />
+                                                                                ? <Lead3 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} storeData={storeData} getForms={getForms} newForm={newForm} />
                                                                                 : design.content === 'Tabla comparativa'
                                                                                   ? <Table edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
                                                                                   : design.content === 'Preguntas frecuentes'
                                                                                     ? <Faq edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
-                                                                                    : ''
+                                                                                    : design.content === 'Categorias'
+                                                                                      ? <Categories edit={edit} categories={categories} pages={pages} setPages={setPages} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} />
+                                                                                      : design.content === 'Productos'
+                                                                                        ? <Products edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setPages} design={design} categories={categories} pages={pages} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} />
+                                                                                        : design.content === 'Categorias 2'
+                                                                                          ? <Categories2 edit={edit} categories={categories} pages={pages} setPages={setPages} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} />
+                                                                                          : design.content === 'Carrusel productos'
+                                                                                            ? <SliderProducts edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setPages} design={design} categories={categories} pages={pages} index={index} ind={i} inde={funnels.findIndex(funnel => funnel.funnel === part)} funnels={funnels} setFunnels={setFunnels} />
+                                                                                            : ''
                                     }
                                     <div className='m-auto mt-2 mb-6 flex gap-4 w-fit'>
                                       <p className='my-auto font-medium'>{design.content}</p>
@@ -2105,6 +2722,8 @@ export default function Page () {
                                       setIndexStepService(-1)
                                       setIndexFunnel(funnels.findIndex((funnel) => funnel.funnel === part))
                                       setIndexStep(i)
+                                      setIndexProduct(-1)
+                                      setIndexCategory(-1)
                                       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                                       setTimeout(() => {
                                         setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
@@ -2119,8 +2738,12 @@ export default function Page () {
                                   <div className='py-10 flex'>
                                     <Button action={() => {
                                       setIndexPage(-1)
+                                      setIndexService(-1)
+                                      setIndexStepService(-1)
                                       setIndexFunnel(funnels.findIndex((funnel) => funnel.funnel === part))
                                       setIndexStep(i)
+                                      setIndexProduct(-1)
+                                      setIndexCategory(-1)
                                       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                                       setTimeout(() => {
                                         setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
@@ -2211,7 +2834,7 @@ export default function Page () {
                                                     : design.content === 'Suscripción'
                                                       ? <Subscription edit={edit} pages={pages} setPages={setPages} index={index} design={design} ind={i} indx={services.findIndex(service => service.name === part)} funnels={funnels} setFunnels={setFunnels} responsive={responsive} services={services} setServices={setServices} />
                                                       : design.content === 'Lead 1'
-                                                        ? <Lead1 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} services={services} setServices={setServices} storeData={storeData} />
+                                                        ? <Lead1 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} services={services} setServices={setServices} storeData={storeData} getForms={getForms} newForm={newForm} />
                                                         : design.content === 'Video'
                                                           ? <Video edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} funnels={funnels} setFunnels={setFunnels} responsive={responsive} services={services} setServices={setServices} style={style} storeData={storeData} />
                                                           : design.content === 'Agendar llamada'
@@ -2223,18 +2846,26 @@ export default function Page () {
                                                                 : design.content === 'Llamadas'
                                                                   ? <Calls edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} calls={calls} funnels={funnels} setFunnels={setFunnels} services={services} setServices={setServices} />
                                                                   : design.content === 'Lead 2'
-                                                                    ? <Lead2 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} services={services} setServices={setServices} storeData={storeData} />
+                                                                    ? <Lead2 edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} selectFunnel={selectFunnel} setSelectFunnel={setSelectFunnel} selectStep={step} setNewForm={setNewForm} responsive={responsive} error={error} setError={setError} services={services} setServices={setServices} storeData={storeData} getForms={getForms} newForm={newForm} />
                                                                     : design.content === 'Servicios'
                                                                       ? <Services edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} calls={calls} funnels={funnels} setFunnels={setFunnels} services={services} setServices={setServices} responsive={responsive} pageNeed={pages} />
                                                                       : design.content === 'Planes'
-                                                                        ? <Plans edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} setServices={setServices} getClientData={getClientData} clientData={clientData} setNewCall={setNewCall} setTitleMeeting={setTitleMeeting} popupCall={popupCall} setPopupCall={setPopupCall} calls={calls} />
+                                                                        ? <Plans edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} setServices={setServices} getClientData={getClientData} clientData={clientData} setNewCall={setNewCall} setTitleMeeting={setTitleMeeting} popupCall={popupCall} setPopupCall={setPopupCall} calls={calls} style={style} />
                                                                         : design.content === 'Bloques'
                                                                           ? <Blocks edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} forms={forms} />
                                                                           : design.content === 'Reseñas'
                                                                             ? <Reviews edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} style={style} />
                                                                             : design.content === 'Formulario'
-                                                                              ? <Form edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} />
-                                                                              : ''
+                                                                              ? <Form edit={edit} pages={pages} setPages={setPages} design={design} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} responsive={responsive} pageNeed={pages} funnels={funnels} setFunnels={setFunnels} forms={forms} popupForm={popupForm} setNewForm={setNewForm} setPopupForm={setPopupForm} setTitleForm={setTitleForm} style={style} getForms={getForms} newForm={newForm} />
+                                                                              : design.content === 'Categorias'
+                                                                                ? <Categories edit={edit} categories={categories} pages={pages} setPages={setPages} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} indx={services.findIndex(service => service.name === part)} services={services} funnels={funnels} setFunnels={setFunnels} />
+                                                                                : design.content === 'Productos'
+                                                                                  ? <Products edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setPages} design={design} categories={categories} pages={pages} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} funnels={funnels} setFunnels={setFunnels} />
+                                                                                  : design.content === 'Categorias 2'
+                                                                                    ? <Categories2 edit={edit} categories={categories} pages={pages} setPages={setPages} setMouse={setMouse} design={design} index={index} mouse={mouse} ind={i} indx={services.findIndex(service => service.name === part)} services={services} funnels={funnels} setFunnels={setFunnels} />
+                                                                                    : design.content === 'Carrusel productos'
+                                                                                      ? <SliderProducts edit={edit} order={order} setOrder={setOrder} productsOrder={productsOrder} setPages={setPages} design={design} categories={categories} pages={pages} index={index} ind={i} indx={services.findIndex(service => service.name === part)} services={services} funnels={funnels} setFunnels={setFunnels} />
+                                                                                      : ''
                                     }
                                     <div className='m-auto mt-2 mb-6 flex gap-4 w-fit'>
                                       <p className='my-auto font-medium'>{design.content}</p>
@@ -2261,6 +2892,8 @@ export default function Page () {
                                       setIndexStep(-1)
                                       setIndexService(services.findIndex(service => service.name === part))
                                       setIndexStepService(i)
+                                      setIndexProduct(-1)
+                                      setIndexCategory(-1)
                                       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                                       setTimeout(() => {
                                         setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
@@ -2275,8 +2908,12 @@ export default function Page () {
                                   <div className='py-10 flex'>
                                     <Button action={() => {
                                       setIndexPage(-1)
-                                      setIndexFunnel(services.findIndex(service => service.name === part))
-                                      setIndexStep(i)
+                                      setIndexFunnel(-1)
+                                      setIndexStep(-1)
+                                      setIndexService(services.findIndex(service => service.name === part))
+                                      setIndexStepService(i)
+                                      setIndexProduct(-1)
+                                      setIndexCategory(-1)
                                       setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                                       setTimeout(() => {
                                         setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
@@ -2305,9 +2942,128 @@ export default function Page () {
             : ''
         }
         {
+          part === 'Pagina de carrito'
+            ? (
+              <div className='w-full bg-white text-black lg:w-[calc(100%-350px)] overflow-y-auto'>
+                <div className={`w-full p-4 flex gap-4 justify-between`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 0px 10px 0px ${style.borderColor}15` : '', borderBottom: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                  <p className='text-3xl font-semibold my-auto'>LOGO</p>
+                  <div className='flex gap-4 my-auto'>
+                    <p className='my-auto'>Inicio</p>
+                    <p className='my-auto'>Contacto</p>
+                    <p className={`my-auto px-4 py-2 text-white`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Hablemos</p>
+                  </div>
+                </div>
+                <div className='flex gap-4 p-4' style={{ backgroundColor: cartPage.bgColor, color: cartPage.textColor }}>
+                  <div className='w-1/2 flex flex-col gap-4'>
+                    <h1 className='text-3xl font-medium'>Carrito</h1>
+                    <div className='flex gap-4 justify-between'>
+                      <div className='flex gap-2'>
+                        <Image className='w-28' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} src={productsOrder![0].images[0]} alt='Imagen producto' width={200} height={200} />
+                        <p className='m-auto font-medium'>{productsOrder![0].name}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='w-1/2'>
+                    <div className='p-6 flex flex-col gap-4' style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', backgroundColor: cartPage.detailsColor }}>
+                      <h2 className='text-2xl font-medium'>Calcula los costos de envío</h2>
+                      <Select change={undefined} config='bg-transparent'>
+                        <option>Seleccionar Región</option>
+                      </Select>
+                      <div className='flex flex-col gap-2'>
+                        <div className='flex gap-2 justify-between'>
+                          <p>Subtotal</p>
+                          <p>$10.000</p>
+                        </div>
+                        <div className='flex gap-2 justify-between border-b pb-2'>
+                          <p>Envío</p>
+                          <p>$3.000</p>
+                        </div>
+                        <div className='flex gap-2 justify-between'>
+                          <p>Total</p>
+                          <p>$13.000</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+            : ''
+        }
+        {
+          part === 'Pagina de checkout'
+            ? (
+              <div className='w-full bg-white text-black lg:w-[calc(100%-350px)] overflow-y-auto'>
+                <div className={`w-full p-4 flex gap-4 justify-between`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 0px 10px 0px ${style.borderColor}15` : '', borderBottom: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
+                  <p className='text-3xl font-semibold my-auto'>LOGO</p>
+                  <div className='flex gap-4 my-auto'>
+                    <p className='my-auto'>Inicio</p>
+                    <p className='my-auto'>Contacto</p>
+                    <p className={`my-auto px-4 py-2 text-white`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Hablemos</p>
+                  </div>
+                </div>
+                <div className='flex gap-4 p-4' style={{ backgroundColor: checkoutPage.bgColor, color: checkoutPage.textColor }}>
+                  <div className='w-1/2 flex flex-col gap-4'>
+                    <h1 className='text-3xl font-medium'>Finalizar compra</h1>
+                    <h2 className='text-2xl font-medium'>Información de contacto</h2>
+                    <div className='flex flex-col gap-1'>
+                      <p>Email</p>
+                      <Input config='bg-transparent' placeholder='Email' change={undefined} />
+                    </div>
+                    <h2 className='text-2xl font-medium'>Información de envío</h2>
+                    <div className='flex gap-2'>
+                      <div className='flex flex-col gap-1 w-1/2'>
+                        <p>Nombre</p>
+                        <Input config='bg-transparent' placeholder='Nombre' change={undefined} />
+                      </div>
+                      <div className='flex flex-col gap-1 w-1/2'>
+                        <p>Apellido</p>
+                        <Input config='bg-transparent' placeholder='Apellido' change={undefined} />
+                      </div>
+                    </div>
+                    <div className='flex flex-col gap-1'>
+                      <p>Dirección</p>
+                      <Input config='bg-transparent' placeholder='Dirección' change={undefined} />
+                    </div>
+                    <div className='flex flex-col gap-1'>
+                      <p>Detalles (opcional)</p>
+                      <Input config='bg-transparent' placeholder='Detalles' change={undefined} />
+                    </div>
+                  </div>
+                  <div className='w-1/2'>
+                    <div className='p-6 flex flex-col gap-4' style={{ border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', backgroundColor: checkoutPage.detailsColor }}>
+                      <h2 className='text-2xl font-medium'>Carrito</h2>
+                      <div className='flex gap-2 justify-between'>
+                        <div className='flex gap-2'>
+                          <Image className='w-20' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} src={productsOrder![0].images[0]} alt='Imagen producto' width={200} height={200} />
+                          <p className='m-auto font-medium'>{productsOrder![0].name}</p>
+                        </div>
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <div className='flex gap-2 justify-between'>
+                          <p>Subtotal</p>
+                          <p>$10.000</p>
+                        </div>
+                        <div className='flex gap-2 justify-between border-b pb-2'>
+                          <p>Envío</p>
+                          <p>$3.000</p>
+                        </div>
+                        <div className='flex gap-2 justify-between'>
+                          <p>Total</p>
+                          <p>$13.000</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+            : ''
+        }
+        {
           part === 'Estilo'
             ? (
-              <div className='w-full lg:w-[calc(100%-350px)] overflow-y-auto'>
+              <div className='w-full bg-white text-black lg:w-[calc(100%-350px)] overflow-y-auto'>
                 <div className={`w-full p-4 flex gap-4 justify-between`} style={{ boxShadow: style?.design === 'Sombreado' ? `0px 0px 10px 0px ${style.borderColor}15` : '', borderBottom: style?.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }}>
                   <p className='text-3xl font-semibold my-auto'>LOGO</p>
                   <div className='flex gap-4 my-auto'>
@@ -2340,7 +3096,7 @@ export default function Page () {
                 <div className='w-full px-4 py-12 flex flex-col gap-4'>
                   <p className='text-2xl font-medium text-center m-auto'>Lorem ipsum dolor sit amet</p>
                   <div className='flex gap-2'>
-                    <input className={`w-full border px-2`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} placeholder='Email' />
+                    <input className={`w-full border px-2 bg-white`} style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} placeholder='Email' />
                     <button className={` m-auto px-4 py-2 text-white`} style={{ backgroundColor: style?.primary, color: style?.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>Envíar</button>
                   </div>
                 </div>
@@ -2357,14 +3113,14 @@ export default function Page () {
                 </div>
                 <div className='flex flex-col h-full gap-2 pl-3 sm:pl-4' style={{ overflow: 'overlay' }}>
                   <div className='flex flex-col gap-2 mr-4'>
-                    <div className='bg-gray-200 p-1.5 rounded-md w-fit ml-auto'><p>Lorem ipsum</p></div>
+                    <div className='bg-gray-200 p-1.5 rounded-md w-fit text-black ml-auto'><p>Lorem ipsum</p></div>
                   </div>
                   <div className='flex flex-col gap-2 mr-6'>
                     <div className='text-white p-1.5 rounded-md w-fit' style={{ backgroundColor: style.primary }}><p>Lorem ipsum</p></div>
                   </div>
                 </div>
                 <form className='flex gap-2 pr-3 pl-3 pb-3 sm:pr-4 sm:pl-4 sm:pb-4'>
-                  <Input type={'text'} placeholder={'Mensaje'} change={undefined} />
+                  <Input type={'text'} placeholder={'Mensaje'} change={undefined} config='bg-white' />
                   <button type='submit' className='text-white w-28 rounded-xl dark:bg-neutral-700 transition-colors duration-200 hover:bg-transparent' style={{ backgroundColor: style.primary }}>Enviar</button>
                 </form>
               </div>

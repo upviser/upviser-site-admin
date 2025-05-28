@@ -61,7 +61,7 @@ export default function FunnelPage () {
       <main className="w-full h-full p-4 lg:p-6 flex flex-col gap-6 bg-bg min-h-full max-h-full overflow-y-auto dark:bg-neutral-900">
         <div className="w-full flex flex-col gap-6 mx-auto max-w-[1280px]">
           <div className="flex gap-4 justify-between">
-            <h1 className="text-2xl font-medium my-auto">Embudos</h1>
+            <h1 className="text-lg font-medium my-auto">Embudos</h1>
             {
               session?.user.type === 'Administrador'
                 ? (
@@ -108,7 +108,7 @@ export default function FunnelPage () {
                           ? (
                             <>
                               {
-                                session?.user.type === 'administrador'
+                                session?.user.type === 'Administrador'
                                   ? (
                                     <Button2 action={(e: any) => {
                                       e.preventDefault()
@@ -190,7 +190,7 @@ export default function FunnelPage () {
                     }
                   </div>
                 )
-                : <p>No hay embudos creados</p>
+                : <p className='text-sm'>No tienes embudos creados</p>
           }
         </div>
       </main>

@@ -16,7 +16,6 @@ export default function Page ({ params }: { params: { llamada: string } }) {
   const [popupCancel, setPopupCancel] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [scheduled, setScheduled] = useState(false)
   const [clientData, setClientData] = useState<IClientData[]>([])
-  const [storeData, setStoreData] = useState<IStoreData>()
   const [calls, setCalls] = useState<ICall[]>([])
 
   useEffect(() => {
@@ -46,15 +45,6 @@ export default function Page ({ params }: { params: { llamada: string } }) {
     }
 
     getClientData()
-  }, [])
-
-  useEffect(() => {
-    const getStoreData = async () => {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
-      setStoreData(res.data)
-    }
-
-    getStoreData()
   }, [])
 
   useEffect(() => {
@@ -133,7 +123,7 @@ export default function Page ({ params }: { params: { llamada: string } }) {
                         ? (
                           <div className="flex flex-col gap-2">
                             <p className="font-medium">Lugar</p>
-                            <p>{meeting.type === 'Visita a domicilio' ? `${meeting.address}, ${meeting.city}, ${meeting.region}` : `${storeData?.address}, ${storeData?.city}, ${storeData?.region}`}</p>
+                            <p>{`${meeting.address}, ${meeting.city}, ${meeting.region}`}</p>
                           </div>
                         )
                         : ''

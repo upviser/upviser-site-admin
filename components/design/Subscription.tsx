@@ -14,6 +14,8 @@ interface Props {
     ind: number
     inde?: number
     indx?: number
+    inx?: number
+    inxx?: any
     funnels?: IFunnel[]
     setFunnels?: any
     responsive: string
@@ -22,7 +24,7 @@ interface Props {
     style?: any
 }
 
-export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, design, ind, inde, indx, funnels, setFunnels, responsive, services, setServices, style }) => {
+export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, design, ind, inde, indx, inx, inxx, funnels, setFunnels, responsive, services, setServices, style }) => {
 
   const [gradient, setGradient] = useState('')
   const [firstColor, setFirstColor] = useState('')
@@ -39,7 +41,7 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
             <>
               <h3 className={`${responsive === '400px' ? 'text-xl' : 'text-3xl'} font-medium text-center`} style={{ color: design.info.textColor }}>{design.info.title}</h3>
               <div className='flex gap-2'>
-                <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='text-sm px-3 py-2 border w-full' />
+                <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='text-sm px-3 py-2 border w-full bg-white' />
                 <ButtonDesign style={style} text='Enviar' />
               </div>
             </>
@@ -58,12 +60,20 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.typeBackground = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.typeBackground = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.typeBackground = e.target.value
                       setPages(oldPages)
                     }
-                  }} value={design.info.typeBackground} config='w-fit m-auto'>
+                  }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                     <option>Sin fondo</option>
                     <option>Imagen</option>
                     <option>Color</option>
@@ -112,6 +122,14 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                                 const oldServices = [...services!]
                                 oldServices[indx].steps[ind].design![index].info.background = data
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inx].design[index].info.background = data
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inxx].design[index].info.background = data
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 oldPages[ind].design[index].info.background = data
@@ -139,6 +157,14 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.background = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.background = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.background = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.background = e.target.value
@@ -163,13 +189,23 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                               const oldServices = [...services!]
                               oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              setGradient(e.target.value)
+                              oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              setGradient(e.target.value)
+                              oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               setGradient(e.target.value)
                               oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                               setPages(oldPages)
                             }
-                          }}>
+                          }} config='bg-transparent dark:border-neutral-100'>
                             <option>Seleccionar tipo</option>
                             <option value='135'>Lineal</option>
                             <option value='circle'>Radial</option>
@@ -188,6 +224,16 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                                 setGradient(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setGradient(e.target.value)
@@ -210,6 +256,16 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                               setFirstColor(e.target.value)
                               oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              setFirstColor(e.target.value)
+                              oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              setFirstColor(e.target.value)
+                              oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               setFirstColor(e.target.value)
@@ -231,6 +287,16 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                               setLastColor(e.target.value)
                               oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              setLastColor(e.target.value)
+                              oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              setLastColor(e.target.value)
+                              oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               setLastColor(e.target.value)
@@ -254,6 +320,14 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.textColor = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.textColor = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.textColor = e.target.value
@@ -271,6 +345,14 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                   const oldServices = [...services!]
                   oldServices[indx].steps[ind].design![index].info.title = e.target.value
                   setServices(oldServices)
+                } else if (inx !== undefined) {
+                  const oldPages = [...pages]
+                  oldPages[inx].design[index].info.title = e.target.value
+                  setPages(oldPages)
+                } else if (inxx !== undefined) {
+                  const oldPages = [...pages]
+                  oldPages[inxx].design[index].info.title = e.target.value
+                  setPages(oldPages)
                 } else {
                   const oldPages = [...pages]
                   oldPages[ind].design[index].info.title = e.target.value
@@ -278,7 +360,7 @@ export const Subscription: React.FC<Props> = ({ edit, pages, setPages, index, de
                 }
               }} className={`${responsive === '400px' ? 'text-xl' : 'text-3xl'} p-1.5 border rounded text-center font-medium m-auto bg-transparent w-full`} style={{ color: design.info.textColor }} />
               <div className='flex gap-2'>
-                <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='text-sm px-3 py-2 border w-full' />
+                <input placeholder='Email' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }} className='text-sm px-3 py-2 border w-full bg-white' />
                 <ButtonDesign style={style} text='Enviar' />
               </div>
             </>

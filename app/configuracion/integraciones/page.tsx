@@ -9,6 +9,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 export default function Page () {
 
   const [integrations, setIntegrations] = useState({
+    whatsappToken: '',
+    messengerToken: '',
     apiToken: '',
     apiPixelId: '',
     googleAnalytics: '',
@@ -64,17 +66,25 @@ export default function Page () {
           <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
             <Nav />
             <div className='w-full lg:w-3/4 flex flex-col gap-4'>
-              <h2 className='text-lg font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Integraciones</h2>
+              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Integraciones</h2>
               <div className='flex flex-col gap-2'>
-                <h3 className='font-medium'>Api Meta Token</h3>
+                <h3 className='text-sm'>Token Whatsapp App</h3>
+                <Input change={(e: any) => setIntegrations({ ...integrations, whatsappToken: e.target.value })} value={integrations.whatsappToken} placeholder='Api Meta Token' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>Token Messenger App</h3>
+                <Input change={(e: any) => setIntegrations({ ...integrations, messengerToken: e.target.value })} value={integrations.messengerToken} placeholder='Api Meta Token' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>Api Meta Token</h3>
                 <Input change={(e: any) => setIntegrations({ ...integrations, apiToken: e.target.value })} value={integrations.apiToken} placeholder='Api Meta Token' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
-                <h3 className='font-medium'>Api Pixel Id</h3>
+                <h3 className='text-sm'>Api Pixel Id</h3>
                 <Input change={(e: any) => setIntegrations({ ...integrations, apiPixelId: e.target.value })} value={integrations.apiPixelId} placeholder='Api Pixel Id' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
-                <h3 className='font-medium'>Google Analytics</h3>
+                <h3 className='text-sm'>Google Analytics</h3>
                 <Input change={(e: any) => setIntegrations({ ...integrations, googleAnalytics: e.target.value })} value={integrations.googleAnalytics} placeholder='Google Analytics' config='h-40' />
               </div>
             </div>

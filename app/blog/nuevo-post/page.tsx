@@ -50,7 +50,7 @@ export default function Page () {
         <div className='p-4 lg:p-6 flex flex-col gap-6 w-full bg-bg dark:bg-neutral-900'>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
             <Link href='/blog' className='border rounded-xl p-2 bg-white transition-colors duration-150 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
-            <h1 className='text-2xl my-auto font-medium'>Nuevo post</h1>
+            <h1 className='text-lg my-auto font-medium'>Nuevo post</h1>
           </div>
           <form onSubmit={handleSubmit} className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
             <div className='flex gap-6 flex-col w-full lg:w-2/3'>

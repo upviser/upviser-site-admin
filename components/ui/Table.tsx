@@ -11,7 +11,7 @@ export const Table: React.FC<PropsWithChildren<Props>> = ({ children, th }) => {
             <thead className='border-b border-black/5 w-full dark:border-neutral-700'>
                 {
                     th.map(title => (
-                        <th key={title} className='text-left p-3 font-medium'>{ title }</th>
+                        <th key={title} className='text-left p-3 font-medium text-[15px]'>{ title }</th>
                     ))
                 }
             </thead>

@@ -1,5 +1,5 @@
 "use client"
-import { IPage, IDesign, IFunnel, ICall, IService } from '@/interfaces'
+import { IPage, IDesign, IFunnel, ICall, IService, ICategoryPage } from '@/interfaces'
 import React, { useState } from 'react'
 import { Button2, Button2Red, Input, Select, Spinner, Textarea } from '../ui'
 import axios from 'axios'
@@ -7,13 +7,15 @@ import { IoIosArrowDown } from 'react-icons/io'
 
 interface Props {
     edit: any
-    pages: IPage[]
+    pages: IPage[] | ICategoryPage[]
     setPages: any
     design: IDesign
     index: number
     ind: number
     inde?: number
     indx?: number
+    inx?: any
+    inxx?: any
     funnels?: IFunnel[]
     setFunnels?: any
     calls?: ICall[]
@@ -24,7 +26,7 @@ interface Props {
     style?: any
 }
 
-export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, funnels, setFunnels, calls, services, setServices, responsive, pageNeed, style }) => {
+export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, inx, inxx, funnels, setFunnels, calls, services, setServices, responsive, pageNeed, style }) => {
   
   const [gradient, setGradient] = useState('')
   const [firstColor, setFirstColor] = useState('')
@@ -53,12 +55,20 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.typeBackground = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.typeBackground = e.target.value
                         setPages(oldPages)
                       }
-                    }} value={design.info.typeBackground} config='w-fit m-auto'>
+                    }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                       <option>Sin fondo</option>
                       <option>Imagen</option>
                       <option>Color</option>
@@ -107,6 +117,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                                   const oldServices = [...services!]
                                   oldServices[indx].steps[ind].design![index].info.background = data
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.background = data
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.background = data
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   oldPages[ind].design[index].info.background = data
@@ -134,6 +152,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.background = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.background = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.background = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.background = e.target.value
@@ -156,15 +182,26 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                                 setFunnels(oldFunnels)
                               } else if (indx !== undefined) {
                                 const oldServices = [...services!]
+                                setGradient(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setGradient(e.target.value)
                                 oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                                 setPages(oldPages)
                               }
-                            }}>
+                            }} config='bg-transparent dakr:border-neutral-100'>
                               <option>Seleccionar tipo</option>
                               <option value='135'>Lineal</option>
                               <option value='circle'>Radial</option>
@@ -183,6 +220,16 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                                   setGradient(e.target.value)
                                   oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                   setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  setGradient(e.target.value)
+                                  oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   setGradient(e.target.value)
@@ -205,6 +252,16 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                                 setFirstColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setFirstColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setFirstColor(e.target.value)
@@ -226,6 +283,16 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                                 setLastColor(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setLastColor(e.target.value)
+                                oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setLastColor(e.target.value)
@@ -249,6 +316,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.textColor = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.textColor = e.target.value
@@ -267,6 +342,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                         const oldServices = [...services!]
                         oldServices[indx].steps[ind].design![index].info.image = e.target.value
                         setServices(oldServices)
+                      } else if (inx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inx].design[index].info.image = e.target.value
+                        setPages(oldPages)
+                      } else if (inxx !== undefined) {
+                        const oldPages = [...pages]
+                        oldPages[inxx].design[index].info.image = e.target.value
+                        setPages(oldPages)
                       } else {
                         const oldPages = [...pages]
                         oldPages[ind].design[index].info.image = e.target.value
@@ -284,6 +367,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.title = e.target.value
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.title = e.target.value
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.title = e.target.value
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.title = e.target.value
@@ -299,6 +390,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.description = e.target.value
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.description = e.target.value
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.description = e.target.value
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.description = e.target.value
@@ -319,12 +418,20 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                               const oldServices = [...services!]
                               oldServices[indx].steps[ind].design![index].info.faq![i].question = e.target.value
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inx].design[index].info.faq![i].question = e.target.value
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              oldPages[inxx].design[index].info.faq![i].question = e.target.value
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               oldPages[ind].design[index].info.faq![i].question = e.target.value
                               setPages(oldPages)
                             }
-                          }} value={faq.question} className='text-lg font-medium p-1.5 border w-full' />
+                          }} value={faq.question} className='text-lg font-medium p-1.5 border w-full bg-transparent' />
                           <IoIosArrowDown className='my-auto text-2xl rotate-180' />
                         </div>
                         <textarea onChange={(e: any) => {
@@ -336,12 +443,20 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.faq![i].response = e.target.value
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.faq![i].response = e.target.value
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.faq![i].response = e.target.value
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.faq![i].response = e.target.value
                             setPages(oldPages)
                           }
-                        }} value={faq.response!} placeholder='Pregunta' className='p-1.5 border' />
+                        }} value={faq.response!} placeholder='Pregunta' className='p-1.5 border bg-transparent' />
                         <Button2Red action={(e: any) => {
                           if (inde !== undefined) {
                             const oldFunnels = [...funnels!]
@@ -351,6 +466,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                             const oldServices = [...services!]
                             oldServices[indx].steps[ind].design![index].info.faq?.splice(i, 1)
                             setServices(oldServices)
+                          } else if (inx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inx].design[index].info.faq?.splice(i, 1)
+                            setPages(oldPages)
+                          } else if (inxx !== undefined) {
+                            const oldPages = [...pages]
+                            oldPages[inxx].design[index].info.faq?.splice(i, 1)
+                            setPages(oldPages)
                           } else {
                             const oldPages = [...pages]
                             oldPages[ind].design[index].info.faq?.splice(i, 1)
@@ -370,6 +493,14 @@ export const Faq: React.FC<Props> = ({ edit, pages, setPages, design, index, ind
                     const oldServices = [...services!]
                     oldServices[indx].steps[ind].design![index].info.faq?.push({ question: 'Lorem ipsum', response: 'Lorem ipsum' })
                     setServices(oldServices)
+                  } else if (inx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inx].design[index].info.faq?.push({ question: 'Lorem ipsum', response: 'Lorem ipsum' })
+                    setPages(oldPages)
+                  } else if (inxx !== undefined) {
+                    const oldPages = [...pages]
+                    oldPages[inxx].design[index].info.faq?.push({ question: 'Lorem ipsum', response: 'Lorem ipsum' })
+                    setPages(oldPages)
                   } else {
                     const oldPages = [...pages]
                     oldPages[ind].design[index].info.faq?.push({ question: 'Lorem ipsum', response: 'Lorem ipsum' })

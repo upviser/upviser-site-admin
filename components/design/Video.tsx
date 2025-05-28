@@ -1,5 +1,5 @@
 "use client"
-import { IDesign, IFunnel, IPage, IService, IStoreData } from '@/interfaces'
+import { ICategoryPage, IDesign, IFunnel, IPage, IService, IStoreData } from '@/interfaces'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Input, Select, Spinner } from '../ui'
@@ -7,13 +7,15 @@ import Image from 'next/image'
 
 interface Props {
     edit: any
-    pages: IPage[]
+    pages: IPage[] | ICategoryPage[]
     setPages: any
     design: IDesign
     index: number
     ind: number
     inde?: number
     indx?: number
+    inx?: any
+    inxx?: any
     funnels?: IFunnel[]
     setFunnels?: any
     responsive: string
@@ -23,7 +25,7 @@ interface Props {
     storeData?: IStoreData
 }
 
-export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, funnels, setFunnels, responsive, services, setServices, style, storeData }) => {
+export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, ind, inde, indx, inx, inxx, funnels, setFunnels, responsive, services, setServices, style, storeData }) => {
 
   const [loadingVideo, setLoadingVideo] = useState(false)
   const [gradient, setGradient] = useState('')
@@ -58,6 +60,14 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
             const oldServices = [...services!]
             oldServices[indx].steps[ind].design![index].info.video = response.data
             setServices(oldServices)
+          } else if (inx !== undefined) {
+            const oldPages = [...pages]
+            oldPages[inx].design[index].info.video = response.data
+            setPages(oldPages)
+          } else if (inxx !== undefined) {
+            const oldPages = [...pages]
+            oldPages[inxx].design[index].info.video = response.data
+            setPages(oldPages)
           } else {
             const oldPages = [...pages]
             oldPages[ind].design[index].info.video = response.data
@@ -91,12 +101,20 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.typeBackground = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.typeBackground = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.typeBackground = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.typeBackground = e.target.value
                       setPages(oldPages)
                     }
-                  }} value={design.info.typeBackground} config='w-fit m-auto'>
+                  }} value={design.info.typeBackground} config='w-fit m-auto bg-transparent dark:border-neutral-100'>
                     <option>Sin fondo</option>
                     <option>Imagen</option>
                     <option>Color</option>
@@ -145,6 +163,14 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                 const oldServices = [...services!]
                                 oldServices[indx].steps[ind].design![index].info.background = data
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inx].design[index].info.background = data
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inxx].design[index].info.background = data
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 oldPages[ind].design[index].info.background = data
@@ -172,6 +198,14 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                           const oldServices = [...services!]
                           oldServices[indx].steps[ind].design![index].info.background = e.target.value
                           setServices(oldServices)
+                        } else if (inx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inx].design[index].info.background = e.target.value
+                          setPages(oldPages)
+                        } else if (inxx !== undefined) {
+                          const oldPages = [...pages]
+                          oldPages[inxx].design[index].info.background = e.target.value
+                          setPages(oldPages)
                         } else {
                           const oldPages = [...pages]
                           oldPages[ind].design[index].info.background = e.target.value
@@ -194,15 +228,26 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                               setFunnels(oldFunnels)
                             } else if (indx !== undefined) {
                               const oldServices = [...services!]
+                              setGradient(e.target.value)
                               oldServices[indx].steps[ind].design![index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              setGradient(e.target.value)
+                              oldPages[inx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              setGradient(e.target.value)
+                              oldPages[inxx].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               setGradient(e.target.value)
                               oldPages[ind].design[index].info.background = `${e.target.value === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${e.target.value === 'circle' ? e.target.value : `${e.target.value}deg`}, ${firstColor}, ${lastColor})` 
                               setPages(oldPages)
                             }
-                          }}>
+                          }} config='bg-transparent dark:border-neutral-100'>
                             <option>Seleccionar tipo</option>
                             <option value='135'>Lineal</option>
                             <option value='circle'>Radial</option>
@@ -221,6 +266,16 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                                 setGradient(e.target.value)
                                 oldServices[indx].steps[ind].design![index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
                                 setServices(oldServices)
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                setGradient(e.target.value)
+                                oldPages[inxx].design[index].info.background = `linear-gradient(${e.target.value}deg, ${firstColor}, ${lastColor})` 
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 setGradient(e.target.value)
@@ -243,6 +298,16 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                               setFirstColor(e.target.value)
                               oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              setFirstColor(e.target.value)
+                              oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              setFirstColor(e.target.value)
+                              oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${e.target.value}, ${lastColor})` 
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               setFirstColor(e.target.value)
@@ -264,6 +329,16 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                               setLastColor(e.target.value)
                               oldServices[indx].steps[ind].design![index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
                               setServices(oldServices)
+                            } else if (inx !== undefined) {
+                              const oldPages = [...pages]
+                              setLastColor(e.target.value)
+                              oldPages[inx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                              setPages(oldPages)
+                            } else if (inxx !== undefined) {
+                              const oldPages = [...pages]
+                              setLastColor(e.target.value)
+                              oldPages[inxx].design[index].info.background = `${gradient === 'circle' ? 'radial-gradient' : 'linear-gradient'}(${gradient}deg, ${firstColor}, ${e.target.value})` 
+                              setPages(oldPages)
                             } else {
                               const oldPages = [...pages]
                               setLastColor(e.target.value)
@@ -287,6 +362,14 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.textColor = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.textColor = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.textColor = e.target.value
@@ -305,12 +388,20 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.titleForm = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.titleForm = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.titleForm = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.titleForm = e.target.value
                       setPages(oldPages)
                     }
-                  }} config='w-fit m-auto' value={design.info.titleForm}>
+                  }} config='w-fit m-auto bg-transparent dark:border-neutral-100' value={design.info.titleForm}>
                     <option>Seleccionar color logo</option>
                     <option>Logo principal</option>
                     <option>Logo blanco</option>
@@ -335,6 +426,14 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                       const oldServices = [...services!]
                       oldServices[indx].steps[ind].design![index].info.description = e.target.value
                       setServices(oldServices)
+                    } else if (inx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inx].design[index].info.description = e.target.value
+                      setPages(oldPages)
+                    } else if (inxx !== undefined) {
+                      const oldPages = [...pages]
+                      oldPages[inxx].design[index].info.description = e.target.value
+                      setPages(oldPages)
                     } else {
                       const oldPages = [...pages]
                       oldPages[ind].design[index].info.description = e.target.value
@@ -351,6 +450,14 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                   const oldServices = [...services!]
                   oldServices[indx].steps[ind].design![index].info.title = e.target.value
                   setServices(oldServices)
+                } else if (inx !== undefined) {
+                  const oldPages = [...pages]
+                  oldPages[inx].design[index].info.title = e.target.value
+                  setPages(oldPages)
+                } else if (inxx !== undefined) {
+                  const oldPages = [...pages]
+                  oldPages[inxx].design[index].info.title = e.target.value
+                  setPages(oldPages)
                 } else {
                   const oldPages = [...pages]
                   oldPages[ind].design[index].info.title = e.target.value

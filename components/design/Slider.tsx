@@ -19,6 +19,8 @@ interface Props {
     ind: number
     inde?: number
     indx?: number
+    inx?: number
+    inxx?: number
     pageNeed: IPage[]
     funnels?: IFunnel[]
     setFunnels?: any
@@ -30,7 +32,7 @@ interface Props {
     style?: any
 }
 
-export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, ind, inde, indx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style }) => {
+export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, ind, inde, indx, inx, inxx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style }) => {
   return (
     <div>
       <Swiper
@@ -88,6 +90,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                   oldServices[indx].steps[ind].design![index].info.banner![i].title = e.target.value
                                   setServices(oldServices)
                                 }
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inx].design[index].info.banner![i].title = e.target.value
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inxx].design[index].info.banner![i].title = e.target.value
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 if (oldPages[ind].design[index].info.banner?.length) {
@@ -109,6 +119,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                   oldServices[indx].steps[ind].design![index].info.banner![i].description = e.target.value
                                   setServices(oldServices)
                                 }
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inx].design[index].info.banner![i].description = e.target.value
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inxx].design[index].info.banner![i].description = e.target.value
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 if (oldPages[ind].design[index].info.banner?.length) {
@@ -132,6 +150,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                       oldServices[indx].steps[ind].design![index].info.banner![i].button = e.target.value
                                       setServices(oldServices)
                                     }
+                                  } else if (inx !== undefined) {
+                                    const oldPages = [...pages]
+                                    oldPages[inx].design[index].info.banner![i].button = e.target.value
+                                    setPages(oldPages)
+                                  } else if (inxx !== undefined) {
+                                    const oldPages = [...pages]
+                                    oldPages[inxx].design[index].info.banner![i].button = e.target.value
+                                    setPages(oldPages)
                                   } else {
                                     const oldPages = [...pages]
                                     if (oldPages[ind].design[index].info.banner?.length) {
@@ -154,6 +180,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                     oldServices[indx].steps[ind].design![index].info.banner![i].buttonLink = e.target.value
                                     setServices(oldServices)
                                   }
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.banner![i].buttonLink = e.target.value
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.banner![i].buttonLink = e.target.value
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   if (oldPages[ind].design[index].info.banner?.length) {
@@ -207,6 +241,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                   oldServices[indx].steps[ind].design![index].info.banner![i].image = data
                                   setServices(oldServices)
                                 }
+                              } else if (inx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inx].design[index].info.banner![i].image = data
+                                setPages(oldPages)
+                              } else if (inxx !== undefined) {
+                                const oldPages = [...pages]
+                                oldPages[inxx].design[index].info.banner![i].image = data
+                                setPages(oldPages)
                               } else {
                                 const oldPages = [...pages]
                                 if (oldPages[ind].design[index].info.banner?.length) {
@@ -229,6 +271,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                     oldServices[indx].steps[ind].design![index].info.banner![i].type = e.target.value
                                     setServices(oldServices)
                                   }
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.banner![i].type = e.target.value
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.banner![i].type = e.target.value
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   if (oldPages[ind].design[index].info.banner?.length) {
@@ -254,6 +304,14 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                                     oldServices[indx].steps[ind].design![index].info.banner?.push({ title: 'Lorem ipsum', description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.', button: 'Lorem ipsum', buttonLink: '', image: '' })
                                     setServices(oldServices)
                                   }
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.banner?.push({ title: 'Lorem ipsum', description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.', button: 'Lorem ipsum', buttonLink: '', image: '' })
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.banner?.push({ title: 'Lorem ipsum', description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit.', button: 'Lorem ipsum', buttonLink: '', image: '' })
+                                  setPages(oldPages)
                                 } else {
                                   const oldPages = [...pages]
                                   if (oldPages[ind].design[index].info.banner?.length) {

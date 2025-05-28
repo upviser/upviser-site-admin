@@ -1,6 +1,6 @@
 "use client"
 import { Button, Button2, Button2Red, ButtonSubmit, ButtonSubmit2, Card, Input, Spinner, Textarea } from '@/components/ui'
-import { ICall, IClient, IForm, IFunnel, IMeeting, IService } from '@/interfaces'
+import { ICall, IClient, IForm, IFunnel, IMeeting, ISell, IService } from '@/interfaces'
 import { NumberFormat } from '@/utils'
 import axios from 'axios'
 import Head from 'next/head'
@@ -40,6 +40,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [selectContact, setSelectContact] = useState<any>()
   const [popupContact, setPopupContact] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [calls, setCalls] = useState<ICall[]>([])
+  const [clientSells, setClientSells] = useState<ISell[]>()
 
   const router = useRouter()
 
@@ -48,6 +49,9 @@ export default function Page ({ params }: { params: { slug: string } }) {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/client-email/${params.slug}`);
         setClientData(response.data);
+
+        const sells = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells-client/${params.slug}`)
+        setClientSells(sells.data)
         
         // Usar Promise.all para esperar que todas las llamadas se completen
         const funnelsFind = await Promise.all(
@@ -155,9 +159,9 @@ export default function Page ({ params }: { params: { slug: string } }) {
             setPopupPrice({ ...popupPrice, view: 'hidden', opacity: 'opacity-0' })
           }, 200)
         }
-      }} className={`${popupPrice.view} ${popupPrice.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
-        <div onMouseEnter={() => setPopupPrice({ ...popupPrice, mouse: true })} onMouseLeave={() => setPopupPrice({ ...popupPrice, mouse: false })} className={`${popupPrice.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[500px] p-6 flex flex-col gap-2 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-          <p>Asignar precio</p>
+      }} className={`${popupPrice.view} ${popupPrice.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30`}>
+        <div onMouseEnter={() => setPopupPrice({ ...popupPrice, mouse: true })} onMouseLeave={() => setPopupPrice({ ...popupPrice, mouse: false })} onMouseMove={() => setPopupPrice({ ...popupPrice, mouse: true })} className={`${popupPrice.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[500px] p-5 flex flex-col gap-2 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+          <p className='text-sm'>Asignar precio</p>
           <Input change={(e: any) => setPrice(e.target.value)} placeholder='Precio' value={price} />
           <div className='flex gap-6'>
             <ButtonSubmit action={async (e: any) => {
@@ -179,7 +183,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
               setTimeout(() => {
                 setPopupPrice({ ...popupPrice, view: 'hidden', opacity: 'opacity-0' })
               }, 200)
-            }}>Cancelar</button>
+            }} className='text-sm'>Cancelar</button>
           </div>
         </div>
       </div>
@@ -193,8 +197,8 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               }
-            }} className={`${popup.view} ${popup.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
-              <div onMouseEnter={() => setPopup({ ...popup, mouse: true })} onMouseLeave={() => setPopup({ ...popup, mouse: false })} className={`${popup.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[500px] p-6 flex flex-col gap-2 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+            }} className={`${popup.view} ${popup.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30`}>
+              <div onMouseEnter={() => setPopup({ ...popup, mouse: true })} onMouseLeave={() => setPopup({ ...popup, mouse: false })} className={`${popup.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[500px] p-5 flex flex-col gap-2 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <p>Estas seguro que deseas eliminar el cliente <span className='font-semibold'>{clientData!.email}</span></p>
                 <div className='flex gap-6'>
                   <ButtonSubmit action={deleteClient} color='red-500' submitLoading={loading} textButton='Eliminar cliente' config='w-44' />
@@ -203,7 +207,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                     setTimeout(() => {
                       setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
                     }, 200)
-                  }}>Cancelar</button>
+                  }} className='text-sm'>Cancelar</button>
                 </div>
               </div>
             </div>
@@ -220,15 +224,15 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   setPopupEmail({ ...popupEmail, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               }
-            }} className={`${popupEmail.view} ${popupEmail.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
-              <div onMouseEnter={() => setPopupEmail({ ...popupEmail, mouse: true })} onMouseLeave={() => setPopupEmail({ ...popupEmail, mouse: false })} className={`${popupEmail.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-8 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-                <h3 className='text-lg font-medium'>Enviar email</h3>
+            }} className={`${popupEmail.view} ${popupEmail.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30`}>
+              <div onMouseEnter={() => setPopupEmail({ ...popupEmail, mouse: true })} onMouseLeave={() => setPopupEmail({ ...popupEmail, mouse: false })} className={`${popupEmail.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-6 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+                <h3 className='font-medium'>Enviar email</h3>
                 <div className='flex flex-col gap-2'>
-                  <p>Asunto</p>
+                  <p className='text-sm'>Asunto</p>
                   <Input placeholder='Asunto' value={email.subject} change={(e: any) => setEmail({ ...email, subject: e.target.value })} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <p>Correo</p>
+                  <p className='text-sm'>Correo</p>
                   <Textarea placeholder='Correo' value={email.email} change={(e: any) => setEmail({ ...email, email: e.target.value })} />
                 </div>
                 <ButtonSubmit action={async (e: any) => {
@@ -260,11 +264,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
               }
             }} className={`${popupForm.view} ${popupForm.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
               <div onMouseEnter={() => setPopupForm({ ...popupForm, mouse: true })} onMouseLeave={() => setPopupForm({ ...popupForm, mouse: false })} className={`${popupForm.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-8 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-                <h3 className='text-lg font-medium'>Formulario {selectForm?.nameForm}</h3>
+                <h3 className='font-medium'>Formulario {selectForm?.nameForm}</h3>
                 {
                   selectForm?.labels.map(label => (
                     <div key={label.name} className="flex flex-col gap-2">
-                      <p>{label.text !== '' ? label.text : label.name}</p>
+                      <p className='text-sm'>{label.text !== '' ? label.text : label.name}</p>
                       <p className='px-3 py-2 border shadow rounded-xl text-sm'>{selectLead[label.data!] ? selectLead[label.data!] : selectLead.data.find((data: any) => data.name === label.data)?.value}</p>
                     </div>
                   ))
@@ -286,17 +290,17 @@ export default function Page ({ params }: { params: { slug: string } }) {
               }
             }} className={`${popupContact.view} ${popupContact.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
               <div onMouseEnter={() => setPopupContact({ ...popupContact, mouse: true })} onMouseLeave={() => setPopupContact({ ...popupContact, mouse: false })} className={`${popupContact.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-8 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-                <h3 className='text-lg font-medium'>Formulario de contacto</h3>
+                <h3 className='font-medium'>Formulario de contacto</h3>
                 <div className="flex flex-col gap-2">
-                  <p>Nombre</p>
+                  <p className='text-sm'>Nombre</p>
                   <p className='px-3 py-2 border shadow rounded-xl text-sm'>{selectContact?.name}</p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p>Email</p>
+                  <p className='text-sm'>Email</p>
                   <p className='px-3 py-2 border shadow rounded-xl text-sm'>{selectContact?.email}</p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p>Mensaje</p>
+                  <p className='text-sm'>Mensaje</p>
                   <p className='px-3 py-2 border shadow rounded-xl text-sm'>{selectContact?.message}</p>
                 </div>
               </div>
@@ -313,7 +317,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   <div className='flex gap-3 w-full justify-between m-auto'>
                     <div className='flex gap-3 my-auto'>
                       <Link href='/clientes' className='border rounded-xl p-2 bg-white transition-colors duration-200 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
-                      <h1 className='text-2xl font-medium mt-auto mb-auto'>{ clientData.email }</h1>
+                      <h1 className='text-lg font-medium mt-auto mb-auto'>{ clientData.email }</h1>
                     </div>
                     <Button action={(e: any) => {
                       e.preventDefault()
@@ -325,6 +329,29 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   </div>
                   <form className='flex gap-6 w-full m-auto'>
                     <div className='flex gap-6 flex-col w-2/3'>
+                      <Card title='Pedidos'>
+                        {
+                          clientSells
+                            ? clientSells.length
+                              ? clientSells.map(sell => (
+                                <div onClick={() => router.push(`/ventas/${sell._id}`)} className='flex gap-4 cursor-pointer justify-between transition-colors duration-150 hover:bg-neutral-100 pt-4 pb-4 rounded pl-2 pr-2 dark:hover:bg-neutral-700' key={sell._id}>
+                                  <p className='mt-auto mb-auto text-sm'>{sell.pay}</p>
+                                  <p className='mt-auto mb-auto text-sm'>{sell.state}</p>
+                                  <p className='mt-auto mb-auto text-sm'>{sell.shippingMethod}</p>
+                                  <p className='mt-auto mb-auto text-sm'>{sell.shippingState}</p>
+                                  <p className='mt-auto mb-auto text-sm'>${NumberFormat(sell.total)}</p>
+                                </div>
+                              ))
+                              : <p className='text-sm'>No hay ventas</p>
+                            : (
+                              <div className="flex w-full">
+                                <div className="m-auto mt-16 mb-16">
+                                  <Spinner />
+                                </div>
+                              </div>
+                            )
+                        }
+                      </Card>
                       <Card title='Servicios'>
                         {
                           services.length
@@ -356,10 +383,10 @@ export default function Page ({ params }: { params: { slug: string } }) {
                                   </div>
                                 )
                               } else {
-                                return <p key={service._id}>Este cliente no esta asociado a algun servicio</p>
+                                return <p key={service._id} className='text-sm'>Este cliente no esta asociado a algun servicio</p>
                               }
                             })
-                            : <p>Este cliente no esta asociado a algun servicio</p>
+                            : <p className='text-sm'>Este cliente no esta asociado a algun servicio</p>
                         }
                       </Card>
                       <Card title='Embudo actual'>
@@ -390,7 +417,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                                 </div>
                               </>
                             ))
-                            : <p>Este cliente no esta en un embudo</p>
+                            : <p className='text-sm'>Este cliente no esta en un embudo</p>
                         }
                       </Card>
                       <Card title='Reuniones'>
@@ -405,7 +432,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                                 <p>{new Date(meeting.date).toLocaleDateString()} - {new Date(meeting.date).toLocaleTimeString()}</p>
                               </button>
                             ))
-                            : <p>Este cliente no ha agendado ninguna llamada</p>
+                            : <p className='text-sm'>Este cliente no ha agendado ninguna llamada</p>
                         }
                       </Card>
                       <Card title='Formularios'>
@@ -429,7 +456,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                                 </button>
                               )
                             })
-                            : <p>No hay formularios completados</p>
+                            : <p className='text-sm'>No hay formularios completados</p>
                         }
                       </Card>
                       <Card title={'Contactos'}>
@@ -448,7 +475,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                                 <p>{new Date(contact?.createdAt!).toLocaleDateString()} - {new Date(contact?.createdAt!).toLocaleTimeString()}</p>
                               </button>
                             ))
-                            : <p>No hay contactos realizados.</p>
+                            : <p className='text-sm'>No hay contactos realizados.</p>
                         }
                       </Card>
                     </div>
@@ -482,7 +509,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                                     setDataView(true)
                                   }
                                 }} className='w-full flex gap-4 justify-between'>
-                                  <p className='font-medium my-auto'>Campos personalizados</p>
+                                  <p className='font-medium my-auto text-sm'>Campos personalizados</p>
                                   <SlArrowDown className={`${dataView ? 'rotate-180' : ''} transition-all duration-200 text-lg my-auto`} />
                                 </button>
                                 {
@@ -576,7 +603,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                         </div>
                       </Card>
                       <div className='flex flex-col gap-4 p-2'>
-                        <h2 className='font-medium'>Eliminar cliente</h2>
+                        <h2 className='font-medium text-[15px]'>Eliminar cliente</h2>
                         <Button2Red action={(e: any) => {
                           e.preventDefault()
                           setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })

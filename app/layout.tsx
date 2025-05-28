@@ -7,7 +7,7 @@ import { LeftMenu } from '@/components/ui'
 import localFont from 'next/font/local'
 
 const myFont = localFont({
-  src: './fonts/Montserrat-VariableFont_wght.ttf',
+  src: './fonts/RedHatDisplay-VariableFont_wght.ttf',
   display: 'swap',
 })
 

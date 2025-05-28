@@ -92,7 +92,7 @@ export default function Page () {
           )
           : accounts?.length
             ? (
-              <form onSubmit={handleSubmit} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-9' style={{ boxShadow: '0px 3px 10px 3px #f9f9f9' }}>
+              <form onSubmit={handleSubmit} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-8 dark:bg-neutral-800 shadow-card dark:shadow-card-dark dark:border-neutral-700'>
                 {
                   error !== ''
                     ? <p className='w-full p-2 bg-red-600 text-white text-center'>{error}</p>
@@ -111,7 +111,7 @@ export default function Page () {
               </form>
             )
             : (
-              <form onSubmit={createAccount} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-9' style={{ boxShadow: '0px 3px 10px 3px #f9f9f9' }}>
+              <form onSubmit={createAccount} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-8 shadow-card dark:shadow-card-dark dark:bg-neutral-800 dark:border-neutral-700'>
                 {
                   error !== ''
                     ? <p className='w-full p-2 bg-red-600 text-white text-center'>{error}</p>

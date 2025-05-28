@@ -7,6 +7,6 @@ interface Props {
 
 export const ButtonSecondary: React.FC<PropsWithChildren<Props>> = ({ children, action, config }) => {
   return (
-    <button onClick={action} className={`${config} bg-transparent border border-main h-10 px-6 w-fit text-main rounded-xl transition-colors duration-300 hover:bg-main/5`}>{ children }</button>
+    <button onClick={action} className={`${config} bg-transparent text-sm border border-main h-10 px-6 w-fit text-main rounded-xl transition-colors duration-300 hover:bg-main/5`}>{ children }</button>
   )
 }

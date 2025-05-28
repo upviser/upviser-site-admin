@@ -45,7 +45,7 @@ export const PopupNewFunnel: React.FC<Props> = ({ popup, setPopup, getFunnels, n
   }, [popup, setPopup]);
 
   return (
-    <div className={`${popup.view} ${popup.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/20 flex top-0 left-0 z-50 p-4`}>
+    <div className={`${popup.view} ${popup.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/30 flex top-0 left-0 z-50 p-4`}>
         <form ref={popupRef} onSubmit={async (e: any) => {
           e.preventDefault()
           if (!loading) {
@@ -81,23 +81,23 @@ export const PopupNewFunnel: React.FC<Props> = ({ popup, setPopup, getFunnels, n
               }
             }
           }
-        }} onMouseEnter={() => setPopup({ ...popup, mouse: true })} onMouseLeave={() => setPopup({ ...popup, mouse: false })} className={`${popup.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[700px] max-h-[600px] overflow-y-auto p-6 lg:p-8 rounded-2xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+        }} onMouseEnter={() => setPopup({ ...popup, mouse: true })} onMouseLeave={() => setPopup({ ...popup, mouse: false })} className={`${popup.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[700px] max-h-[600px] overflow-y-auto p-6 rounded-xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
           {
             error !== ''
               ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{error}</p>
               : ''
           }
-          <p className="text-xl font-medium">{title}</p>
+          <p className="text-lg font-medium">{title}</p>
           <div className="flex flex-col gap-2">
-            <p className="font-medium">Embudo</p>
+            <p className="text-sm">Embudo</p>
             <Input change={(e: any) => setNewFunnel({ ...newFunnel, funnel: e.target.value })} placeholder='Embudo' value={newFunnel.funnel} />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="font-medium">Descripción</p>
+            <p className="text-sm">Descripción</p>
             <Textarea change={(e: any) => setNewFunnel({ ...newFunnel, description: e.target.value })} placeholder='Descripción' value={newFunnel.description!} />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="font-medium">A que servicio pertenece</p>
+            <p className="text-sm">A que servicio pertenece</p>
             <Select change={(e: any) => setNewFunnel({ ...newFunnel, service: e.target.value })} value={newFunnel.service}>
               <option>Seleccionar servicio</option>
               {
@@ -108,11 +108,11 @@ export const PopupNewFunnel: React.FC<Props> = ({ popup, setPopup, getFunnels, n
             </Select>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="font-medium">Pasos</p>
+            <p className="text-sm font-medium">Pasos</p>
             {
               newFunnel.steps.map((step, i) => (
                 <>
-                  <p>Paso {i + 1}</p>
+                  <p className='text-sm'>Paso {i + 1}</p>
                   <div className="flex gap-4">
                     <Input change={(e: any) => {
                       const oldSteps = [...newFunnel.steps]

@@ -11,6 +11,9 @@ export default function Page () {
   const [politics, setPolitics] = useState({
     terms: '',
     privacy: '',
+    devolutions: '',
+    shipping: '',
+    pay: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -67,14 +70,26 @@ export default function Page () {
           <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
             <Nav />
             <div className='w-full lg:w-3/4 flex flex-col gap-4'>
-              <h2 className='text-lg font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Politicas de la tienda</h2>
+              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Politicas de la tienda</h2>
               <div className='flex flex-col gap-2'>
-                <h3 className='font-medium'>Terminos y condiciones</h3>
-                <Textarea change={handleChange} name='terms' value={politics.terms} placeholder='Terminos y Condiciones' config='h-40' />
+                <p className='text-sm'>Terminos y condiciones</p>
+                <Textarea change={handleChange} name='terms' value={politics.terms} placeholder='Términos y Condiciones' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
-                <h3 className='font-medium'>Politicas de privacidad</h3>
-                <Textarea change={handleChange} name='privacy' value={politics.privacy} placeholder='Politicas de privacidad' config='h-40' />
+                <p className='text-sm'>Políticas de privacidad</p>
+                <Textarea change={handleChange} name='privacy' value={politics.privacy} placeholder='Políticas de privacidad' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Política de devoluciones</p>
+                <Textarea change={handleChange} name='devolutions' value={politics.devolutions} placeholder='Política de devoluciones' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Política de envíos</p>
+                <Textarea change={handleChange} name='shipping' value={politics.devolutions} placeholder='Política de envíos' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <p className='text-sm'>Política de pagos</p>
+                <Textarea change={handleChange} name='pay' value={politics.pay} placeholder='Política de pagos' config='h-40' />
               </div>
             </div>
           </div>

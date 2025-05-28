@@ -1,6 +1,6 @@
 "use client"
 import { PopupNewService } from "@/components/service"
-import { Button, ButtonSubmit, Spinner, Table } from "@/components/ui"
+import { Button, ButtonSubmit, Popup, Spinner, Table } from "@/components/ui"
 import { IService, ITag } from "@/interfaces"
 import axios from "axios"
 import { useSession } from "next-auth/react"
@@ -47,38 +47,29 @@ export default function Page() {
 
   return (
     <>
-      <div onClick={() => {
-        if (!popupDelete.mouse) {
-          setPopupDelete({ ...popupDelete, view: 'flex', opacity: 'opacity-0' })
-          setTimeout(() => {
-            setPopupDelete({ ...popupDelete, view: 'hidden', opacity: 'opacity-0' })
-          }, 200)
-        }
-      }}className={`${popupDelete.view} ${popupDelete.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/20 flex top-0 left-0 z-50`}>
-        <div onMouseEnter={() => setPopupDelete({ ...popupDelete, mouse: true })} onMouseLeave={() => setPopupDelete({ ...popupDelete, mouse: false })} onMouseMove={() => setPopupDelete({ ...popupDelete, mouse: true })} className={`${popupDelete.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[500px] max-h-[700px] overflow-y-auto p-6 rounded-xl m-auto border flex flex-col gap-4 bg-white dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #c1c1c1' }}>
-          <p>¿Estas seguro que deseas eliminar el servicio <span className="font-medium">{newService.name}</span>?</p>
-          <div className="flex gap-6">
-            <ButtonSubmit submitLoading={loadingDelete} textButton='Eliminar' action={async (e: any) => {
-              e.preventDefault()
-              if (!loadingDelete) {
-                setLoadingDelete(true)
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/service/${newService._id}`)
-                getServices()
-                setPopupDelete({ ...popupDelete, view: 'flex', opacity: 'opacity-0' })
-                setTimeout(() => {
-                  setPopupDelete({ ...popupDelete, view: 'hidden', opacity: 'opacity-0' })
-                  setLoadingDelete(false)
-                }, 200)
-              }
-            }} color='red-500' config="w-28" />
-            <button>Cancelar</button>
-          </div>
+      <Popup popup={popupDelete} setPopup={setPopupDelete}>
+        <p>¿Estas seguro que deseas eliminar el servicio <span className="font-medium">{newService.name}</span>?</p>
+        <div className="flex gap-6">
+          <ButtonSubmit submitLoading={loadingDelete} textButton='Eliminar' action={async (e: any) => {
+            e.preventDefault()
+            if (!loadingDelete) {
+              setLoadingDelete(true)
+              await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/service/${newService._id}`)
+              getServices()
+              setPopupDelete({ ...popupDelete, view: 'flex', opacity: 'opacity-0' })
+              setTimeout(() => {
+                setPopupDelete({ ...popupDelete, view: 'hidden', opacity: 'opacity-0' })
+                setLoadingDelete(false)
+              }, 200)
+            }
+          }} color='red-500' config="w-28" />
+          <button className="text-sm">Cancelar</button>
         </div>
-      </div>
+      </Popup>
       <PopupNewService popupService={popup} setPopupService={setPopup} newService={newService} setNewService={setNewService} loadingService={loading} setLoadingService={setLoading} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={services} setError={setError} />
       <div className='p-4 lg:p-6 w-full min-h-full max-h-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900'>
         <div className='w-full flex gap-4 justify-between max-w-[1280px] mx-auto'>
-          <h1 className='text-2xl font-medium my-auto'>Servicios</h1>
+          <h1 className='text-lg font-medium my-auto'>Servicios</h1>
           {
             session?.user.type === 'Administrador'
               ? (
@@ -166,7 +157,7 @@ export default function Page() {
                     }
                   </Table>
                 )
-                : <p>No tienes servicios creados</p>
+                : <p className="text-sm">No tienes servicios creados</p>
           }
         </div>
       </div>
