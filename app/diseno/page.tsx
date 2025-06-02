@@ -2072,11 +2072,11 @@ export default function Page () {
                                       : design.content === 'Bloque 2'
                                         ? <Bloque2 edit={edit} design={design} pages={pages} setPages={setPages} index={index} ind={i} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} funnels={funnels} />
                                         : design.content === 'Bloque 3'
-                                          ? <Bloque3 edit={edit} design={design} index={index} pages={pages} setPages={setPages} ind={i} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} storeData={storeData} />
+                                          ? <Bloque3 edit={edit} design={design} index={index} pages={pages} setPages={setPages} ind={i} pageNeed={pages} funnels={funnels} responsive={responsive} calls={calls} forms={forms} style={style} storeData={storeData} />
                                           : design.content === 'Bloque 4'
-                                            ? <Bloque4 edit={edit} design={design} pages={pages} setPages={setPages} index={index} ind={i} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                            ? <Bloque4 edit={edit} design={design} pages={pages} setPages={setPages} index={index} ind={i} pageNeed={pages} funnels={funnels} responsive={responsive} calls={calls} forms={forms} style={style} />
                                             : design.content === 'Bloque 5'
-                                              ? <Bloque5 edit={edit} design={design} pages={pages} setPages={setPages} index={index} ind={i} pageNeed={pages} responsive={responsive} calls={calls} forms={forms} style={style} />
+                                              ? <Bloque5 edit={edit} design={design} pages={pages} setPages={setPages} index={index} ind={i} pageNeed={pages} funnels={funnels} responsive={responsive} calls={calls} forms={forms} style={style} />
                                               : design.content === 'Contacto'
                                                 ? <Contact edit={edit} design={design} pages={pages} setPages={setPages} index={index} ind={i} responsive={responsive} style={style} />
                                                 : design.content === 'Suscripción'
