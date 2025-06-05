@@ -90,6 +90,16 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                   <div className="flex gap-1">
                     <input type="checkbox" onChange={(e: any) => {
                       const oldPermissions = [...user.permissions ? [...user.permissions] : []]
+                      const permissions = oldPermissions.includes('Ventas')
+                        ? oldPermissions.filter(permission => permission !== 'Ventas')
+                        : [...oldPermissions, 'Ventas']
+                      setUser({ ...user, permissions: permissions })
+                    }} checked={user.permissions?.find(permission => permission === 'Ventas') ? true : false} />
+                    <p>Ventas</p>
+                  </div>
+                  <div className="flex gap-1">
+                    <input type="checkbox" onChange={(e: any) => {
+                      const oldPermissions = [...user.permissions ? [...user.permissions] : []]
                       const permissions = oldPermissions.includes('Productos')
                         ? oldPermissions.filter(permission => permission !== 'Productos')
                         : [...oldPermissions, 'Productos']
@@ -136,16 +146,6 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                       setUser({ ...user, permissions: permissions })
                     }} checked={user.permissions?.find(permission => permission === 'Reuniones') ? true : false} />
                     <p>Reuniones</p>
-                  </div>
-                  <div className="flex gap-1">
-                    <input type="checkbox" onChange={(e: any) => {
-                      const oldPermissions = [...user.permissions ? [...user.permissions] : []]
-                      const permissions = oldPermissions.includes('Pagos')
-                        ? oldPermissions.filter(permission => permission !== 'Pagos')
-                        : [...oldPermissions, 'Pagos']
-                      setUser({ ...user, permissions: permissions })
-                    }} checked={user.permissions?.find(permission => permission === 'Pagos') ? true : false} />
-                    <p>Pagos</p>
                   </div>
                   <div className="flex gap-1">
                     <input type="checkbox" onChange={(e: any) => {
