@@ -69,12 +69,12 @@ export default function Page () {
       <Head>
         <title>Mensajes</title>
       </Head>
-        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 min-h-full overflow-y-auto bg-[#f6f6f7] dark:bg-neutral-900'>
-          <div className='w-full max-w-1280 m-auto flex flex-col gap-4'>
+        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 min-h-full overflow-y-auto bg-bg dark:bg-neutral-900'>
+          <div className='w-full max-w-[1280px] mx-auto flex flex-col gap-4'>
             <h1 className='text-lg font-medium'>Mensajes</h1>
             <MessagesCategories />
           </div>
-          <div className='w-full max-w-1280 flex m-auto gap-6'>
+          <div className='w-full max-w-[1280px] flex mx-auto gap-6'>
             <div className='w-1/2 flex flex-col gap-2'>
               {
                 instagramIds === undefined
