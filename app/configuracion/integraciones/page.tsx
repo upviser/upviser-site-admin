@@ -9,7 +9,9 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 export default function Page () {
 
   const [integrations, setIntegrations] = useState({
+    idPhone: '',
     whatsappToken: '',
+    idPage: '',
     messengerToken: '',
     apiToken: '',
     apiPixelId: '',
@@ -68,8 +70,16 @@ export default function Page () {
             <div className='w-full lg:w-3/4 flex flex-col gap-4'>
               <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Integraciones</h2>
               <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>ID del número de teléfono</h3>
+                <Input change={(e: any) => setIntegrations({ ...integrations, idPhone: e.target.value })} value={integrations.idPhone} placeholder='ID del número de teléfono' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Token Whatsapp App</h3>
                 <Input change={(e: any) => setIntegrations({ ...integrations, whatsappToken: e.target.value })} value={integrations.whatsappToken} placeholder='Api Meta Token' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>ID de la página de Facebook</h3>
+                <Input change={(e: any) => setIntegrations({ ...integrations, idPage: e.target.value })} value={integrations.idPage} placeholder='ID de la página de Facebook' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Token Messenger App</h3>

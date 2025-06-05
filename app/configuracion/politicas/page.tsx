@@ -76,7 +76,7 @@ export default function Page () {
                 <Textarea change={handleChange} name='terms' value={politics.terms} placeholder='Términos y Condiciones' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
-                <p className='text-sm'>Políticas de privacidad</p>
+                <p className='text-sm'>Política de privacidad</p>
                 <Textarea change={handleChange} name='privacy' value={politics.privacy} placeholder='Políticas de privacidad' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
