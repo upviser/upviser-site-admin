@@ -74,8 +74,8 @@ export default function Page () {
             <h1 className='text-lg font-medium'>Mensajes</h1>
             <MessagesCategories />
           </div>
-          <div className='w-full max-w-[1280px] flex mx-auto gap-6'>
-            <div className='w-1/2 flex flex-col gap-2'>
+          <div className='w-full max-w-[1280px] flex mx-auto gap-6 flex-col lg:flex-row'>
+            <div className='w-full lg:w-1/2 flex flex-col gap-2'>
               {
                 messengerIds === undefined
                   ? (
@@ -111,7 +111,7 @@ export default function Page () {
                     : <p className='text-sm'>No hay chats</p>
               }
             </div>
-            <div className='w-1/2'>
+            <div className='w-full lg:w-1/2'>
               <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-[70vh] dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <div ref={containerRef} className='w-full h-full pr-4 flex' style={{ overflow: 'overlay' }}>
                   {

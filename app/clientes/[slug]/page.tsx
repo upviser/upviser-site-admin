@@ -314,7 +314,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
             clientData
               ? (
                 <>
-                  <div className='flex gap-3 w-full justify-between m-auto'>
+                  <div className='flex gap-3 w-full justify-between m-auto flex-col lg:flex-row'>
                     <div className='flex gap-3 my-auto'>
                       <Link href='/clientes' className='border rounded-xl p-2 bg-white transition-colors duration-200 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
                       <h1 className='text-lg font-medium mt-auto mb-auto'>{ clientData.email }</h1>
@@ -327,8 +327,8 @@ export default function Page ({ params }: { params: { slug: string } }) {
                       }, 10)
                     }}>Envíar email</Button>
                   </div>
-                  <form className='flex gap-6 w-full m-auto'>
-                    <div className='flex gap-6 flex-col w-2/3'>
+                  <form className='flex gap-6 w-full m-auto flex-col lg:flex-row'>
+                    <div className='flex gap-6 flex-col w-full lg:w-2/3'>
                       <Card title='Pedidos'>
                         {
                           clientSells
@@ -479,7 +479,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                         }
                       </Card>
                     </div>
-                    <div className='flex gap-6 flex-col w-1/3'>
+                    <div className='flex gap-6 flex-col w-full lg:w-1/3'>
                       <Card title='Datos'>
                         <div className='flex flex-col gap-2'>
                           <p className='text-sm'>Nombre</p>

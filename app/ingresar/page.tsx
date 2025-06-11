@@ -82,7 +82,7 @@ export default function Page () {
   }
 
   return (
-    <div className='bg-bg w-full h-full flex border-t-4 fixed top-0 z-50 border-main dark:bg-neutral-900'>
+    <div className='bg-bg w-full h-full flex border-t-4 fixed top-0 z-50 px-4 border-main dark:bg-neutral-900'>
       {
         loadingInitial
           ? (
@@ -92,7 +92,7 @@ export default function Page () {
           )
           : accounts?.length
             ? (
-              <form onSubmit={handleSubmit} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-8 dark:bg-neutral-800 shadow-card dark:shadow-card-dark dark:border-neutral-700'>
+              <form onSubmit={handleSubmit} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-6 sm:p-8 dark:bg-neutral-800 shadow-card dark:shadow-card-dark dark:border-neutral-700'>
                 {
                   error !== ''
                     ? <p className='w-full p-2 bg-red-600 text-white text-center'>{error}</p>
@@ -111,7 +111,7 @@ export default function Page () {
               </form>
             )
             : (
-              <form onSubmit={createAccount} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-8 shadow-card dark:shadow-card-dark dark:bg-neutral-800 dark:border-neutral-700'>
+              <form onSubmit={createAccount} className='m-auto bg-white flex flex-col gap-4 w-[450px] border border-[#f3f3f3] rounded-xl p-6 sm:p-8 shadow-card dark:shadow-card-dark dark:bg-neutral-800 dark:border-neutral-700'>
                 {
                   error !== ''
                     ? <p className='w-full p-2 bg-red-600 text-white text-center'>{error}</p>
