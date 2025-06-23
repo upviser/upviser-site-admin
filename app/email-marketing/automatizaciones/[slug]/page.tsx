@@ -190,7 +190,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg h-[calc(100%-140px)] lg:h-[calc(100%-73px)] dark:bg-neutral-900'>
+        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg h-[calc(100%-125px)] lg:h-[calc(100%-73px)] dark:bg-neutral-900'>
           {
             automatization
               ? (

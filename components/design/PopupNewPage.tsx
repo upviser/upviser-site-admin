@@ -38,7 +38,7 @@ export const PopupNewPage: React.FC<Props> = ({ popupPage, setPopupPage, setLoad
   }, [popupPage, setPopupPage]);
 
   return (
-    <div className={`${popupPage.view} ${popupPage.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 bg-black/30 fixed z-50`}>
+    <div className={`${popupPage.view} ${popupPage.opacity} transition-opacity duration-200 w-full h-full px-4 top-0 left-0 bg-black/30 fixed z-50`}>
         <div ref={popupRef} onMouseEnter={() => setPopupPage({ ...popupPage, mouse: true })} onMouseLeave={() => setPopupPage({ ...popupPage, mouse: false })} className={`${popupPage.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 p-5 bg-white m-auto rounded-xl border border-black/5 w-[500px] flex flex-col gap-4 shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
           {
             error !== ''

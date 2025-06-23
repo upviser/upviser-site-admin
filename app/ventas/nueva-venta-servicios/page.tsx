@@ -37,7 +37,7 @@ export default function Page () {
 
   return (
     <>
-      <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700' style={{ width: 'calc(100% - 250px)' }}>
+      <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
         <div className='flex m-auto w-full max-w-[1280px]'>
           <div className='flex gap-6 ml-auto w-fit'>
             {
@@ -54,8 +54,8 @@ export default function Page () {
           <Link href='/ventas' className='border border-border rounded-lg p-2 bg-white transition-colors duration-150 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
           <h1 className='text-xl mt-auto mb-auto font-medium'>Nueva venta de servicios</h1>
         </div>
-        <form className='flex gap-6 w-full max-w-[1280px] m-auto'>
-          <div className='flex gap-6 flex-col w-2/3'>
+        <form className='flex gap-6 w-full max-w-[1280px] m-auto flex-col lg:flex-row'>
+          <div className='flex gap-6 flex-col w-full lg:w-2/3'>
             <Card title='Datos'>
               <div className='flex gap-2'>
                 <div className='w-1/2'>
@@ -149,7 +149,7 @@ export default function Page () {
               }
             </Card>
           </div>
-          <div className='flex gap-6 flex-col w-1/3'>
+          <div className='flex gap-6 flex-col w-full lg:w-1/3'>
             <Card title='Pago'>
               <div className='flex flex-col gap-2'>
                 <p className='text-sm'>Metodo de pago</p>

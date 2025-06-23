@@ -48,7 +48,7 @@ export default function Page () {
   return (
     <div className='w-full h-full bg-bg flex flex-col gap-6 dark:bg-neutral-900'>
       <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto min-h-full max-h-full'>
-        <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
+        <div className='flex gap-4 justify-between w-full max-w-[1280px] mx-auto flex-wrap'>
           <h1 className='text-lg font-medium my-auto'>Ventas</h1>
           <div className="flex gap-2">
             <ButtonSecondary action={() => router.push('/ventas/nueva-venta-servicios')}>Nueva venta de servicios</ButtonSecondary>

@@ -26,7 +26,7 @@ export const PopupDeletePage: React.FC<Props> = ({ popupDeletePage, setPopupDele
             setPopupDeletePage({ ...popupDeletePage, view: 'hidden', opacity: 'opacity-0' })
           }, 200)
         }
-      }} className={`${popupDeletePage.view} ${popupDeletePage.opacity} transition-opacity duration-200 fixed w-full h-full bg-black/30 flex top-0 left-0 z-50`}>
+      }} className={`${popupDeletePage.view} ${popupDeletePage.opacity} transition-opacity duration-200 fixed w-full h-full px-4 bg-black/30 flex top-0 left-0 z-50`}>
         <div onMouseEnter={() => setPopupDeletePage({ ...popupDeletePage, mouse: true })} onMouseLeave={() => setPopupDeletePage({ ...popupDeletePage, mouse: false })} className={`${popupDeletePage.opacity === 'opacity-1' ? 'scale-1' : 'scale-90'} transition-transform duration-200 w-full max-w-[500px] max-h-[600px] overflow-y-auto p-5 rounded-xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
           <p>¿Estas seguro que deseas eliminar la pagina: <span className='font-medium'>{page?.page}</span>?</p>
           <div className='flex gap-6'>

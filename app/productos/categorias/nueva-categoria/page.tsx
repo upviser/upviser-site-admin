@@ -34,7 +34,7 @@ export default  function Page () {
       <Head>
         <title>Nueva categoría</title>
       </Head>
-        <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700' style={{ width: 'calc(100% - 250px)' }}>
+        <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
             <div className='flex gap-6 ml-auto w-fit'>
               {
@@ -51,12 +51,12 @@ export default  function Page () {
             <Link href='/productos/categorias' className='border border-border rounded-lg p-2 bg-white transition-colors duration-150 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
             <h1 className='text-lg font-medium mt-auto mb-auto'>Nueva categoría</h1>
           </div>
-          <form className='flex gap-6 w-full max-w-[1280px] m-auto'>
-            <div className='flex gap-6 flex-col w-2/3'>
+          <form className='flex gap-6 w-full max-w-[1280px] m-auto flex-col lg:flex-row'>
+            <div className='flex gap-6 flex-col w-full lg:w-2/3'>
               <NameDescription categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
               <CategorySeo categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
             </div>
-            <div className='flex gap-6 flex-col w-1/3'>
+            <div className='flex gap-6 flex-col w-full lg:w-1/3'>
               <Media categoryInfo={categoryInfo} setCategoryInfo={setCategoryInfo} />
             </div>
           </form>

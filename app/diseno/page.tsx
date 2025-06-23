@@ -345,7 +345,7 @@ export default function Page () {
             }
           }} className='h-fit'>{menu === 'hidden' ? <SlMenu className='text-lg' /> : <GrClose className='text-lg' />}</button>
         </div>
-        <div className={`${menu} z-40 bg-white flex flex-col gap-4 fixed p-4 overflow-y-auto lg:hidden`} style={{ height: 'calc(100% - 49px)' }}>
+        <div className={`${menu} z-40 bg-white flex flex-col gap-4 fixed p-4 overflow-y-auto lg:hidden dark:bg-neutral-900`} style={{ height: 'calc(100% - 49px)' }}>
           <button onClick={(e: any) => {
             e.preventDefault()
             if (menu === 'hidden') {

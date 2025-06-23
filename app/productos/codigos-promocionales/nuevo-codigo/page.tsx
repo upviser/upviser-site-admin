@@ -43,7 +43,7 @@ export default function Page () {
       <Head>
         <title>Nuevo codigo promocional</title>
       </Head>
-        <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700' style={{ width: 'calc(100% - 250px)' }}>
+        <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
             <div className='flex gap-6 ml-auto w-fit'>
               {
@@ -55,17 +55,17 @@ export default function Page () {
             </div>
           </div>
         </div>
-        <div className='p-6 w-full flex flex-col gap-6 min-h-full overflow-y-auto bg-bg dark:bg-neutral-900'>
+        <div className='p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
             <Link href='/productos/codigos-promocionales' className='border rounded-lg p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
             <h1 className='text-lg font-medium my-auto'>Nuevo codigo promocional</h1>
           </div>
-          <form className='flex gap-6 w-full max-w-[1280px] mx-auto'>
-            <div className='flex gap-6 flex-col w-2/3'>
+          <form className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
+            <div className='flex gap-6 flex-col w-full lg:w-2/3'>
               <Code codeInfo={codeInfo} inputChange={inputChange} />
               <Promotion codeInfo={codeInfo} inputChange={inputChange} minimunPrice={minimunPrice} setMinimunPrice={setMinimunPrice} />
             </div>
-            <div className='w-1/3 flex flex-col gap-6'>
+            <div className='w-full lg:w-1/3 flex flex-col gap-6'>
               <State codeInfo={codeInfo} setCodeInfo={setCodeInfo} />
             </div>
           </form>

@@ -169,7 +169,12 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
       <div className={`${menu} ${menu2 ? 'opacity-1' : 'opacity-0'} transition-opacity duration-200 fixed top-[49px] h-full flex w-full z-50`}>
         <div className={`${menu2 ? '' : '-ml-60'} transition-all duration-200 w-[250px] h-full z-50 border-r bg-bg border-border p-4 flex-col justify-between dark:border-neutral-800 dark:bg-neutral-900`}>
           <div className='flex flex-col gap-[2px] overflow-y-auto'>
-            <Link href='/' className={`transition-all duration-150 ${pathname === '/' ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><AiOutlineHome className={`mt-auto mb-auto text-lg ${pathname === '/' ? 'text-white' : 'text-main'}`} /><p className={`${pathname === '/' ? 'text-white' : ''} text-sm`}>Inicio</p></Link>
+            <Link href='/' onClick={() => {
+              setMenu2(false)
+              setTimeout(() => {
+                setMenu('hidden')
+              }, 200);
+            }} className={`transition-all duration-150 ${pathname === '/' ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><AiOutlineHome className={`mt-auto mb-auto text-lg ${pathname === '/' ? 'text-white' : 'text-main'}`} /><p className={`${pathname === '/' ? 'text-white' : ''} text-sm`}>Inicio</p></Link>
             {
               session?.user.permissions?.includes('Ventas') || session?.user.type === 'Administrador'
                 ? <Link href='/ventas' onClick={() => {
@@ -421,7 +426,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                             : <Link href='/'><Image className='h-10 object-contain w-fit' alt={`Logo Upviser`} src='https://upviser-website.b-cdn.net/Logo%20website.png' width={500} height={160} /></Link>
                     }
                   </div>
-                  <div className='hidden lg:flex gap-4'>
+                  <div className='flex gap-4'>
                     {renderThemeChanger()}
                     <button onClick={(e: any) => {
                       e.preventDefault()
