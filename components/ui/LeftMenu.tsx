@@ -147,6 +147,11 @@ export const LeftMenu: React.FC<PropsWithChildren> = ({ children }) => {
                         )
                         : ''
                     }
+                    {
+                      session?.user.permissions?.includes('Contenido IA') || session?.user.type === 'Administrador'
+                        ? <Link href='/contenido-ia' className={`transition-all duration-150 ${pathname.includes('/contenido-ia') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><p className='text-sm'>✨</p><p className={`${pathname.includes('/contenido-ia') ? 'text-white' : ''} text-sm`}> Contenido IA</p></Link>
+                        : ''
+                    }
                   </div>
                   <div className='border-t border-border pt-4 dark:border-neutral-800'>
                     {
