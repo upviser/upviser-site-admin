@@ -17,6 +17,7 @@ export default  function Page () {
     slug: ''
   })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const initialCategory = { category: '' }
 
   const router = useRouter()
@@ -24,6 +25,12 @@ export default  function Page () {
   const handleSubmit = async () => {
     if (!loading) {
       setLoading(true)
+      setError('')
+      if (categoryInfo.category === '') {
+        setError('La categoría debe tener un nombre')
+        setLoading(false)
+        return
+      }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/categories`, categoryInfo)
       router.push('/productos/categorias')
     }
@@ -36,6 +43,11 @@ export default  function Page () {
       </Head>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
+            {
+              error !== ''
+                ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+                : ''
+            }
             <div className='flex gap-6 ml-auto w-fit'>
               {
                 categoryInfo.category === initialCategory.category

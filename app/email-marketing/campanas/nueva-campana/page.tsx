@@ -25,6 +25,7 @@ export default function Page () {
   const [storeData, setStoreData] = useState<IStoreData>()
   const [clientTags, setClientTags] = useState<IClientTag[]>([])
   const [clientData, setClientData] = useState([])
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -63,6 +64,12 @@ export default function Page () {
     e.preventDefault()
     if (!loading) {
       setLoading(true)
+      setError('')
+      if (email.affair === '') {
+        setError('La campaña debe tener un asunto')
+        setLoading(false)
+        return
+      }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/new-campaign`, email)
       router.push('/email-marketing/campanas')
     }
@@ -75,6 +82,11 @@ export default function Page () {
       </Head>
       <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 w-full lg:w-[calc(100%-250px)] dark:bg-neutral-800 dark:border-neutral-700'>
         <div className='flex m-auto w-full max-w-[1280px]'>
+          {
+            error !== ''
+              ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+              : ''
+          }
           <div className='flex gap-6 ml-auto w-fit'>
             <ButtonSubmit action={submit} color='main' submitLoading={loading} textButton='Crear campaña' config='w-40' />
             <Link className='my-auto text-sm' href='/email-marketing/campanas'>Descartar</Link>

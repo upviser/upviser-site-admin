@@ -22,12 +22,19 @@ export default function Page () {
   })
   const [submitLoading, setSubmitLoading] = useState(false)
   const [content, setContent] = useState('')
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
   const handleSubmit = async () => {
     if (!submitLoading) {
       setSubmitLoading(true)
+      setError('')
+      if (contentData.title === '') {
+        setError('El post debe tener un titulo')
+        setSubmitLoading(false)
+        return
+      }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post`, { ...contentData, content: content })
       router.push('/blog')
     }
@@ -40,6 +47,11 @@ export default function Page () {
       </Head>
       <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 w-full lg:w-[calc(100%-250px)] dark:bg-neutral-800 dark:border-neutral-700'>
         <div className='flex m-auto w-full max-w-[1280px]'>
+          {
+            error !== ''
+              ? <p className='bg-red-500 text-white w-fit p-2'>{error}</p>
+              : ''
+          }
           <div className='flex gap-6 ml-auto w-fit'>
             <ButtonSubmit action={handleSubmit} color='main' submitLoading={submitLoading} textButton='Crear post' config='w-32' />
             <Link className='my-auto text-sm' href='/blog'>Descartar</Link>

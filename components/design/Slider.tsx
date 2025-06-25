@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
@@ -7,7 +8,7 @@ import styles from "./Slider.module.css"
 import { Navigation, Pagination } from "swiper/modules"
 import axios from 'axios'
 import { Design, ICall, ICategoryPage, IDesign, IForm, IFunnel, IPage, IService } from '@/interfaces'
-import { Button, Button2 } from '../ui'
+import { Button, Button2, Input, Select, Spinner } from '../ui'
 import { ButtonDesign } from './ButtonDesign'
 
 interface Props {
@@ -33,6 +34,15 @@ interface Props {
 }
 
 export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, ind, inde, indx, inx, inxx, pageNeed, funnels, setFunnels, responsive, calls, forms, services, setServices, style }) => {
+  
+  const [gradient, setGradient] = useState('')
+  const [firstColor, setFirstColor] = useState('')
+  const [lastColor, setLastColor] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [loadingImage, setLoadingImage] = useState(false)
+  const [errorImage, setErrorImage] = useState('')
+  
   return (
     <div>
       <Swiper
@@ -58,10 +68,12 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                               <h1
                                 className={`${responsive === '400px' ? 'text-4xl' : 'text-5xl'} ${banner.type === 'Izquierda' ? '' : 'text-center'} transition-opacity duration-200 text-white font-semibold`}
                                 dangerouslySetInnerHTML={{ __html: banner.title ? banner.title  : '' }}
+                                style={{ color: design.info.textColor }}
                               />
                               <p
                                 className={`${responsive === '400px' ? 'text-base' : 'text-lg'} ${banner.type === 'Izquierda' ? '' : 'text-center'} transition-opacity duration-200 text-white`}
                                 dangerouslySetInnerHTML={{ __html: banner.description ? banner.description : '' }}
+                                style={{ color: design.info.textColor }}
                               />
                               {
                                 banner.button && banner.button !== '' && banner.buttonLink && banner.buttonLink !== ''
@@ -74,7 +86,38 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                         </>
                       )
                       : (
-                        <>
+                        <div className='flex flex-col gap-4 w-full'>
+                        <div className='w-full flex'>
+                          <div className='flex flex-col gap-2 w-fit m-auto bg-white p-6 rounded-xl shadow-md border border-black/5 mb-4'>
+                            <div className='flex flex-col gap-2'>
+                              <p className='font-medium m-auto'>Color texto</p>
+                              <input type='color' onChange={(e: any) => {
+                                if (inde !== undefined) {
+                                  const oldFunnels = [...funnels!]
+                                  oldFunnels[inde].steps[ind].design![index].info.textColor = e.target.value
+                                  setFunnels(oldFunnels)
+                                } else if (indx !== undefined) {
+                                  const oldServices = [...services!]
+                                  oldServices[indx].steps[ind].design![index].info.textColor = e.target.value
+                                  setServices(oldServices)
+                                } else if (inx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inx].design[index].info.textColor = e.target.value
+                                  setPages(oldPages)
+                                } else if (inxx !== undefined) {
+                                  const oldPages = [...pages]
+                                  oldPages[inxx].design[index].info.textColor = e.target.value
+                                  setPages(oldPages)
+                                } else {
+                                  const oldPages = [...pages]
+                                  oldPages[ind].design[index].info.textColor = e.target.value
+                                  setPages(oldPages)
+                                }
+                              }} value={design.info.textColor} className='m-auto' />
+                            </div>
+                          </div>
+                        </div>
+                        <div className='flex'>
                         <div className="m-auto w-full p-4">
                           <div className='max-w-[1600px] w-full m-auto flex flex-col gap-4'>
                             <textarea placeholder='Titulo' value={banner.title} onChange={(e: any) => {
@@ -322,8 +365,9 @@ export const Slider: React.FC<Props> = ({ design, edit, pages, setPages, index, 
                               }}>Agregar banner</Button2>
                           </div>
                         </div>
+                        </div>
                         <Image width={1920} height={1080} className={`absolute object-cover h-full w-full -z-10`} src={banner.image!} alt='banner' />
-                        </>
+                        </div>
                       )
                   }
                 </div>

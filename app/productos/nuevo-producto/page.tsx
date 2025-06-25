@@ -45,6 +45,7 @@ export default function Page () {
   })
   const [productsOffer, setProductsOffer] = useState<IProductsOffer[]>([{productsSale: [], price: 0}])
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -60,9 +61,17 @@ export default function Page () {
   }, [])
 
   const handleSubmit = async () => {
-    setSubmitLoading(true)
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, { name: information?.name, description: information?.description, category: information?.category, price: information?.price, beforePrice: information?.beforePrice, images: information?.images, stock: information?.stock, slug: information?.slug, state: information?.state, tags: information?.tags, titleSeo: information?.titleSeo, descriptionSeo: information?.descriptionSeo, variations: information?.variations, productsOffer: productsOffer, cost: information?.cost, quantityOffers: quantityOffers, informations: information.informations })
-    router.push('/productos')
+    if (!submitLoading) {
+      setSubmitLoading(true)
+      setError('')
+      if (information?.name === '') {
+        setError('El producto debe tener un nombre')
+        setSubmitLoading(false)
+        return
+      }
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/products`, { name: information?.name, description: information?.description, category: information?.category, price: information?.price, beforePrice: information?.beforePrice, images: information?.images, stock: information?.stock, slug: information?.slug, state: information?.state, tags: information?.tags, titleSeo: information?.titleSeo, descriptionSeo: information?.descriptionSeo, variations: information?.variations, productsOffer: productsOffer, cost: information?.cost, quantityOffers: quantityOffers, informations: information.informations })
+      router.push('/productos')
+    }
   }
 
   return (
@@ -72,6 +81,11 @@ export default function Page () {
       </Head>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
+            {
+              error !== ''
+                ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+                : ''
+            }
             <div className='flex gap-6 ml-auto w-fit'>
               {
                 information.name === initial.name

@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -9,8 +8,6 @@ import { HiOutlineInformationCircle } from 'react-icons/hi'
 import { MdOutlineIntegrationInstructions, MdOutlineLocalShipping } from 'react-icons/md'
 
 export const Nav = () => {
-
-  const { data: session } = useSession()
 
   const pathname = usePathname()
 

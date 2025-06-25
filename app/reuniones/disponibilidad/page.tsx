@@ -20,6 +20,7 @@ export default function AvaliableCallsPage () {
   const [title, setTitle] = useState('')
   const [newCalendar, setNewCalendar] = useState<any>({ name: '' })
   const [popupDeleteCalendar, setPopupDeleteCalendar] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [shopLogin, setShopLogin] = useState<any>()
 
   const { data: session } = useSession()
   const router = useRouter()
@@ -33,6 +34,15 @@ export default function AvaliableCallsPage () {
 
   useEffect(() => {
     getCaledars()
+  }, [])
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
   }, [])
 
   useEffect(() => {
@@ -104,6 +114,11 @@ export default function AvaliableCallsPage () {
             setLoading(true)
             setError('')
             if (newCalendar.name !== '') {
+              if ((shopLogin.plan === 'Esencial' && calendars.length === 1) || (shopLogin.plan === 'Avanzado' && calendars.length === 3) || (shopLogin.plan === 'Profesional' && calendars.length === 10)) {
+                setError('Has llegado al limite de calendarios de tu plan')
+                setLoading(false)
+                return
+              }
               await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/calendar`, newCalendar)
               setPopupNewCalendar({ ...popupNewCalendar, view: 'flex', opacity: 'opacity-0' })
               getCaledars()

@@ -15,6 +15,7 @@ export default function Page () {
   const [automatizationSelect, setAutomatizationSelect] = useState({ _id: '', automatization: '' })
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loadingDelete, setLoadingDelete] = useState(false)
+  const [shopLogin, setShopLogin] = useState<any>()
 
   const { data: session } = useSession()
 
@@ -29,6 +30,15 @@ export default function Page () {
 
   useEffect(() => {
     getAutomatizations()
+  }, [])
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
   }, [])
 
   const deleteAutomatization= async (e: any) => {
@@ -71,6 +81,7 @@ export default function Page () {
                 : ''
             }
           </div>
+          <p className='p-2 border w-fit bg-white rounded-xl dark:border-neutral-700 dark:bg-neutral-800'>Emails disponibles: {shopLogin?.emails}</p>
           <div className='w-full max-w-[1280px] mx-auto'>
             {
               loading

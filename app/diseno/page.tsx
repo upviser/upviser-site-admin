@@ -244,6 +244,20 @@ export default function Page () {
     getStyle()
   }, [])
 
+  const getPage = () => {
+    const currentUrl = window.location.href
+    const url = new URL(currentUrl)
+    const params = new URLSearchParams(url.search)
+    const page = params.get('page')
+    if (page) {
+      setPart(page)
+    }
+  }
+
+  useEffect(() => {
+    getPage()
+  }, [])
+
   const moveItem = (fromIndex: number, toIndex: number) => {
     const newPages = [...pages]
     const [removedItem] = newPages.splice(fromIndex, 1)

@@ -19,6 +19,7 @@ export default function Page () {
   })
   const [minimunPrice, setMinimunPrice] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -32,6 +33,12 @@ export default function Page () {
     e.preventDefault()
     if (!submitLoading) {
       setSubmitLoading(true)
+      setError('')
+      if (codeInfo.promotionalCode === '') {
+        setError('Debe tener un nombre el codigo promocional')
+        setSubmitLoading(false)
+        return
+      }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/promotional-code`, codeInfo)
       router.push('/productos/codigos-promocionales')
       setSubmitLoading(false)
@@ -45,6 +52,11 @@ export default function Page () {
       </Head>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
+            {
+              error !== ''
+                ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+                : ''
+            }
             <div className='flex gap-6 ml-auto w-fit'>
               {
                 codeInfo.promotionalCode === promotionalCode

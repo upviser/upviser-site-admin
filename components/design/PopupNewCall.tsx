@@ -95,11 +95,6 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
             }
           }
         }} onMouseEnter={() => setPopupCall({ ...popupCall, mouse: true })} onMouseLeave={() => setPopupCall({ ...popupCall, mouse: false })} onMouseMove={() => setPopupCall({ ...popupCall, mouse: true })} className={`${popupCall.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[700px] max-h-[600px] overflow-y-auto p-6 rounded-xl m-auto border flex flex-col gap-4 border-white bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
-          {
-            error !== ''
-              ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{ error }</p>
-              : ''
-          }
           <p className="text-lg font-medium">{titleMeeting}</p>
           <div className="flex flex-col gap-2">
             <p className='text-sm font-medium'>Tipo</p>
@@ -446,6 +441,11 @@ export const PopupNewCall: React.FC<Props> = ({ popupCall, setPopupCall, titleMe
                   </Select>
                 </div>
               )
+              : ''
+          }
+          {
+            error !== ''
+              ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{ error }</p>
               : ''
           }
           <Button type='submit' loading={loadingNewCall} config='w-full'>{titleMeeting === 'Crear reunion' ? 'Crear reunion' : 'Editar reunion'}</Button>

@@ -11,6 +11,7 @@ export default function Page() {
   const [users, setUsers] = useState<IUser[]>([])
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [user, setUser] = useState<IUser>()
+  const [shopLogin, setShopLogin] = useState<any>()
 
   const getUsers = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/accounts`)
@@ -21,22 +22,37 @@ export default function Page() {
     getUsers()
   }, [])
 
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
+
   return (
     <>
-    <PopupNewUser popup={popup} setPopup={setPopup} user={user} setUser={setUser} getUsers={getUsers} />
+    <PopupNewUser popup={popup} setPopup={setPopup} user={user} setUser={setUser} getUsers={getUsers} shopLogin={shopLogin} setShopLogin={setShopLogin} />
     <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900 mb-16 h-full'>
       <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
         <Nav />
         <div className='w-full lg:w-3/4 flex flex-col gap-6'>
           <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Usuarios</h2>
-          <Button2 action={(e: any) => {
-            e.preventDefault()
-            setUser({email: '', type: 'Administrador', _id: '', name: '', password: '', permissions: [] })
-            setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
-            setTimeout(() => {
-              setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
-            }, 10)
-          }}>Nuevo usuario</Button2>
+          {
+            shopLogin?.plan !== 'Esencial'
+              ? (
+                 <Button2 action={(e: any) => {
+                  e.preventDefault()
+                  setUser({email: '', type: 'Usuario', _id: '', name: '', password: '', permissions: [] })
+                  setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                  setTimeout(() => {
+                    setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                  }, 10)
+                }}>Nuevo usuario</Button2>
+              )
+              : ''
+          }
           {
             users.length
               ? (

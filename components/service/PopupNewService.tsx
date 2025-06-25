@@ -57,7 +57,13 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
           e.preventDefault()
           if (!loadingService) {
             setLoadingService(true)
+            setError('')
             if (title === 'Nuevo servicio') {
+              if (newService.name === '') {
+                setError('El servicio debe tener un nombre')
+                setLoadingService(false)
+                return
+              }
               await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/service`, newService)
             } else {
               await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/service/${newService._id}`, newService)
@@ -71,11 +77,6 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
             }, 200)
           }
         }} onMouseEnter={() => setPopupService({ ...popupService, mouse: true })} onMouseLeave={() => setPopupService({ ...popupService, mouse: false })} onMouseMove={() => setPopupService({ ...popupService, mouse: true })} className={`${popupService.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[700px] max-h-[600px] overflow-y-auto p-6 rounded-xl m-auto border flex flex-col gap-4 shadow-popup bg-white dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
-          {
-            error !== ''
-              ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{ error }</p>
-              : ''
-          }
           <p className="font-medium">{title}</p>
           <div className="flex flex-col gap-2">
             <p className='text-sm'>Nombre del servicio</p>
@@ -557,6 +558,11 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
               }} color='main' config='w-32' />
             </div>
           </div>
+          {
+            error !== ''
+              ? <p className='px-2 py-1 bg-red-500 text-white w-fit'>{ error }</p>
+              : ''
+          }
           <Button type='submit' loading={loadingService} config="w-full">{title === 'Nuevo servicio' ? 'Crear servicio' : 'Editar servicio'}</Button>
         </form>
       </div>

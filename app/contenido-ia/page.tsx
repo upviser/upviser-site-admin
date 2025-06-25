@@ -1,7 +1,7 @@
 "use client"
 import { Button, ButtonAI, Input, Select, Textarea } from "@/components/ui"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from 'next/image'
 
 export default function Page() {
@@ -18,6 +18,17 @@ export default function Page() {
   const [loadingVideo, setLoadingVideo] = useState(false)
   const [videoIA, setVideoIA] = useState('')
   const [isLoaded, setIsLoaded] = useState(false)
+  const [shopLogin, setShopLogin] = useState<any>()
+  const [error, setError] = useState('')
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const imageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -76,27 +87,66 @@ export default function Page() {
   const handleSubmitText = async () => {
     if (!loadingText) {
       setLoadingText(true)
+      setError('')
+      if (shopLogin.imageAI < 1) {
+        setError('No tienes palabras disponibles')
+        setLoadingText(false)
+        return
+      }
+      if (text.promt === '') {
+        setError('Debes describir el texto que quieres generar')
+        setLoadingText(false)
+        return
+      }
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/text-ia`, text)
       setTextIA(res.data)
       setLoadingText(false)
+      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - res.data.trim().split(/\s+/).filter(Boolean).length })
+      setShopLogin(res2.data)
     }
   }
 
   const handleSubmitImage = async () => {
     if (!loadingImage) {
       setLoadingImage(true)
+      setError('')
+      if (shopLogin.imageAI === 0) {
+        setError('No tienes imagenes disponibles')
+        setLoadingImage(false)
+        return
+      }
+      if (image.promt === '') {
+        setError('Debes describir la imagen que quieres generar')
+        setLoadingText(false)
+        return
+      }
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: image.promt, image: imageRef, size: image.size })
       setImageIA(res.data)
       setLoadingImage(false)
+      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imageAI: shopLogin.imageAI - 1 })
+      setShopLogin(res2.data)
     }
   }
 
   const handleSubmitVideo = async () => {
     if (!loadingVideo) {
       setLoadingVideo(true)
+      setError('')
+      if (shopLogin.imageAI === 0) {
+        setError('No tienes videos disponibles')
+        setLoadingVideo(false)
+        return
+      }
+      if (video.promt === '') {
+        setError('Debes describir el video que quieres generar')
+        setLoadingText(false)
+        return
+      }
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video-ia`, video)
       setVideoIA(res.data)
       setLoadingVideo(false)
+      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videoAI: shopLogin.videoAI - 1 })
+      setShopLogin(res2.data)
     }
   }
 
@@ -107,10 +157,24 @@ export default function Page() {
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg font-medium my-auto'>Generación de contenido con IA</h1>
           </div>
+          <div className="flex p-2 border rounded-xl w-fit bg-white divide-x dark:border-neutral-700 dark:bg-neutral-800 dark:divide-neutral-700">
+            <p className="px-2">Texto: {shopLogin?.textAI}</p>
+            <p className="px-2">Imagenes: {shopLogin?.imageAI}</p>
+            <p className="px-2">Videos: {shopLogin?.videoAI}</p>
+          </div>
           <div className="flex gap-2 flex-wrap">
-            <button onClick={() => setType('Generación de textos')} className={`${type === 'Generación de textos' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de textos</button>
-            <button onClick={() => setType('Generación de imagenes')} className={`${type === 'Generación de imagenes' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de imagenes</button>
-            <button onClick={() => setType('Generación de videos')} className={`${type === 'Generación de videos' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de videos</button>
+            <button onClick={() => {
+              setType('Generación de textos')
+              setError('')
+            }} className={`${type === 'Generación de textos' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de textos</button>
+            <button onClick={() => {
+              setType('Generación de imagenes')
+              setError('')
+            }} className={`${type === 'Generación de imagenes' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de imagenes</button>
+            <button onClick={() => {
+              setType('Generación de videos')
+              setError('')
+            }} className={`${type === 'Generación de videos' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de videos</button>
           </div>
           {
             type !== ''
@@ -144,6 +208,11 @@ export default function Page() {
                           <p className='text-sm'>Describe el texto que quieres generar</p>
                           <Textarea change={(e: any) => setText({ ...text, promt: e.target.value })} value={text.promt} placeholder="Descripción" config='h-20' />
                         </div>
+                        {
+                          error !== ''
+                            ? <p className="w-fit p-2 bg-red-500 text-white">{error}</p>
+                            : ''
+                        }
                         <ButtonAI click={handleSubmitText} text={'Generar texto con IA'} loading={loadingText} />
                       </div>
                       <div className="flex flex-col gap-4 w-full sm:w-1/2">
@@ -194,6 +263,11 @@ export default function Page() {
                               <option>16:21</option>
                             </Select>
                           </div>
+                          {
+                            error !== ''
+                              ? <p className="w-fit p-2 bg-red-500 text-white">{error}</p>
+                              : ''
+                          }
                           <ButtonAI click={handleSubmitImage} text={'Generar imagen con IA'} loading={loadingImage} />
                         </div>
                         <div className="flex flex-col gap-4 w-full sm:w-1/2">
@@ -281,6 +355,11 @@ export default function Page() {
                                 }
                               </Select>
                             </div>
+                            {
+                              error !== ''
+                                ? <p className="w-fit p-2 bg-red-500 text-white">{error}</p>
+                                : ''
+                            }
                             <ButtonAI click={handleSubmitVideo} text={'Generar video con IA'} loading={loadingVideo} />
                           </div>
                           <div className="flex flex-col gap-4 w-full sm:w-1/2">

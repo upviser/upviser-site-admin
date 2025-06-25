@@ -14,6 +14,7 @@ export default function Page () {
   const [services, setServices] = useState<IService[]>([])
   const [selectService, setSelectService] = useState<IService>()
   const [state, setState] = useState('') 
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -29,6 +30,17 @@ export default function Page () {
   const sellSubmit = async () => {
     if (!loading) {
       setLoading(true)
+      setError('')
+      if (pay.email === '' || pay.firstName === '' || pay.lastName === '' || pay.phone === '') {
+        setError('Debes llenar todos los datos requeridos')
+        setLoading(false)
+        return
+      }
+      if (pay.service === '') {
+        setError('Debes seleccionar un servicio')
+        setLoading(false)
+        return
+      }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/pay`, pay)
       await axios.post(`${process.env.ENXT_PUBLIC_API_URL}/client`, { ...pay, services: [{ service: pay.service, step: pay.stepService, plan: pay.plan, price: pay.price, payStatus: state }] })
       router.push('/ventas')
@@ -39,6 +51,11 @@ export default function Page () {
     <>
       <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
         <div className='flex m-auto w-full max-w-[1280px]'>
+          {
+            error !== ''
+              ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+              : ''
+          }
           <div className='flex gap-6 ml-auto w-fit'>
             {
               pay.email === ''

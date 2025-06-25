@@ -16,6 +16,7 @@ export default function Page () {
   const [messages, setMessages] = useState<IChatMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState('')
+  const [shopLogin, setShopLogin] = useState<any>()
 
   const chatIdRef = useRef(chatId)
   const messagesRef = useRef(messages)
@@ -28,6 +29,15 @@ export default function Page () {
 
   useEffect(() => {
     getChats()
+  }, [])
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
   }, [])
 
   useEffect(() => {
@@ -67,9 +77,10 @@ export default function Page () {
       <Head>
         <title>Mensajes</title>
       </Head>
-        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 min-h-full overflow-y-auto bg-bg dark:bg-neutral-900'>
+        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto h-full bg-bg dark:bg-neutral-900'>
           <div className='w-full flex flex-col gap-4 max-w-[1280px] mx-auto'>
             <h1 className='text-lg font-medium'>Mensajes</h1>
+            <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
             <MessagesCategories />
           </div>
           <div className='w-full max-w-[1280px] flex mx-auto gap-6 flex-col lg:flex-row'>

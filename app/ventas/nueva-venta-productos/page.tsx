@@ -31,6 +31,7 @@ export default function Page () {
   const [products, setProducts] = useState<IProduct[]>([])
   const [submitLoading, setSubmitLoading] = useState(false)
   const [chilexpress, setChilexpress] = useState([])
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -70,6 +71,27 @@ export default function Page () {
   const sellSubmit = async () => {
     if (!submitLoading) {
       setSubmitLoading(true)
+      setError('')
+      if (sell.email === '' || sell.address === '' || sell.firstName === '' || sell.city === '' || sell.region !== '') {
+        setError('Debes llenar todos los datos requeridos')
+        setSubmitLoading(false)
+        return
+      }
+      if (!sell.cart.length) {
+        setError('El carrito debe tener al menos un producto')
+        setSubmitLoading(false)
+        return
+      }
+      if (sell.pay === '') {
+        setError('Selecciona el pago de la venta')
+        setSubmitLoading(false)
+        return
+      }
+      if (sell.shippingMethod === '' || sell.shippingState === '') {
+        setError('Selecciona el envío de la venta')
+        setSubmitLoading(false)
+        return
+      }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, sell)
       setSubmitLoading(false)
       router.push('/ventas')
@@ -83,6 +105,11 @@ export default function Page () {
       </Head>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
+            {
+              error !== ''
+                ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+                : ''
+            }
             <div className='flex gap-6 ml-auto w-fit'>
               {
                 sell.email === initialEmail

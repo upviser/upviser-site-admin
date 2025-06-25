@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { Select, Button, Input } from '../ui'
 import { IUser } from '@/interfaces'
-import { useSession } from 'next-auth/react'
 
 interface Props {
     popup: any
@@ -10,15 +9,15 @@ interface Props {
     user?: IUser
     setUser: any
     getUsers: any
+    shopLogin: any
+    setShopLogin: any
 }
 
-export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, getUsers }) => {
+export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, getUsers, shopLogin, setShopLogin }) => {
 
   const [users, setUsers] = useState<IUser[]>([])
   const [loadingUser, setLoadingUser] = useState(false)
   const [error, setError] = useState('')
-
-  const { data: session } = useSession()
 
   const popupRef = useRef<HTMLDivElement | null>(null)
 
@@ -74,13 +73,6 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
               </div>
             )
         }
-        <div className='flex flex-col gap-2'>
-          <p className='text-sm'>Tipo de cuenta</p>
-          <Select change={(e: any) => setUser({ ...user!, type: e.target.value })} value={user?.type}>
-            <option>Administrador</option>
-            <option>Usuario</option>
-          </Select>
-        </div>
         {
           user?.type === 'Usuario'
             ? (
@@ -197,6 +189,16 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                     }} checked={user.permissions?.find(permission => permission === 'Diseño') ? true : false} />
                     <p>Diseño</p>
                   </div>
+                  <div className="flex gap-1">
+                    <input type="checkbox" onChange={(e: any) => {
+                      const oldPermissions = [...user.permissions ? [...user.permissions] : []]
+                      const permissions = oldPermissions.includes('Contenido IA')
+                        ? oldPermissions.filter(permission => permission !== 'Contenido IA')
+                        : [...oldPermissions, 'Contenido IA']
+                      setUser({ ...user, permissions: permissions })
+                    }} checked={user.permissions?.find(permission => permission === 'Contenido IA') ? true : false} />
+                    <p>Contenido IA</p>
+                  </div>
                 </div>
               </>
             )
@@ -208,10 +210,20 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
             if (!loadingUser) {
               setLoadingUser(true)
               setError('')
+              if (user?.email === '') {
+                setError('El usuario debe tener un correo')
+                setLoadingUser(false)
+                return
+              }
               if (user?._id) {
                 await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login/${user?._id}`, user)
               } else {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, user)
+                if ((users.length === 3 && shopLogin?.plan === 'Avanzado') || (users.length === 10 && shopLogin?.plan === 'Profesional')) {
+                  setError('Has llegado al limite de usuarios de tu plan')
+                  return
+                } else {
+                  await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, user)
+                }
               }
               getUsers()
               setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
