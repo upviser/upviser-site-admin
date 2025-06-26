@@ -133,6 +133,11 @@ export default function AvaliableCallsPage () {
             }
           }
         }} onMouseEnter={() => setPopupNewCalendar({ ...popupNewCalendar, mouse: true })} onMouseLeave={() => setPopupNewCalendar({ ...popupNewCalendar, mouse: false })} className={`${popupNewCalendar.opacity === 'opacity-0' ? 'scale-90' : 'scale-100'} transition-transform duration-200 w-full max-w-[500px] max-h-[600px] overflow-y-auto p-6 rounded-xl flex flex-col gap-4 m-auto border bg-white shadow-popup dark:shadow-popup-dark dark:bg-neutral-800 dark:border-neutral-700`}>
+          {
+            error !== ''
+              ? <p className="bg-red-500 text-white w-fit p-2">{error}</p>
+              : ''
+          }
           <p className="font-medium">Nuevo calendario</p>
           <div className="flex flex-col gap-2">
             <p className="text-sm">Nombre del calendario</p>
