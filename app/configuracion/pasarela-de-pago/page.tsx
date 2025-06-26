@@ -24,6 +24,11 @@ export default function Page () {
       active: false,
       accessToken: '',
       publicKey: ''
+    },
+    suscription: {
+      active: false,
+      accessToken: '',
+      publicKey: ''
     }
   })
   const [error, setError] = useState('')
@@ -135,6 +140,26 @@ export default function Page () {
                         <div className='flex flex-col gap-2'>
                           <p className='text-sm'>Public key</p>
                           <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, mercadoPagoPro: { ...payment.mercadoPagoPro, publicKey: e.target.value } }) } value={payment.mercadoPagoPro?.publicKey} placeholder='Public key' />
+                        </div>
+                      </div>
+                    )
+                    : ''
+                }
+                <div className='flex gap-2'>
+                  <input type='checkbox' checked={payment.suscription?.active} onChange={(e: ChangeEvent<HTMLInputElement>) => e.target.checked ? setPayment({ ...payment, suscription: { ...payment.suscription, active: true } }) : setPayment({ ...payment, suscription: { ...payment.suscription, active: false } })} />
+                  <p className='text-sm'>MercadoPago - Suscripciones</p>
+                </div>
+                {
+                  payment.suscription?.active
+                    ? (
+                      <div className='flex flex-col gap-2'>
+                        <div className='flex flex-col gap-2'>
+                          <p className='text-sm'>Token de acceso</p>
+                          <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, suscription: { ...payment.suscription, accessToken: e.target.value } }) } value={payment.suscription?.accessToken} placeholder='Token de acceso' />
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                          <p className='text-sm'>Public key</p>
+                          <Input change={ (e: ChangeEvent<HTMLInputElement>) => setPayment({ ...payment, suscription: { ...payment.suscription, publicKey: e.target.value } }) } value={payment.suscription?.publicKey} placeholder='Public key' />
                         </div>
                       </div>
                     )
