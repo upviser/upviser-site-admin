@@ -1,5 +1,5 @@
 "use client"
-import { Button2, Button2Red, ButtonSubmit, ButtonSubmit2, Card, Input, Popup, Spinner, Spinner2 } from "@/components/ui"
+import { Button, Button2, Button2Red, ButtonSubmit, ButtonSubmit2, Card, Input, Popup, Spinner, Spinner2 } from "@/components/ui"
 import { IFunnel, ISell, IService } from "@/interfaces"
 import { NumberFormat, offer } from "@/utils"
 import axios from "axios"
@@ -40,6 +40,7 @@ export default function Page ({ params }: { params: { id: string } }) {
       setLoading(false)
     } else {
       setSell(response.data)
+      setLoading(false)
     }
   }
 
@@ -51,15 +52,6 @@ export default function Page ({ params }: { params: { id: string } }) {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${params.id}`)
     setSell(response.data)
   }
-
-  useEffect(() => {
-    const getSell = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/sells/${params.id}`)
-      setSell(response.data)
-    }
-
-    getSell()
-  }, [])
 
   const deleteProduct = async (e: any) => {
     e.preventDefault()
@@ -211,26 +203,26 @@ export default function Page ({ params }: { params: { id: string } }) {
                               )
                               : (
                                 <div className='flex flex-col gap-2'>
-                                  <p className='font-light text-sm'>Codigo de seguimiento</p>
-                                  <Input placeholder='Codigo' change={(e: any) => setShippingCode(e.target.value)} />
-                                  {
-                                    shippingCode !== ''
-                                      ? (
-                                        <ButtonSubmit2 action={async (e: any) => {
-                                          e.preventDefault()
-                                          if (!loadingEdit) {
-                                            setLoadingEdit(true)
-                                            const updatedSell = {...sell, shippingState: 'Envío realizado'}
-                                            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/sells/${sell._id}`, {sell: updatedSell, shippingCode: shippingCode})
-                                            await getSell()
-                                            setLoadingEdit(false)
-                                          }
-                                        }} color='main' submitLoading={loadingEdit} textButton='Marcar como enviado' config='w-52' />
-                                      )
-                                      : (
-                                        <button onClick={async (e: any) => e.preventDefault()} className='bg-main/50 border border-main/50 mt-2 h-9 text-white text-sm rounded-lg w-52 cursor-not-allowed'>{loadingEdit ? <Spinner2 /> : 'Marcar como enviado'}</button>
-                                      )
-                                  }
+                                  <Button action={(e: any) => {
+                                    e.preventDefault()
+                                    if (sell.shippingLabel) {
+                                      const byteChars = atob(sell.shippingLabel.replace(/\s/g, ''));
+                                      const byteNumbers = new Array(byteChars.length);
+                                      for (let i = 0; i < byteChars.length; i++) {
+                                        byteNumbers[i] = byteChars.charCodeAt(i);
+                                      }
+                                      const byteArray = new Uint8Array(byteNumbers);
+                                      const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+                                      // Crear URL temporal y disparar descarga
+                                      const url = URL.createObjectURL(blob);
+                                      const link = document.createElement('a');
+                                      link.href = url;
+                                      link.download = 'etiqueta.pdf';
+                                      link.click();
+                                      URL.revokeObjectURL(url);
+                                    }
+                                  }}>Descargar etiqueta</Button>
                                 </div>
                               )
                             : ''
@@ -243,7 +235,7 @@ export default function Page ({ params }: { params: { id: string } }) {
                         <Link className='text-sm block' href={`/clientes/${sell?.email}`}>{sell?.email}</Link>
                       </Card>
                       <Card title='Dirección de Envío'>
-                        <p className='text-sm'>{sell?.address}</p>
+                        <p className='text-sm'>{sell?.address} {sell?.number} {sell?.details}</p>
                         <p className='text-sm'>{sell?.city}</p>
                         <p className='text-sm'>{sell?.region}</p>
                       </Card>

@@ -70,6 +70,8 @@ export default function Page () {
   const [error, setError] = useState('')
   const [loadingLogo, setLoadingLogo] = useState(false)
   const [loadingLogoWhite, setLoadingLogoWhite] = useState(false)
+  const [chile, setChile] = useState<any>()
+  const [streets, setStreets] = useState([])
 
   const router = useRouter()
 
@@ -89,10 +91,12 @@ export default function Page () {
   }
 
   const requestRegions = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`)
+    setChile(res.data)
     const request = await axios.get('https://testservices.wschilexpress.com/georeference/api/v1.0/regions', {
       headers: {
         'Cache-Control': 'no-cache',
-        'Ocp-Apim-Subscription-Key': '4ebbe4e737b54bfe94307bca9e36ac4d'
+        'Ocp-Apim-Subscription-Key': res.data.coberturaKey
       }
     })
     setRegions(request.data.regions)
@@ -241,6 +245,7 @@ export default function Page () {
                 </div>
               </Card>
               <Card title='Ubicación del negocio'>
+                <p className='text-sm text-neutral-700 dark:text-neutral-300'>*Si el sitio web se utilizazra para la venta de productos fisicos debe haber al menos una dirección para la devolución en caso de no recepción.</p>
                 {
                   storeData.locations?.map((location, index) => (
                     <>
@@ -253,11 +258,27 @@ export default function Page () {
                           setStoreData({ ...storeData, locations: beforeLocations })
                         }}><AiOutlineClose /></button>
                       </div>
+                      <div className='flex gap-2'>
+                        <input type='checkbox' onChange={(e: any) => {
+                          const beforeLocations = [...storeData.locations!]
+                          beforeLocations[index].commercial = e.target.value
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }} />
+                        <p className='text-sm'>Dirección comercial</p>
+                      </div>
                       <div className='flex flex-col gap-2'>
                         <p className='text-sm'>Dirección</p>
                         <Input name='address' value={location.address} change={(e: any) => {
                           const beforeLocations = [...storeData.locations!]
                           beforeLocations[index].address = e.target.value
+                          setStoreData({ ...storeData, locations: beforeLocations })
+                        }} placeholder='Dirección' />
+                      </div>
+                       <div className='flex flex-col gap-2'>
+                        <p className='text-sm'>Numero</p>
+                        <Input name='address' value={location.streetNumber} change={(e: any) => {
+                          const beforeLocations = [...storeData.locations!]
+                          beforeLocations[index].streetNumber = e.target.value
                           setStoreData({ ...storeData, locations: beforeLocations })
                         }} placeholder='Dirección' />
                       </div>
@@ -277,12 +298,12 @@ export default function Page () {
                             const request = await axios.get(`https://testservices.wschilexpress.com/georeference/api/v1.0/coverage-areas?RegionCode=${region?.regionId}&type=0`, {
                               headers: {
                                 'Cache-Control': 'no-cache',
-                                'Ocp-Apim-Subscription-Key': '4ebbe4e737b54bfe94307bca9e36ac4d'
+                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey
                               }
                             })
                             setCitys(request.data.coverageAreas)
                             const beforeLocations = [...storeData.locations!]
-                            beforeLocations[index].region = e.target.value
+                            beforeLocations[index].region = region?.regionName
                             setStoreData({ ...storeData, locations: beforeLocations })
                           }} value={location.region}>
                             <option>Seleccionar Región</option>
@@ -295,11 +316,34 @@ export default function Page () {
                         </div>
                         <div className='flex flex-col gap-2 w-1/2'>
                           <p className='text-sm'>Ciudad</p>
-                          <Select change={(e: any) => {
-                          const beforeLocations = [...storeData.locations!]
-                          beforeLocations[index].city = e.target.value
-                          setStoreData({ ...storeData, locations: beforeLocations })
-                        }} value={location.city}>
+                          <Select change={async (e: any) => {
+                            const city: any = citys?.find((city: any) => city.countyName === e.target.value)
+                            const beforeLocations = [...storeData.locations!]
+                            beforeLocations[index].city = city?.countyName
+                            beforeLocations[index].countyCoverageCode = city?.countyCode
+                            const res = await axios.post('http://testservices.wschilexpress.com/georeference/api/v1.0/streets/search', {
+                              "countyName": city?.countyName,
+                              "streetName": location.address,
+                              "pointsOfInterestEnabled": true,
+                              "streetNameEnabled": true,
+                              "roadType": 0
+                            }, {
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'Cache-Control': 'no-cache',
+                                'Ocp-Apim-Subscription-Key': chile?.coberturaKey
+                              }
+                            })
+                            console.log(res.data)
+                            if (res.data.streets.length) {
+                              if (res.data.streets.length === 1) {
+                                beforeLocations[index].streetName = res.data.streets[0].streetName
+                              } else {
+                                setStreets(res.data.streets)
+                              }
+                            }
+                            setStoreData({ ...storeData, locations: beforeLocations })
+                          }} value={location.city}>
                             <option>Seleccionar Ciudad</option>
                             {citys?.map((city: any) => <option key={city.countyCode}>{city.countyName}</option>)}
                           </Select>

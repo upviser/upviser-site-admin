@@ -9,7 +9,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 export default function Page () {
 
   const [loading, setLoading] = useState(false)
-  const [chilexpress, setChilexpress] = useState({ active: false, coberturaKey: '', cotizadorKey: '' })
+  const [chilexpress, setChilexpress] = useState({ active: false, coberturaKey: '', cotizadorKey: '', enviosKey: '', cardNumber: '' })
   const [error, setError] = useState('')
 
   const pathname = usePathname()
@@ -74,6 +74,14 @@ export default function Page () {
                         <div className='flex flex-col gap-2'>
                           <p className='text-sm'>Codigo de cotizador</p>
                           <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, cotizadorKey: e.target.value })} value={chilexpress.cotizadorKey} placeholder='Codigo de cotizador' />
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                          <p className='text-sm'>Codigo de envíos</p>
+                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, enviosKey: e.target.value })} value={chilexpress.enviosKey} placeholder='Codigo de cotizador' />
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                          <p className='text-sm'>Numero tarjeta cliente</p>
+                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, cardNumber: e.target.value })} value={chilexpress.cardNumber} placeholder='Numero tarjeta cliente' />
                         </div>
                       </div>
                     )

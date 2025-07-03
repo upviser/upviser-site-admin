@@ -7,6 +7,7 @@ export interface ISell {
     lastName?: string
     email: string
     address: string
+    number: string
     details?: string
     city: string
     region: string
@@ -20,4 +21,5 @@ export interface ISell {
     shippingState: string
     createdAt?: Date
     updatedAt?: Date
+    shippingLabel?: string
 }

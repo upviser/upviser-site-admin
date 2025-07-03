@@ -5,11 +5,15 @@ export interface IStoreData {
     email: string
     phone?: string
     locations?: {
+        commercial?: Boolean
         mapsLink?: string
         address?: string
         details?: string
         region?: string
         city?: string
+        countyCoverageCode?: string
+        streetName?: string
+        streetNumber?: string
     }[]
     schedule?: ISchedule
     logo?: string

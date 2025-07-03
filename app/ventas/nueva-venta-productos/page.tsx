@@ -16,6 +16,7 @@ export default function Page () {
 
   const [sell, setSell] = useState<ISell>({
     address: '',
+    number: '',
     cart: [],
     city: '',
     email: '',
