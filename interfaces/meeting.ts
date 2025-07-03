@@ -17,4 +17,5 @@ export interface IMeeting {
     details?: string
     city?: string
     region?: string
+    price?: string
 }

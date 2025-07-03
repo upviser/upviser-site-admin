@@ -279,7 +279,7 @@ export default function CallsPage () {
                                     <tr key={meeting._id} onClick={() => router.push(`/reuniones/${meeting._id}`)} className={`${index + 1 < meetings.length ? 'border-b' : ''} bg-white border-neutral-300 cursor-pointer transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`}>
                                       <td className='p-3'>{meeting.firstName} {meeting.lastName}</td>
                                       <td className='p-3'>{meeting.email}</td>
-                                      <td className='p-3'>+56{meeting.phone}</td>
+                                      <td className='p-3'>{meeting.phone && meeting.phone !== '' ? `+56${meeting.phone}` : ''}</td>
                                       <td className='p-3'>{`${day}/${month}/${year}`}</td>
                                       <td className='p-3'>{`${hours}:${minutes}`}</td>
                                       <td className='p-3'>{calls.find(call => call._id === meeting.meeting)?.nameMeeting}</td>
@@ -297,7 +297,7 @@ export default function CallsPage () {
                                     <tr key={meeting._id} onClick={() => router.push(`/reuniones/${meeting._id}`)} className={`${index + 1 < meetings.length ? 'border-b' : ''} bg-white border-neutral-300 cursor-pointer transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`}>
                                       <td className='p-3'>{meeting.firstName} {meeting.lastName}</td>
                                       <td className='p-3'>{meeting.email}</td>
-                                      <td className='p-3'>+56{meeting.phone}</td>
+                                      <td className='p-3'>{meeting.phone && meeting.phone !== '' ? `+56${meeting.phone}` : ''}</td>
                                       <td className='p-3'>{`${day}/${month}/${year}`}</td>
                                       <td className='p-3'>{`${hours}:${minutes}`}</td>
                                       <td className='p-3'>{calls.find(call => call._id === meeting.meeting)?.nameMeeting}</td>

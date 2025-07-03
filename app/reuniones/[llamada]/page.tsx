@@ -2,6 +2,7 @@
 import { PopupCancelMeeting } from "@/components/meetings"
 import { Button2, Button2Red, ButtonLink, EditMeeting, Spinner } from "@/components/ui"
 import { ICall, IClientData, IMeeting, IStoreData } from "@/interfaces"
+import { NumberFormat } from "@/utils"
 import axios from "axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -80,7 +81,11 @@ export default function Page ({ params }: { params: { llamada: string } }) {
                 </div>
                 <div className="p-6 rounded-xl border border-black/5 shadow-card w-full max-w-[1280px] mx-auto bg-white flex gap-16 dark:shadow-card-dark dark:bg-neutral-800 dark:border-neutral-700">
                   <div className="w-64 flex flex-col gap-4">
-                    <p>{(new Date(meeting?.date!)).getHours()}:{(new Date(meeting?.date!)).getMinutes().toString().padStart(2, '0')}</p>
+                    {
+                      meeting?.url
+                        ? <ButtonLink href={meeting?.url}>Ingresar a la llamada</ButtonLink>
+                        : ''
+                    }
                     <Button2Red action={async (e: any) => {
                       e.preventDefault()
                       setPopupCancel({ ...popupCancel, view: 'flex', opacity: 'opacity-0' })
@@ -98,10 +103,26 @@ export default function Page ({ params }: { params: { llamada: string } }) {
                       <p className="font-medium">Email</p>
                       <p>{meeting?.email}</p>
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <p className="font-medium">Teléfono</p>
-                      <p>+56{meeting?.phone}</p>
-                    </div>
+                    {
+                      meeting?.phone && meeting.phone !== ''
+                        ? (
+                          <div className="flex flex-col gap-2">
+                            <p className="font-medium">Teléfono</p>
+                            <p>+56{meeting?.phone}</p>
+                          </div>
+                        )
+                        : ''
+                    }
+                    {
+                      meeting?.price
+                        ? (
+                          <div className="flex flex-col gap-2">
+                            <p className="font-medium">Precio</p>
+                            <p>{NumberFormat(Number(meeting?.price))}</p>
+                          </div>
+                        )
+                        : ''
+                    }
                   </div>
                   <div className="min-w-80 flex flex-col gap-4">
                     {
@@ -126,11 +147,6 @@ export default function Page ({ params }: { params: { llamada: string } }) {
                             <p>{`${meeting.address}, ${meeting.city}, ${meeting.region}`}</p>
                           </div>
                         )
-                        : ''
-                    }
-                    {
-                      meeting?.url
-                        ? <ButtonLink href={meeting?.url}>Ingresar a la llamada</ButtonLink>
                         : ''
                     }
                   </div>
