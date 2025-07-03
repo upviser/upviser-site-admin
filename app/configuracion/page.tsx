@@ -245,7 +245,7 @@ export default function Page () {
                 </div>
               </Card>
               <Card title='Ubicación del negocio'>
-                <p className='text-sm text-neutral-700 dark:text-neutral-300'>*Si el sitio web se utilizazra para la venta de productos fisicos debe haber al menos una dirección para la devolución en caso de no recepción.</p>
+                <p className='text-sm text-neutral-700 dark:text-neutral-300'>*Si el sitio web se utilizara para la venta de productos fisicos debe haber al menos una dirección para la devolución en caso de no recepción.</p>
                 {
                   storeData.locations?.map((location, index) => (
                     <>
