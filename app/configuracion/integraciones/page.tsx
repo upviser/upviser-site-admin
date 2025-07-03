@@ -37,11 +37,7 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      if ((integrations.apiToken !== '' && integrations.apiPixelId !== '') || integrations.googleAnalytics !== '') {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, integrations)
-      } else {
-        setError('Debes llenar al menos una integración')
-      }
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, integrations)
       setLoading(false)
     }
   }

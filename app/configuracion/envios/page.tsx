@@ -28,11 +28,7 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      if (chilexpress?.coberturaKey !== '' && chilexpress?.cotizadorKey !== '') {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, chilexpress)
-      } else {
-        setError('Debes llenar todos los datos de al menos un metodo de pago')
-      }
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`, chilexpress)
       setLoading(false)
     }
   }

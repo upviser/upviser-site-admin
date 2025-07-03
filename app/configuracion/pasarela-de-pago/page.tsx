@@ -51,11 +51,7 @@ export default function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      if ((payment.mercadoPago.accessToken !== '' && payment.mercadoPago.publicKey !== '') || (payment.transbank.apiKey !== '' && payment.transbank.commerceCode !== '') || (payment.mercadoPagoPro.accessToken !== '' && payment.mercadoPagoPro.publicKey !== '')) {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment`, payment)
-      } else {
-        setError('Debes llenar todos los datos de al menos un metodo de pago')
-      }
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/payment`, payment)
       setLoading(false)
     }
   }
