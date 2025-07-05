@@ -88,7 +88,7 @@ export default function Page() {
     if (!loadingText) {
       setLoadingText(true)
       setError('')
-      if (shopLogin.imageAI < 1) {
+      if (shopLogin.imagesAI < 1) {
         setError('No tienes palabras disponibles')
         setLoadingText(false)
         return
@@ -110,7 +110,7 @@ export default function Page() {
     if (!loadingImage) {
       setLoadingImage(true)
       setError('')
-      if (shopLogin.imageAI === 0) {
+      if (shopLogin.imagesAI === 0) {
         setError('No tienes imagenes disponibles')
         setLoadingImage(false)
         return
@@ -123,7 +123,7 @@ export default function Page() {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: image.promt, image: imageRef, size: image.size })
       setImageIA(res.data)
       setLoadingImage(false)
-      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imageAI: shopLogin.imageAI - 1 })
+      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin.imagesAI - 1 })
       setShopLogin(res2.data)
     }
   }
@@ -132,7 +132,7 @@ export default function Page() {
     if (!loadingVideo) {
       setLoadingVideo(true)
       setError('')
-      if (shopLogin.imageAI === 0) {
+      if (shopLogin.videosAI === 0) {
         setError('No tienes videos disponibles')
         setLoadingVideo(false)
         return
@@ -145,7 +145,7 @@ export default function Page() {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video-ia`, video)
       setVideoIA(res.data)
       setLoadingVideo(false)
-      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videoAI: shopLogin.videoAI - 1 })
+      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { videosAI: shopLogin.videosAI - 1 })
       setShopLogin(res2.data)
     }
   }
@@ -159,8 +159,8 @@ export default function Page() {
           </div>
           <div className="flex p-2 border rounded-xl w-fit bg-white divide-x dark:border-neutral-700 dark:bg-neutral-800 dark:divide-neutral-700">
             <p className="px-2">Texto: {shopLogin?.textAI}</p>
-            <p className="px-2">Imagenes: {shopLogin?.imageAI}</p>
-            <p className="px-2">Videos: {shopLogin?.videoAI}</p>
+            <p className="px-2">Imagenes: {shopLogin?.imagesAI}</p>
+            <p className="px-2">Videos: {shopLogin?.videosAI}</p>
           </div>
           <div className="flex gap-2 flex-wrap">
             <button onClick={() => {
