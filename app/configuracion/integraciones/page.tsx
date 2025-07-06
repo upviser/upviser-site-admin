@@ -12,6 +12,7 @@ export default function Page () {
     idPhone: '',
     whatsappToken: '',
     idPage: '',
+    idInstagram: '',
     messengerToken: '',
     apiToken: '',
     apiPixelId: '',
@@ -76,6 +77,10 @@ export default function Page () {
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>ID de la página de Facebook</h3>
                 <Input change={(e: any) => setIntegrations({ ...integrations, idPage: e.target.value })} value={integrations.idPage} placeholder='ID de la página de Facebook' config='h-40' />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <h3 className='text-sm'>ID del Instagram</h3>
+                <Input change={(e: any) => setIntegrations({ ...integrations, idInstagram: e.target.value })} value={integrations.idInstagram} placeholder='ID del Instagram' config='h-40' />
               </div>
               <div className='flex flex-col gap-2'>
                 <h3 className='text-sm'>Token Messenger App</h3>
