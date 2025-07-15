@@ -13,6 +13,8 @@ const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
 export default function Page () {
 
   const [chatIds, setChatIds] = useState<IChatId[]>()
+  const [chatIdsFilter, setChatIdsFilter] = useState<IChatId[]>()
+  const [chatAgent, setChatAgent] = useState(false)
   const [messages, setMessages] = useState<IChatMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState('')
@@ -25,6 +27,8 @@ export default function Page () {
   const getChats = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat`)
     setChatIds(response.data)
+    const chatFilter = response.data.filter((chat: any) => chat.agent)
+    setChatIdsFilter(chatFilter)
   }
 
   useEffect(() => {
@@ -95,28 +99,61 @@ export default function Page () {
                     </div>
                   )
                   : chatIds.length
-                    ? chatIds?.map((chat, i: any) => {
-                      const createdAt = new Date(chat.createdAt!)
-                      return (
-                        <button onClick={async () => {
-                          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
-                          setMessages(response.data)
-                          setChatId(chat.senderId)
-                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
-                          getChats()
-                        }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between`}>
-                          <div className='mt-auto mb-auto'>
-                            <p>{chat.senderId}</p>
-                            <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
-                          </div>
-                          {
-                            chat.adminView === false
-                              ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
-                              : ''
-                          }
+                    ? (
+                      <>
+                        <button className='flex gap-2' onClick={() => chatAgent ? setChatAgent(false) : setChatAgent(true)}>
+                          <input type='checkbox' checked={chatAgent} />
+                          <p>Incluir conversaciones con el agente IA</p>
                         </button>
-                      )
-                    })
+                        {
+                          chatAgent
+                            ? chatIds?.map((chat, i: any) => {
+                              const createdAt = new Date(chat.createdAt!)
+                              return (
+                                <button onClick={async () => {
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
+                                  setMessages(response.data)
+                                  setChatId(chat.senderId)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
+                                  getChats()
+                                }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between`}>
+                                  <div className='mt-auto mb-auto'>
+                                    <p>{chat.senderId}</p>
+                                    <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                  </div>
+                                  {
+                                    chat.adminView === false
+                                      ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
+                                      : ''
+                                  }
+                                </button>
+                              )
+                            })
+                            : chatIdsFilter?.map((chat, i: any) => {
+                              const createdAt = new Date(chat.createdAt!)
+                              return (
+                                <button onClick={async () => {
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
+                                  setMessages(response.data)
+                                  setChatId(chat.senderId)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
+                                  getChats()
+                                }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between`}>
+                                  <div className='mt-auto mb-auto'>
+                                    <p>{chat.senderId}</p>
+                                    <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                  </div>
+                                  {
+                                    chat.adminView === false
+                                      ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
+                                      : ''
+                                  }
+                                </button>
+                              )
+                            })
+                        }
+                      </>
+                    )
                     : <p className='text-sm'>No hay chats</p>
               }
             </div>
@@ -127,7 +164,7 @@ export default function Page () {
                     messages?.map(message => {
                       const createdAt = new Date(message.createdAt!)
                       return (
-                        <div key={message._id} className='flex flex-col gap-2 mb-2'>
+                        <div key={message._id} className='flex flex-col gap-2 mb-2 w-full'>
                           {
                             message.message
                               ? (

@@ -11,6 +11,8 @@ const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`)
 export default function Page () {
 
   const [phones, setPhones] = useState<IWhatsappId[]>()
+  const [phonesFilter, setPhonesFilter] = useState<IWhatsappId[]>([])
+  const [phonesAgent, setPhonesAgent] = useState(false)
   const [messages, setMessages] = useState<IWhatsappMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [selectedPhone, setSelectedPhone] = useState('')
@@ -23,6 +25,8 @@ export default function Page () {
   const getMessages = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp`)
     setPhones(response.data)
+    const phones = response.data.filter((phone: any) => phone.agent)
+    setPhonesFilter(phones)
   }
   
   useEffect(() => {
@@ -97,28 +101,61 @@ export default function Page () {
                     </div>
                   )
                   : phones.length
-                    ? phones?.map(phone => {
-                      const createdAt = new Date(phone.createdAt!)
-                      return (
-                        <button onClick={async () => {
-                          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
-                          setMessages(response.data)
-                          setSelectedPhone(phone.phone)
-                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
-                          getMessages()
-                        }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
-                          <div className='mt-auto mb-auto'>
-                            <p>{phone.phone}</p>
-                            <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
-                          </div>
-                          {
-                            phone.view === false
-                              ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
-                              : ''
-                          }
+                    ? (
+                      <>
+                        <button className='flex gap-2' onClick={() => phonesAgent ? setPhonesAgent(false) : setPhonesAgent(true)}>
+                          <input type='checkbox' checked={phonesAgent} />
+                          <p>Incluir conversaciones con el agente IA</p>
                         </button>
-                      )
-                    })
+                        {
+                          phonesAgent
+                            ? phones?.map(phone => {
+                              const createdAt = new Date(phone.createdAt!)
+                              return (
+                                <button onClick={async () => {
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  setMessages(response.data)
+                                  setSelectedPhone(phone.phone)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  getMessages()
+                                }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
+                                  <div className='mt-auto mb-auto'>
+                                    <p>{phone.phone}</p>
+                                    <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                  </div>
+                                  {
+                                    phone.view === false
+                                      ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
+                                      : ''
+                                  }
+                                </button>
+                              )
+                            })
+                            : phonesFilter?.map(phone => {
+                              const createdAt = new Date(phone.createdAt!)
+                              return (
+                                <button onClick={async () => {
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  setMessages(response.data)
+                                  setSelectedPhone(phone.phone)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp/${phone.phone}`)
+                                  getMessages()
+                                }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
+                                  <div className='mt-auto mb-auto'>
+                                    <p>{phone.phone}</p>
+                                    <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                  </div>
+                                  {
+                                    phone.view === false
+                                      ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
+                                      : ''
+                                  }
+                                </button>
+                              )
+                          })
+                        }
+                      </>
+                    )
                     : <p className='text-sm'>No hay chats</p>
               }
             </div>
@@ -129,7 +166,7 @@ export default function Page () {
                     messages?.map(message => {
                       const createdAt = new Date(message.createdAt!)
                       return (
-                        <div key={message._id} className='flex flex-col gap-2 mb-2'>
+                        <div key={message._id} className='flex flex-col gap-2 mb-2 w-full'>
                           {
                             message.message
                               ? (

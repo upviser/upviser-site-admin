@@ -11,6 +11,8 @@ const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`)
 export default function Page () {
 
   const [messengerIds, setMessengerIds] = useState<IMessengerId[]>()
+  const [messengerIdsFilter, setMessengerIdsFilter] = useState<IMessengerId[]>()
+  const [messengerAgent, setMessengerAgent] = useState(false)
   const [messages, setMessages] = useState<IMessengerMessage[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [selectedMessengerId, setSelectedMessengerId] = useState('')
@@ -23,6 +25,8 @@ export default function Page () {
   const getMessages = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger`)
     setMessengerIds(response.data)
+    const messengerFilter = response.data.filter((messenger: any) => messenger.agent)
+    setMessengerIdsFilter(messengerFilter)
   }
 
   useEffect(() => {
@@ -97,28 +101,61 @@ export default function Page () {
                     </div>
                   )
                   : messengerIds.length
-                    ? messengerIds?.map(messenger => {
-                      const createdAt = new Date(messenger.createdAt!)
-                      return (
-                        <button onClick={async () => {
-                          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
-                          setMessages(response.data)
-                          setSelectedMessengerId(messenger.messengerId)
-                          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
-                          getMessages()
-                        }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
-                          <div className='mt-auto mb-auto'>
-                            <p>{messenger.messengerId}</p>
-                            <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
-                          </div>
-                          {
-                            messenger.view === false
-                              ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
-                              : ''
-                          }
+                    ? (
+                      <>
+                        <button className='flex gap-2' onClick={() => messengerAgent ? setMessengerAgent(false) : setMessengerAgent(true)}>
+                          <input type='checkbox' checked={messengerAgent} />
+                          <p>Incluir conversaciones con el agente IA</p>
                         </button>
-                      )
-                    })
+                        {
+                          messengerAgent
+                            ? messengerIds?.map(messenger => {
+                              const createdAt = new Date(messenger.createdAt!)
+                              return (
+                                <button onClick={async () => {
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  setMessages(response.data)
+                                  setSelectedMessengerId(messenger.messengerId)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  getMessages()
+                                }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
+                                  <div className='mt-auto mb-auto'>
+                                    <p>{messenger.messengerId}</p>
+                                    <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                  </div>
+                                  {
+                                    messenger.view === false
+                                      ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
+                                      : ''
+                                  }
+                                </button>
+                              )
+                            })
+                            : messengerIdsFilter?.map(messenger => {
+                              const createdAt = new Date(messenger.createdAt!)
+                              return (
+                                <button onClick={async () => {
+                                  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  setMessages(response.data)
+                                  setSelectedMessengerId(messenger.messengerId)
+                                  await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
+                                  getMessages()
+                                }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700`}>
+                                  <div className='mt-auto mb-auto'>
+                                    <p>{messenger.messengerId}</p>
+                                    <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                  </div>
+                                  {
+                                    messenger.view === false
+                                      ? <div className=' mt-auto mb-auto w-3 h-3 rounded-full bg-main' />
+                                      : ''
+                                  }
+                                </button>
+                              )
+                            })
+                        }
+                      </>
+                    )
                     : <p className='text-sm'>No hay chats</p>
               }
             </div>
@@ -129,7 +166,7 @@ export default function Page () {
                     messages?.map(message => {
                       const createdAt = new Date(message.createdAt!)
                       return (
-                        <div key={message._id} className='flex flex-col gap-2 mb-2'>
+                        <div key={message._id} className='flex flex-col gap-2 mb-2 w-full'>
                           {
                             message.message
                               ? (
