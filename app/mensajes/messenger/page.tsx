@@ -161,7 +161,7 @@ export default function Page () {
             </div>
             <div className='w-full lg:w-1/2'>
               <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-[70vh] dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-                <div ref={containerRef} className='w-full h-full pr-4 flex' style={{ overflow: 'overlay' }}>
+                <div ref={containerRef} className='w-full h-full pr-4 flex flex-col' style={{ overflow: 'overlay' }}>
                   {
                     messages?.map(message => {
                       const createdAt = new Date(message.createdAt!)
