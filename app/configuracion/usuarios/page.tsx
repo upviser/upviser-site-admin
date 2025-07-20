@@ -44,7 +44,7 @@ export default function Page() {
               ? (
                  <Button2 action={(e: any) => {
                   e.preventDefault()
-                  setUser({email: '', type: 'Usuario', _id: '', name: '', password: '', permissions: [] })
+                  setUser({email: '', type: 'Usuario', name: '', password: '', permissions: [] })
                   setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
                   setTimeout(() => {
                     setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
