@@ -1,6 +1,6 @@
 "use client"
-import { Button, MessagesCategories, Spinner } from '@/components/ui'
-import { IWhatsappId, IWhatsappMessage } from '@/interfaces'
+import { Button, ButtonRed, ButtonSecondary, Input, MessagesCategories, Popup, Select, Spinner, Spinner2, Textarea } from '@/components/ui'
+import { IWhatsappId, IWhatsappMessage, IWhatsappTemplate } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
@@ -17,6 +17,13 @@ export default function Page () {
   const [newMessage, setNewMessage] = useState('')
   const [selectedPhone, setSelectedPhone] = useState('')
   const [shopLogin, setShopLogin] = useState<any>()
+  const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [popup2, setPopup2] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [popup3, setPopup3] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [template, setTemplate] = useState<IWhatsappTemplate>({ name: '', category: '', components: [{ "type": "BODY" }] })
+  const [loading, setLoading] = useState(false)
+  const [templates, setTemplates] = useState([])
+  const [loadingDelete, setLoadingDelete] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const messagesRef = useRef(messages)
@@ -40,6 +47,15 @@ export default function Page () {
 
   useEffect(() => {
     getShopLogin()
+  }, [])
+
+  const getTemplates = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-templates`)
+    setTemplates(res.data.data)
+  }
+
+  useEffect(() => {
+    getTemplates()
   }, [])
 
   useEffect(() => {
@@ -83,6 +99,287 @@ export default function Page () {
       <Head>
         <title>Mensajes</title>
       </Head>
+        <Popup popup={popup3} setPopup={setPopup3}>
+          <p className='font-medium'>¿Seguro que quieres eliminar la plantilla {template.name}?</p>
+          <div className='flex gap-2'>
+            <ButtonRed action={async () => {
+              if (!loadingDelete) {
+                setLoadingDelete(true)
+                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-template/${template.name}`)
+                getTemplates()
+                setPopup3({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+                setTimeout(() => {
+                  setPopup3({ ...popup2, view: 'hidden', opacity: 'opacity-0' })
+                }, 200)
+                setLoadingDelete(false)
+              }
+            }} config='w-24'>{loadingDelete ? <Spinner2 /> : 'Eliminar'}</ButtonRed>
+            <button onClick={() => {
+              setPopup3({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+              setTimeout(() => {
+                setPopup3({ ...popup2, view: 'hidden', opacity: 'opacity-0' })
+              }, 200)
+            }}>Cancelar</button>
+          </div>
+        </Popup>
+        <Popup popup={popup2} setPopup={setPopup2}>
+          <p className='font-medium'>Plantillas</p>
+          {
+            templates?.map((temp: any) => (
+              <div key={temp.name} className='flex gap-2'>
+                <button onClick={() => {
+                  setTemplate(temp)
+                  setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+                  setTimeout(() => {
+                    setPopup2({ ...popup2, view: 'hidden', opacity: 'opacity-0' })
+                  }, 200)
+                  setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                  setTimeout(() => {
+                    setPopup({ ...popup, view: 'flex', opacity: 'opacity-1' })
+                  }, 10)
+                }} className='border w-full bg-gray-50 flex gap-2 justify-between p-2 rounded-xl hover:bg-neutral-100 transition-colors duration-100 dark:hover:bg-neutral-600 dark:bg-neutral-700 dark:border-neutral-600'>
+                  <div className='flex flex-col gap-1 text-left'>
+                    <p>Nombre: {temp.name}</p>
+                    <p>Categoria: {temp.category}</p>
+                    <p>Estatus: {temp.status}</p>
+                  </div>
+                </button>
+                <button onClick={() => {
+                  setTemplate(temp)
+                  setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+                  setTimeout(() => {
+                    setPopup2({ ...popup2, view: 'hidden', opacity: 'opacity-0' })
+                  }, 200)
+                  setPopup3({ ...popup3, view: 'flex', opacity: 'opacity-0' })
+                  setTimeout(() => {
+                    setPopup3({ ...popup3, view: 'flex', opacity: 'opacity-1' })
+                  }, 10)
+                }} className='h-fit my-auto'>X</button>
+              </div>
+            ))
+          }
+        </Popup>
+        <Popup popup={popup} setPopup={setPopup}>
+          <p className='font-medium'>{template.id ? 'Editar' : 'Crear'} plantilla</p>
+          <div className='flex flex-col gap-2'>
+            <p className='text-sm'>Nombre de la plantilla</p>
+            <Input change={(e: any) => setTemplate({ ...template, name: e.target.value })} value={template.name} placeholder='Nombre de la platilla' />
+          </div>
+          <div className='flex flex-col gap-2'>
+            <p className='text-sm'>Categoria de la plantilla</p>
+            <Select change={(e: any) => setTemplate({ ...template, category: e.target.value })} value={template.category}>
+              <option value='AUTHENTICATION'>Autenticación</option>
+              <option value='MARKETING'>Marketing</option>
+              <option value='UTILITY'>Utilidad</option>
+            </Select>
+          </div>
+          <div className='flex flex-col gap-2'>
+            <p>Mensajes de la plantilla</p>
+            {
+              template.components.map((component, index) => (
+                <>
+                  <div className='flex gap-2 justify-between'>
+                    <p className='text-sm'>Mensaje {index + 1}</p>
+                    <button onClick={() => {
+                      const oldComponents = [...template.components]
+                      oldComponents.splice(index, 1)
+                      setTemplate({ ...template, components: oldComponents })
+                    }}>X</button>
+                  </div>
+                  <p className='text-sm'>Tipo</p>
+                  <Select change={(e: any) => {
+                    const oldComponents = [...template.components]
+                    if (e.target.value === 'HEADER') {
+                      oldComponents[index] = { type: e.target.value, format: 'TEXT', text: '', example: { header_text: [] } }
+                    } else if (e.target.value === 'BODY') {
+                      oldComponents[index] = { type: e.target.value, text: '', example: { body_text: [[]] } }
+                    } else if (e.target.value === 'FOOTER') {
+                      oldComponents[index] = { type: e.target.value, text: '' }
+                    } else if (e.target.value === 'BUTTONS') {
+                      oldComponents[index] = { type: e.target.value, buttons: [{ type: 'QUICK_REPLY', text: '' }] }
+                    }
+                    setTemplate({ ...template, components: oldComponents })
+                  }} value={component.type}>
+                    <option value='HEADER'>Cabecera</option>
+                    <option value='BODY'>Cuerpo</option>
+                    <option value='FOOTER'>Pie de página</option>
+                    <option value='BUTTONS'>Botones</option>
+                  </Select>
+                  {
+                    component.type === 'HEADER'
+                      ? (
+                        <>
+                          <p className='text-sm'>Formato</p>
+                          <Select change={(e: any) => {
+                            const oldComponents = [...template.components]
+                            oldComponents[index].format = e.target.value
+                            setTemplate({ ...template, components: oldComponents })
+                          }} value={component.format}>
+                            <option value='TEXT'>Texto</option>
+                          </Select>
+                        </>
+                      )
+                      : ''
+                  }
+                  {
+                    ((component.type === 'HEADER' && component.format === 'TEXT') || component.type === 'BODY' || component.type === 'FOOTER')
+                      ? (
+                        <>
+                          <p className='text-sm'>Texto</p>
+                          <Textarea change={(e: any) => {
+                            const oldComponents = [...template.components]
+                            oldComponents[index].text = e.target.value
+                            const matches = e.target.value.match(/{{\s*\d+\s*}}/g) || [];
+                            const count = matches.length;
+                            if (component.type === 'HEADER') {
+                              oldComponents[index].example = {
+                                header_text: Array(count).fill('')
+                              };
+                            } else if (component.type === 'BODY') {
+                              oldComponents[index].example = {
+                                body_text: [
+                                  Array(count).fill('')
+                                ]
+                              }
+                            }
+                            setTemplate({ ...template, components: oldComponents })
+                          }} value={component.text!} placeholder='Texto' config='h-24' />
+                          {
+                            component.type === 'HEADER' && component.example?.header_text?.length
+                              ? (
+                                <>
+                                  <p className='text-sm'>Variables de ejemplo</p>
+                                  {
+                                    component.example?.header_text.map((header, i) => (
+                                      <div key={header} className='flex gap-2'>
+                                        <p className='text-sm'>Variable {i + 1}</p>
+                                        <Input change={(e: any) => {
+                                          const oldComponents = [...template.components]
+                                          oldComponents[index].example!.header_text![i] = e.target.value
+                                          setTemplate({ ...template, components: oldComponents })
+                                        }} value={header} placeholder={`Variable ${i + 1}`} />
+                                      </div>
+                                    ))
+                                  }
+                                </>
+                              )
+                              : ''
+                          }
+                          {
+                            component.type === 'BODY' && component.example?.body_text?.length && component.example?.body_text[0].length
+                              ? (
+                                <>
+                                  <p className='text-sm'>Variables de ejemplo</p>
+                                  {
+                                    component.example?.body_text[0].map((body, i) => (
+                                      <div key={body} className='flex gap-2'>
+                                        <p className='text-sm'>Variable {i + 1}</p>
+                                        <Input change={(e: any) => {
+                                          const oldComponents = [...template.components]
+                                          oldComponents[index].example!.body_text![0][i] = e.target.value
+                                          setTemplate({ ...template, components: oldComponents })
+                                        }} value={body} placeholder={`Variable ${i + 1}`} />
+                                      </div>
+                                    ))
+                                  }
+                                </>
+                              )
+                              : ''
+                          }
+                        </>
+                      )
+                      : ''
+                  }
+                  {
+                    component.type === 'BUTTONS'
+                      ? (
+                        <>
+                          <p className='text-sm'>Botones</p>
+                          {
+                            component.buttons?.map((button, i) => (
+                              <>
+                                <p className='text-sm'>Tipo</p>
+                                <Select change={(e: any) => {
+                                  const oldComponents = [...template.components]
+                                  oldComponents[index].buttons![i].type = e.target.value
+                                  setTemplate({ ...template, components: oldComponents })
+                                }} value={button.type}>
+                                  <option value='QUICK_REPLY'>Repuesta rapida</option>
+                                  <option value='PHONE_NUMBER'>Número de teléfono</option>
+                                  <option>URL</option>
+                                </Select>
+                                <p className='text-sm'>Texto</p>
+                                <Input change={(e: any) => {
+                                  const oldComponents = [...template.components]
+                                  oldComponents[index].buttons![i].text = e.target.value
+                                  setTemplate({ ...template, components: oldComponents })
+                                }} value={button.type} placeholder='Texto' />
+                                {
+                                  button.type === 'PHONE_NUMBER'
+                                    ? (
+                                      <>
+                                        <p className='text-sm'>Número de teléfono</p>
+                                        <Input change={(e: any) => {
+                                          const oldComponents = [...template.components]
+                                          oldComponents[index].buttons![i].phone_number = e.target.value
+                                          setTemplate({ ...template, components: oldComponents })
+                                        }} value={button.type} placeholder='Número de teléfono' />
+                                      </>
+                                    )
+                                    : ''
+                                }
+                                {
+                                  button.type === 'URL'
+                                    ? (
+                                      <>
+                                        <p className='text-sm'>URL</p>
+                                        <Input change={(e: any) => {
+                                          const oldComponents = [...template.components]
+                                          oldComponents[index].buttons![i].url = e.target.value
+                                          setTemplate({ ...template, components: oldComponents })
+                                        }} value={button.type} placeholder='URL' />
+                                      </>
+                                    )
+                                    : ''
+                                }
+                              </>
+                            ))
+                          }
+                        </>
+                      )
+                      : ''
+                  }
+                </>
+              ))
+            }
+            <ButtonSecondary action={() => {
+              const oldComponents = [...template.components]
+              oldComponents.push({ "type": "BODY", "text": "" })
+              setTemplate({ ...template, components: oldComponents })
+            }}>Agregar mensaje</ButtonSecondary>
+          </div>
+          <Button action={async () => {
+            if (!loading) {
+              setLoading(true)
+              if (template.id) {
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/edit-template`, template)
+                getTemplates()
+                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                setTimeout(() => {
+                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                }, 200)
+              } else {
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-template`, template)
+                getTemplates()
+                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                setTimeout(() => {
+                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                }, 200)
+              }
+              setLoading(false)
+            }
+          }} loading={loading} config='w-full'>{template.id ? 'Editar' : 'Crear'} plantilla</Button>
+        </Popup>
         <div className='p-4 lg:p-6 w-full h-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900'>
           <div className='w-full max-w-[1280px] mx-auto flex flex-col gap-4'>
             <h1 className='text-lg font-medium'>Mensajes</h1>

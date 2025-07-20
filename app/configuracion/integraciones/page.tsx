@@ -1,10 +1,17 @@
 "use client"
 import { Nav } from '@/components/configuration'
-import { ButtonSubmit, Input, Textarea } from '@/components/ui'
+import { Button, ButtonSubmit, Input, Textarea } from '@/components/ui'
 import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
+
+declare global {
+  interface Window {
+    fbAsyncInit: () => void;
+    FB: any;
+  }
+}
 
 export default function Page () {
 
@@ -20,6 +27,11 @@ export default function Page () {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [sessionInfo, setSessionInfo] = useState<{
+    phone_number_id?: string;
+    waba_id?: string;
+  }>({});
+  const [fbReady, setFbReady] = useState(false)
 
   const router = useRouter()
 
@@ -33,6 +45,99 @@ export default function Page () {
   useEffect(() => {
     getIntegrations()
   }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.FB) {
+        console.log('🟢 FB listo');
+        setFbReady(true);
+        clearInterval(interval);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Captura mensajes de sesión
+  useEffect(() => {
+    const listener = (e: MessageEvent) => {
+      if (!['https://www.facebook.com', 'https://web.facebook.com'].includes(e.origin)) return;
+      try {
+        const data = JSON.parse(e.data);
+        if (data.type === 'WA_EMBEDDED_SIGNUP' && data.event === 'FINISH') {
+          const { phone_number_id, waba_id } = data.data;
+          setSessionInfo({ phone_number_id, waba_id });
+        }
+      } catch {}
+    };
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
+  }, []);
+
+  const handleConnect = async () => {
+    if (!fbReady) {
+      console.warn('SDK no está listo');
+      return;
+    }
+
+    try {
+      const response = await new Promise<any>((resolve, reject) => {
+        window.FB.login(
+          (res: any) => {
+            res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
+          },
+          {
+            config_id: process.env.NEXT_PUBLIC_WHATSAPP_CONFIG_ID!,
+            response_type: 'code',
+            override_default_response_type: true,
+            scope: 'business_management,whatsapp_business_management,whatsapp_business_messaging',
+            extras: { feature: 'whatsapp_embedded_signup', version: 2, sessionInfoVersion: 3, setup: {} },
+          }
+        );
+      });
+      const code = response.authResponse.code;
+      const { phone_number_id, waba_id } = sessionInfo;
+      if (phone_number_id && waba_id) {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/whatsapp-token`, { code, phone_number_id, waba_id });
+        res.data.success === 'OK' ? console.log('Token creado') : console.error('Error al crear token');
+      } else {
+        console.error('No recibí sessionInfo antes del login');
+      }
+    } catch (e) {
+      console.error('Error en conexión FB:', e);
+    }
+  };
+
+  const handleConnectFacebook = async () => {
+    if (!fbReady) {
+      console.warn('SDK no está listo');
+      return;
+    }
+
+    try {
+      const response = await new Promise<any>((resolve, reject) => {
+        window.FB.login(
+          (res: any) => {
+            res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
+          },
+          {
+            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging,instagram_basic,instagram_manage_messages',
+            response_type: 'token',
+          }
+        );
+      });
+
+      const userToken = response.authResponse.accessToken
+
+      const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/messenger-token`, { userToken })
+      if (resp.data.success) {
+        getIntegrations()
+      } else {
+        console.error('Error al guardar datos:', resp.data);
+      }
+    } catch (e) {
+      console.error('Error en conexión FB:', e);
+    }
+  };
 
   const handleSubmit = async () => {
     if (!loading) {
@@ -64,24 +169,33 @@ export default function Page () {
           <div className='w-full lg:w-3/4 flex flex-col gap-4'>
             <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Integraciones</h2>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-sm'>ID del número de teléfono</h3>
-              <Input change={(e: any) => setIntegrations({ ...integrations, idPhone: e.target.value })} value={integrations.idPhone} placeholder='ID del número de teléfono' config='h-40' />
+              <h3 className='text-sm'>Conectar Whatsapp</h3>
+              {
+                (integrations.idPhone && integrations.idPhone !== '') && (integrations.whatsappToken && integrations.whatsappToken !== '')
+                  ? fbReady ? <Button>Desconectar Whatsapp</Button> : ''
+                  : fbReady ? <Button action={handleConnect}>Conectar Whatsapp</Button> : ''
+              }
             </div>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-sm'>Token Whatsapp App</h3>
-              <Input change={(e: any) => setIntegrations({ ...integrations, whatsappToken: e.target.value })} value={integrations.whatsappToken} placeholder='Api Meta Token' config='h-40' />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <h3 className='text-sm'>ID de la página de Facebook</h3>
-              <Input change={(e: any) => setIntegrations({ ...integrations, idPage: e.target.value })} value={integrations.idPage} placeholder='ID de la página de Facebook' config='h-40' />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <h3 className='text-sm'>ID del Instagram</h3>
-              <Input change={(e: any) => setIntegrations({ ...integrations, idInstagram: e.target.value })} value={integrations.idInstagram} placeholder='ID del Instagram' config='h-40' />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <h3 className='text-sm'>Token Messenger App</h3>
-              <Input change={(e: any) => setIntegrations({ ...integrations, messengerToken: e.target.value })} value={integrations.messengerToken} placeholder='Api Meta Token' config='h-40' />
+              <h3 className='text-sm'>Conectar Facebook/Instagram</h3>
+              {
+                integrations.idPage && integrations.idPage !== '' && integrations.idInstagram && integrations.idInstagram !== ''
+                  ? (
+                    <>
+                      <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
+                      <p className='text-sm'>Id Instagram: {integrations.idPage}</p>
+                    </>
+                  )
+                  : ''
+              }
+              {
+                (integrations.messengerToken && integrations.messengerToken !== '') && (integrations.idPage && integrations.idPage !== '')
+                  ? fbReady ? <Button action={async () => {
+                    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-facebook`)
+                    getIntegrations()
+                  }}>Desconectar Facebook/Instagram</Button> : ''
+                  : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button> : ''
+              }
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Api Meta Token</h3>
