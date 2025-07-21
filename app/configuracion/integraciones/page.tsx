@@ -3,6 +3,7 @@ import { Nav } from '@/components/configuration'
 import { Button, ButtonSubmit, Input, Textarea } from '@/components/ui'
 import axios from 'axios'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
@@ -196,6 +197,10 @@ export default function Page () {
                   }}>Desconectar Facebook/Instagram</Button> : ''
                   : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button> : ''
               }
+            </div>
+            <div className='flex flex-col gap-2'>
+              <h3 className='text-sm'>Conectar Instagram</h3>
+              <Button><Link target='_blank' href={'https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=1387870255842122&redirect_uri=https://api.upviser.cl/auth/facebook/callback&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights'}>Conectar Instagram</Link></Button>
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Api Meta Token</h3>
