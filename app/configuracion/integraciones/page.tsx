@@ -200,7 +200,7 @@ export default function Page () {
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Conectar Instagram</h3>
-              <Button><Link target='_blank' href={'https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=1387870255842122&redirect_uri=https://api.upviser.cl/auth/facebook/callback&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights'}>Conectar Instagram</Link></Button>
+              <Button><Link target='_blank' href={`https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`}>Conectar Instagram</Link></Button>
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Api Meta Token</h3>
