@@ -121,7 +121,7 @@ export default function Page () {
             res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
           },
           {
-            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging,instagram_basic,instagram_manage_messages',
+            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging',
             response_type: 'token',
           }
         );
