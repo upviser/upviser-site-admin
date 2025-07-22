@@ -172,6 +172,11 @@ export default function Page () {
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Conectar Whatsapp</h3>
               {
+                integrations.idPhone && integrations.idPhone !== ''
+                  ? <p className='text-sm'>Id de Whatsapp: {integrations.idPhone}</p>
+                  : ''
+              }
+              {
                 (integrations.idPhone && integrations.idPhone !== '') && (integrations.whatsappToken && integrations.whatsappToken !== '')
                   ? fbReady ? <Button>Desconectar Whatsapp</Button> : ''
                   : fbReady ? <Button action={handleConnect}>Conectar Whatsapp</Button> : ''
@@ -181,9 +186,7 @@ export default function Page () {
               <h3 className='text-sm'>Conectar Facebook</h3>
               {
                 integrations.idPage && integrations.idPage !== ''
-                  ? (
-                    <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
-                  )
+                  ? <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
                   : ''
               }
               {
@@ -199,10 +202,7 @@ export default function Page () {
               <h3 className='text-sm'>Conectar Instagram</h3>
               {
                 integrations.idInstagram && integrations.idInstagram !== ''
-                  ? (
-                    <p className='text-sm'>Id p
-                    Instagram: {integrations.idInstagram}</p>
-                  )
+                  ? <p className='text-sm'>Id Instagram: {integrations.idInstagram}</p>
                   : ''
               }
               {
