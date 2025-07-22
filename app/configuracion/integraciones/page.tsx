@@ -178,14 +178,11 @@ export default function Page () {
               }
             </div>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-sm'>Conectar Facebook/Instagram</h3>
+              <h3 className='text-sm'>Conectar Facebook</h3>
               {
-                integrations.idPage && integrations.idPage !== '' && integrations.idInstagram && integrations.idInstagram !== ''
+                integrations.idPage && integrations.idPage !== ''
                   ? (
-                    <>
-                      <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
-                      <p className='text-sm'>Id Instagram: {integrations.idPage}</p>
-                    </>
+                    <p className='text-sm'>Id página de Facebook: {integrations.idPage}</p>
                   )
                   : ''
               }
@@ -194,13 +191,25 @@ export default function Page () {
                   ? fbReady ? <Button action={async () => {
                     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-facebook`)
                     getIntegrations()
-                  }}>Desconectar Facebook/Instagram</Button> : ''
-                  : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook/Instagram</Button> : ''
+                  }}>Desconectar Facebook</Button> : ''
+                  : fbReady ? <Button action={handleConnectFacebook}>Conectar Facebook</Button> : ''
               }
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Conectar Instagram</h3>
-              <Button><Link target='_blank' href={`https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`}>Conectar Instagram</Link></Button>
+              {
+                integrations.idInstagram && integrations.idInstagram !== ''
+                  ? (
+                    <p className='text-sm'>Id p
+                    Instagram: {integrations.idInstagram}</p>
+                  )
+                  : ''
+              }
+              {
+                integrations.idInstagram && integrations.idInstagram !== ''
+                  ? <Button>Desconectar Instagram</Button>
+                  : <Button><Link target='_blank' href={`https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`}>Conectar Instagram</Link></Button>
+              }
             </div>
             <div className='flex flex-col gap-2'>
               <h3 className='text-sm'>Api Meta Token</h3>
