@@ -207,8 +207,17 @@ export default function Page () {
               }
               {
                 integrations.idInstagram && integrations.idInstagram !== ''
-                  ? <Button>Desconectar Instagram</Button>
-                  : <Button><Link target='_blank' href={`https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`}>Conectar Instagram</Link></Button>
+                  ? <Button action={async () => {
+                    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`)
+                    getIntegrations()
+                  }}>Desconectar Instagram</Button>
+                  : <Button action={() => {
+                    window.open(
+                      `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`,
+                      'Conectar Instagram',
+                      'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                    );
+                  }}>Conectar Instagram</Button>
               }
             </div>
             <div className='flex flex-col gap-2'>
