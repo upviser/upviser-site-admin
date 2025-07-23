@@ -179,7 +179,10 @@ export default function Page () {
               }
               {
                 (integrations.idPhone && integrations.idPhone !== '') && (integrations.whatsappToken && integrations.whatsappToken !== '')
-                  ? fbReady ? <Button>Desconectar Whatsapp</Button> : ''
+                  ? fbReady ? <Button action={async () => {
+                    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/delete-whatsapp`)
+                    getIntegrations()
+                  }}>Desconectar Whatsapp</Button> : ''
                   : fbReady ? <Button action={handleConnect}>Conectar Whatsapp</Button> : ''
               }
             </div>
