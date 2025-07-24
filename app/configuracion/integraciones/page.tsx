@@ -216,7 +216,7 @@ export default function Page () {
                     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`)
                     getIntegrations()
                   }}>Desconectar Instagram</Button>
-                  : connecting
+                  : !connecting
                     ? <Button action={async () => {
                       setConnecting(true)
                       window.open(
