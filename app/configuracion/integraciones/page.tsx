@@ -34,6 +34,7 @@ export default function Page () {
     waba_id?: string;
   }>({});
   const [fbReady, setFbReady] = useState(false)
+  const [connecting, setConnecting] = useState(false)
 
   const router = useRouter()
 
@@ -215,13 +216,19 @@ export default function Page () {
                     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/disconnect-instagram`)
                     getIntegrations()
                   }}>Desconectar Instagram</Button>
-                  : <Button action={async () => {
-                    window.open(
-                      `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`,
-                      'Conectar Instagram',
-                      'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
-                    );
-                  }}>Conectar Instagram</Button>
+                  : connecting
+                    ? <Button action={async () => {
+                      setConnecting(true)
+                      window.open(
+                        `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish%2Cinstagram_business_manage_insights`,
+                        'Conectar Instagram',
+                        'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                      );
+                    }}>Conectar Instagram</Button>
+                    : <Button action={async () => {
+                      await getIntegrations()
+                      setConnecting(false)
+                    }}>Probar conexión</Button>
               }
             </div>
             <div className='flex flex-col gap-2'>
