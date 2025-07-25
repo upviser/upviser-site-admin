@@ -216,7 +216,7 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                 return
               }
               if (user?._id) {
-                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login/${user?._id}`, user)
+                await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login`, user)
               } else {
                 if ((users.length === 3 && shopLogin?.plan === 'Avanzado') || (users.length === 10 && shopLogin?.plan === 'Profesional')) {
                   setError('Has llegado al limite de usuarios de tu plan')
