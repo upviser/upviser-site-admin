@@ -96,7 +96,7 @@ export default function Page () {
             config_id: process.env.NEXT_PUBLIC_WHATSAPP_CONFIG_ID!,
             response_type: 'code',
             override_default_response_type: true,
-            scope: 'business_management,whatsapp_business_management,whatsapp_business_messaging',
+            scope: 'whatsapp_business_management,whatsapp_business_messaging',
             extras: { feature: 'whatsapp_embedded_signup', version: 2, sessionInfoVersion: 3, setup: {} },
           }
         );
@@ -127,7 +127,7 @@ export default function Page () {
             res.authResponse ? resolve(res) : reject(new Error('Cancelado o no autorizado'));
           },
           {
-            scope: 'business_management,pages_show_list,pages_manage_metadata,pages_messaging',
+            scope: 'pages_show_list,pages_manage_metadata,pages_messaging',
             response_type: 'token',
           }
         );
