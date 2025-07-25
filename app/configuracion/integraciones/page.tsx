@@ -26,6 +26,10 @@ export default function Page () {
     apiToken: '',
     apiPixelId: '',
     googleAnalytics: '',
+    zoomAccountId: '',
+    zoomToken: '',
+    zoomExpiresIn: '',
+    zoomCreateToken: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -229,6 +233,27 @@ export default function Page () {
                       await getIntegrations()
                       setConnecting(false)
                     }}>Probar conexión</Button>
+              }
+            </div>
+            <div className='flex flex-col gap-2'>
+              <h3 className='text-sm'>Conectar cuenta de Zoom</h3>
+              {
+                integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
+                ? <p className='text-sm'>Id Zoom: {integrations.zoomAccountId}</p>
+                : ''
+              }
+              {
+                integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
+                  ? <Button>Desconectar Zoom</Button>
+                  : (
+                    <Button action={async () => {
+                      window.open(
+                        `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom`,
+                        'Conectar Zoom',
+                        'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                      );
+                    }}>Conectar Zoom</Button>
+                  )
               }
             </div>
             <div className='flex flex-col gap-2'>
