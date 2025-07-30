@@ -154,6 +154,18 @@ export default function Page () {
       setLoading(false)
     }
   }
+  
+  useEffect(() => {
+    function handleInstagramMessage(event: any) {
+      if (event.origin !== window.location.origin) return;
+      if (event.data.type === 'INSTAGRAM_AUTH_SUCCESS') {
+        getIntegrations();
+      }
+    }
+
+    window.addEventListener('message', handleInstagramMessage);
+    return () => window.removeEventListener('message', handleInstagramMessage);
+  }, []);
 
   return (
     <>

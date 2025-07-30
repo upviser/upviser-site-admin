@@ -1,5 +1,5 @@
 "use client"
-import { Spinner } from "@/components/ui";
+import { Spinner } from '../../components/ui'
 import { useEffect } from "react";
 
 export default function Page () {
