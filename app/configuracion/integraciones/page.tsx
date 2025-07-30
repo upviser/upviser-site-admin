@@ -236,7 +236,7 @@ export default function Page () {
                     ? <Button action={async () => {
                       setConnecting(true)
                       window.open(
-                        `https://www.instagram.com/oauth/authorize?force_reauth=true&client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages`,
+                        `https://www.instagram.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages`,
                         'Conectar Instagram',
                         'width=600,height=800,resizable=yes,scrollbars=yes'
                       );
