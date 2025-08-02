@@ -88,11 +88,6 @@ export default function Page() {
     if (!loadingText) {
       setLoadingText(true)
       setError('')
-      if (shopLogin.imagesAI < 1) {
-        setError('No tienes palabras disponibles')
-        setLoadingText(false)
-        return
-      }
       if (text.promt === '') {
         setError('Debes describir el texto que quieres generar')
         setLoadingText(false)
@@ -101,8 +96,6 @@ export default function Page() {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/text-ia`, text)
       setTextIA(res.data)
       setLoadingText(false)
-      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - res.data.trim().split(/\s+/).filter(Boolean).length })
-      setShopLogin(res2.data)
     }
   }
 
@@ -158,7 +151,6 @@ export default function Page() {
             <h1 className='text-lg font-medium my-auto'>Generación de contenido con IA</h1>
           </div>
           <div className="flex p-2 border rounded-xl w-fit bg-white divide-x dark:border-neutral-700 dark:bg-neutral-800 dark:divide-neutral-700">
-            <p className="px-2">Texto: {shopLogin?.textAI}</p>
             <p className="px-2">Imagenes: {shopLogin?.imagesAI}</p>
             <p className="px-2">Videos: {shopLogin?.videosAI}</p>
           </div>
