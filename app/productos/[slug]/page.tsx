@@ -29,6 +29,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
   }])
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -53,9 +54,27 @@ export default function Page ({ params }: { params: { slug: string } }) {
   }, [params.slug])
 
   const handleSubmit = async () => {
-    setSubmitLoading(true)
-    await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${information?._id}`, { name: information?.name, description: information?.description, category: information?.category, price: information?.price, beforePrice: information?.beforePrice, images: information?.images, stock: information?.stock, slug: information?.slug, state: information?.state, tags: information?.tags, titleSeo: information?.titleSeo, descriptionSeo: information?.descriptionSeo, variations: information?.variations, productsOffer: productsOffer, cost: information?.cost, quantityOffers: quantityOffers, informations: information?.informations, dimentions: information?.dimentions })
-    router.push('/productos')
+    if (!submitLoading) {
+      setSubmitLoading(true)
+      setError('')
+      if (!information?.name || information?.name === '') {
+        setError('El producto debe tener un nombre')
+        setSubmitLoading(false)
+        return
+      }
+      if (!information?.description || information?.description === '') {
+        setError('El producto debe tener una descripción')
+        setSubmitLoading(false)
+        return
+      }
+      if (!information?.slug || information?.slug === '') {
+        setError('El producto debe tener un slug')
+        setSubmitLoading(false)
+        return
+      }
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${information?._id}`, { name: information?.name, description: information?.description, category: information?.category, price: information?.price, beforePrice: information?.beforePrice, images: information?.images, stock: information?.stock, slug: information?.slug, state: information?.state, tags: information?.tags, titleSeo: information?.titleSeo, descriptionSeo: information?.descriptionSeo, variations: information?.variations, productsOffer: productsOffer, cost: information?.cost, quantityOffers: quantityOffers, informations: information?.informations, dimentions: information?.dimentions })
+      router.push('/productos')
+    }
   }
 
   const deleteProduct = async (e: any) => {
@@ -96,6 +115,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
         </div>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
+            {
+              error !== ''
+                ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+                : ''
+            }
             <div className='flex gap-6 ml-auto w-fit'>
               <ButtonSubmit action={handleSubmit} color='main' submitLoading={submitLoading} textButton='Modificar producto' config='w-44' />
               <Link className='text-sm my-auto' href='/productos'>Descartar</Link>

@@ -64,8 +64,18 @@ export default function Page () {
     if (!submitLoading) {
       setSubmitLoading(true)
       setError('')
-      if (information?.name === '') {
+      if (!information?.name || information?.name === '') {
         setError('El producto debe tener un nombre')
+        setSubmitLoading(false)
+        return
+      }
+      if (!information?.description || information?.description === '') {
+        setError('El producto debe tener una descripción')
+        setSubmitLoading(false)
+        return
+      }
+      if (!information?.slug || information?.slug === '') {
+        setError('El producto debe tener un slug')
         setSubmitLoading(false)
         return
       }

@@ -26,8 +26,18 @@ export default  function Page () {
     if (!loading) {
       setLoading(true)
       setError('')
-      if (categoryInfo.category === '') {
+      if (!categoryInfo?.category || categoryInfo.category === '') {
         setError('La categoría debe tener un nombre')
+        setLoading(false)
+        return
+      }
+      if (!categoryInfo?.slug || categoryInfo.slug === '') {
+        setError('La categoría debe tener un slug')
+        setLoading(false)
+        return
+      }
+      if (!categoryInfo?.description || categoryInfo.description === '') {
+        setError('La categoría debe tener una descripción')
         setLoading(false)
         return
       }

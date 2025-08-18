@@ -15,6 +15,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const [updatingLoading, setUpdatingLoading] = useState(false)
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const router = useRouter()
 
@@ -30,6 +31,22 @@ export default function Page ({ params }: { params: { slug: string } }) {
   const handleSubmit = async () => {
     if (!updatingLoading) {
       setUpdatingLoading(true)
+      setError('')
+      if (categoryInfo?.category === '') {
+        setError('La categoría debe tener un nombre')
+        setLoading(false)
+        return
+      }
+      if (categoryInfo?.slug === '') {
+        setError('La categoría debe tener un slug')
+        setLoading(false)
+        return
+      }
+      if (categoryInfo?.description === '') {
+        setError('La categoría debe tener una descripción')
+        setLoading(false)
+        return
+      }
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryInfo?._id}`, categoryInfo)
       router.push('/productos/categorias')
     }
@@ -64,6 +81,11 @@ export default function Page ({ params }: { params: { slug: string } }) {
         </Popup>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
+            {
+              error !== ''
+                ? <p className='bg-red-500 text-white p-2 w-fit'>{error}</p>
+                : ''
+            }
             <div className='flex gap-6 ml-auto w-fit'>
               <ButtonSubmit action={handleSubmit} color='main' submitLoading={updatingLoading} textButton='Modificar categoría' config='w-44' />
               <Link className='text-sm my-auto' href='/productos/categorias'>Descartar</Link>
