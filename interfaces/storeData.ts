@@ -5,7 +5,7 @@ export interface IStoreData {
     email: string
     phone?: string
     locations?: {
-        commercial?: Boolean
+        commercial?: boolean
         mapsLink?: string
         address?: string
         details?: string

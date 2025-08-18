@@ -261,7 +261,7 @@ export default function Page () {
                       <div className='flex gap-2'>
                         <input type='checkbox' onChange={(e: any) => {
                           const beforeLocations = [...storeData.locations!]
-                          beforeLocations[index].commercial = e.target.value
+                          beforeLocations[index].commercial = e.target.checked
                           setStoreData({ ...storeData, locations: beforeLocations })
                         }} />
                         <p className='text-sm'>Dirección comercial</p>
