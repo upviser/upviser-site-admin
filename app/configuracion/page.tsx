@@ -263,7 +263,7 @@ export default function Page () {
                           const beforeLocations = [...storeData.locations!]
                           beforeLocations[index].commercial = e.target.checked
                           setStoreData({ ...storeData, locations: beforeLocations })
-                        }} />
+                        }} checked={location.commercial} />
                         <p className='text-sm'>Dirección comercial</p>
                       </div>
                       <div className='flex flex-col gap-2'>
