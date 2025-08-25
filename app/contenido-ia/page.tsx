@@ -110,7 +110,7 @@ export default function Page() {
       }
       if (image.promt === '') {
         setError('Debes describir la imagen que quieres generar')
-        setLoadingText(false)
+        setLoadingImage(false)
         return
       }
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: image.promt, image: imageRef, size: image.size })
@@ -132,7 +132,7 @@ export default function Page() {
       }
       if (video.promt === '') {
         setError('Debes describir el video que quieres generar')
-        setLoadingText(false)
+        setLoadingVideo(false)
         return
       }
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video-ia`, video)
