@@ -484,6 +484,9 @@ export const Bloque1: React.FC<Props> = ({ edit, pages, setPages, design, index,
                           ))
                         })
                       }
+                      {
+                        calls?.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>Abrir llamada {call.nameMeeting}</option>)
+                      }
                       <option>Abrir popup</option>
                       {
                         forms?.map(form => <option key={form._id} value={form._id}>Abrir formulario {form.nameForm} como popup</option>)

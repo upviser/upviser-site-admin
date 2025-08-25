@@ -537,6 +537,9 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                         ))
                       })
                     }
+                    {
+                      calls?.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>Abrir llamada {call.nameMeeting}</option>)
+                    }
                     <option>Abrir popup</option>
                     {
                       forms?.map(form => <option key={form._id} value={form._id}>Abrir formulario {form.nameForm} como popup</option>)
@@ -608,6 +611,9 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                           <option key={step._id} value={step.slug}>{funnel.funnel} - {step.step}</option>
                         ))
                       })
+                    }
+                    {
+                      calls?.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>Abrir llamada {call.nameMeeting}</option>)
                     }
                     <option>Abrir popup</option>
                     {
