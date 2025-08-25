@@ -549,7 +549,7 @@ export default function Page () {
                               e.preventDefault()
                               await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { instagram: false })
                               setInstagram(false)
-                            }} className={`w-full bg-red-500 min-h-9 h-9 px-4 text-white text-sm rounded-xl transition-colors duration-300 hover:bg-red-500/80`}>Desactivar boton Intagram</button>
+                            }} className={`w-full bg-red-500 min-h-9 h-9 px-4 text-white text-sm rounded-xl transition-colors duration-300 hover:bg-red-500/80`}>Desactivar boton Instagram</button>
                           )
                           : (
                             <button onClick={async(e: any) => {
@@ -1395,7 +1395,7 @@ export default function Page () {
                             e.preventDefault()
                             await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/design/${id}`, { instagram: false })
                             setInstagram(false)
-                          }} className={`w-full bg-red-500 min-h-9 h-9 px-4 text-white text-sm rounded-xl transition-colors duration-300 hover:bg-red-500/80`}>Desactivar boton Intagram</button>
+                          }} className={`w-full bg-red-500 min-h-9 h-9 px-4 text-white text-sm rounded-xl transition-colors duration-300 hover:bg-red-500/80`}>Desactivar boton Instagram</button>
                         )
                         : (
                           <button onClick={async(e: any) => {
