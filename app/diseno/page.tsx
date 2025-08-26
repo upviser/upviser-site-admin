@@ -2176,7 +2176,10 @@ export default function Page () {
                                   {
                                     edit === design.content
                                       ? <Button2 action={() => setEdit('')}>Guardar</Button2>
-                                      : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                                      : <Button2 action={() => {
+                                        setResponsive('calc(100%-350px)')
+                                        setEdit(design.content)
+                                      }}>Editar</Button2>
                                   }
                                   <Button2Red action={() => {
                                     const oldPages = [...pages]
@@ -2320,7 +2323,10 @@ export default function Page () {
                                   ? ''
                                   : edit === design.content
                                     ? <Button2 action={() => setEdit('')}>Guardar</Button2>
-                                    : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                                    : <Button2 action={() => {
+                                      setResponsive('calc(100%-350px)')
+                                      setEdit(design.content)
+                                    }}>Editar</Button2>
                               }
                               {
                                 design.content === 'Productos' || design.content === 'Bloque 6'
@@ -2467,7 +2473,10 @@ export default function Page () {
                                       ? ''
                                       : edit === design.content
                                         ? <Button2 action={() => setEdit('')}>Guardar</Button2>
-                                        : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                                        : <Button2 action={() => {
+                                          setResponsive('calc(100%-350px)')
+                                          setEdit(design.content)
+                                        }}>Editar</Button2>
                                   }
                                   {
                                     design.content === 'Productos' || design.content === 'Bloque 6'
@@ -2750,7 +2759,10 @@ export default function Page () {
                                       {
                                         edit === design.content
                                           ? <Button2 action={() => setEdit('')}>Guardar</Button2>
-                                          : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                                          : <Button2 action={() => {
+                                            setResponsive('calc(100%-350px)')
+                                            setEdit(design.content)
+                                          }}>Editar</Button2>
                                       }
                                       <Button2Red action={() => {
                                         const oldFunnels = [...funnels]
@@ -2920,7 +2932,10 @@ export default function Page () {
                                       {
                                         edit === design.content
                                           ? <Button2 action={() => setEdit('')}>Guardar</Button2>
-                                          : <Button2 action={() => setEdit(design.content)}>Editar</Button2>
+                                          : <Button2 action={() => {
+                                            setResponsive('calc(100%-350px)')
+                                            setEdit(design.content)
+                                          }}>Editar</Button2>
                                       }
                                       <Button2Red action={() => {
                                         const oldServices = [...services]

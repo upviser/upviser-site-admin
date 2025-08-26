@@ -10,6 +10,6 @@ interface Props {
 
 export const ButtonDesign2: React.FC<Props> = ({ style, text, config, design }) => {
   return (
-    <button className={`${config} w-fit px-6 h-10 border`} style={{ color: design.info.textColor, borderRadius: style?.form === 'Redondeadas' ? `${style?.borderButton}px` : '' }}>{text}</button>
+    <button className={`${config} w-fit px-6 h-10 border`} style={{ borderRadius: style?.form === 'Redondeadas' ? `${style?.borderButton}px` : '', border: `1px solid ${style.borderColor}` }}>{text}</button>
   )
 }

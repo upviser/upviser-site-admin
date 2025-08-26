@@ -894,7 +894,7 @@ export const Plans: React.FC<Props> = ({ edit, pages, setPages, design, index, i
                 {
                   services?.find(service => service._id === design.service?.service)?.plans?.plans.length
                     ? (
-                      <div className='flex gap-6 justify-around'>
+                      <div className={`flex gap-6 justify-around ${responsive === '400px' ? 'flex-col' : 'flex-row'}`}>
                         {
                           services?.find(service => service._id === design.service?.service)?.plans?.plans.map(plan => (
                             <div className={`p-6 w-full max-w-96 flex flex-col gap-4 justify-between`} key={plan._id} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', color: design.info.textColor, backgroundColor: design.info.image }}>

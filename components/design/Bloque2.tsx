@@ -45,42 +45,61 @@ export const Bloque2: React.FC<Props> = ({ edit, design, pages, setPages, index,
           edit !== 'Bloque 2'
             ? (
               <>
-                <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2'} flex`}>
-                  {
-                    design.info?.image && design.info.image !== ''
-                      ? <Image className='h-fit m-auto' style={{ borderRadius: `${style.borderBlock}px`, border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} width={480} height={300} alt='Imagen slider prueba' src={design.info.image} />
-                      : ''
-                  }
-                </div>
-                <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2'} m-auto flex flex-col gap-3`}>
+                {
+                  responsive !== '400px'
+                    ? (
+                      <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2 pr-2'} flex`}>
+                        {
+                          design.info?.image && design.info.image !== ''
+                            ? <Image className='h-fit m-auto' style={{ borderRadius: `${style.borderBlock}px`, border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} width={480} height={300} alt='Imagen slider prueba' src={design.info.image} />
+                            : ''
+                        }
+                      </div>
+                    )
+                    : ''
+                }
+                <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2 pl-2'} m-auto flex flex-col gap-3`}>
                   {
                     index === 0
                       ? (
                         <h1
-                          className={`${responsive === '400px' ? 'text-3xl' : 'text-5xl'} transition-opacity duration-200 font-semibold`}
+                          className={`${responsive === '400px' ? 'text-3xl text-center' : 'text-5xl'} transition-opacity duration-200 font-semibold`}
                           style={{ color: design.info.textColor }}
                           dangerouslySetInnerHTML={{ __html: design.info.title ? design.info.title  : '' }}
                         />
                       )
                       : (
                         <h2
-                          className={`${responsive === '400px' ? 'text-2xl' : 'text-4xl'} transition-opacity duration-200 font-semibold`}
+                          className={`${responsive === '400px' ? 'text-2xl text-center' : 'text-4xl'} transition-opacity duration-200 font-semibold`}
                           style={{ color: design.info.textColor }}
                           dangerouslySetInnerHTML={{ __html: design.info.title ? design.info.title  : '' }}
                         />
                       )
                   }
                   <p
-                    className={`${responsive === '400px' ? 'text-base' : 'text-lg'} transition-opacity duration-200`}
+                    className={`${responsive === '400px' ? 'text-base text-center' : 'text-lg'} transition-opacity duration-200`}
                     style={{ color: design.info.textColor }}
                     dangerouslySetInnerHTML={{ __html: design.info.description ? design.info.description : '' }}
                   />
                   {
                     design.info.button && design.info.button !== '' && design.info.buttonLink && design.info.buttonLink !== ''
-                      ? <ButtonDesign style={style} text={design.info.button} />
+                      ? <ButtonDesign style={style} text={design.info.button} config={`${responsive === '400px' ? 'm-auto' : ''}`} />
                       : ''
                   }
                 </div>
+                {
+                  responsive === '400px'
+                    ? (
+                      <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2 pr-2'} flex`}>
+                        {
+                          design.info?.image && design.info.image !== ''
+                            ? <Image className='h-fit m-auto' style={{ borderRadius: `${style.borderBlock}px`, border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} width={480} height={300} alt='Imagen slider prueba' src={design.info.image} />
+                            : ''
+                        }
+                      </div>
+                    )
+                    : ''
+                }
               </>
             )
             : (
@@ -376,7 +395,7 @@ export const Bloque2: React.FC<Props> = ({ edit, design, pages, setPages, index,
                     </div>
                   </div>
                 </div>
-                <div className="w-1/2 flex flex-col gap-2">
+                <div className="w-1/2 flex flex-col gap-2 pr-2">
                   {
                     design.info?.image && design.info.image !== ''
                       ? <Image className='h-fit m-auto' style={{ borderRadius: `${style.borderBlock}px`, border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '' }} width={480} height={300} alt='Imagen slider prueba' src={design.info.image} />
@@ -441,7 +460,7 @@ export const Bloque2: React.FC<Props> = ({ edit, design, pages, setPages, index,
                     }
                   }} />
                 </div>
-                <div className="w-1/2 m-auto flex flex-col gap-4">
+                <div className="w-1/2 m-auto flex flex-col gap-4 pl-2">
                   <textarea placeholder='Titulo' value={design.info.title} onChange={(e: any) => {
                     if (inde !== undefined) {
                       const oldFunnels = [...funnels!]
@@ -536,7 +555,7 @@ export const Bloque2: React.FC<Props> = ({ edit, design, pages, setPages, index,
                         oldPages[ind].design[index].info.buttonLink = e.target.value
                         setPages(oldPages)
                       }
-                    }} className='rounded border w-full bg-transparent'>
+                    }} className='rounded border max-w-40 bg-transparent'>
                       <option>Acción boton</option>
                       {
                           pageNeed.map(page => (

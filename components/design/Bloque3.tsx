@@ -551,7 +551,7 @@ export const Bloque3: React.FC<Props> = ({ edit, design, index, pages, setPages,
                   </select>
                 </div>
                 <div className='flex gap-4 m-auto'>
-                  <div className='w-fit text-white py-2 px-6' style={{ backgroundColor: style.primary, color: style.button, borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '' }}>
+                  <div className='w-fit text-black py-2 px-6' style={{ borderRadius: style.form === 'Redondeadas' ? `${style.borderButton}px` : '', border: `1px solid ${style.borderColor}` }}>
                     <input type='text' placeholder='Boton' value={design.info.button2} onChange={(e: any) => {
                       if (inde !== undefined) {
                         const oldFunnels = [...funnels!]
