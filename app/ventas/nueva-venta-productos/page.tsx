@@ -1,8 +1,8 @@
 "use client"
 import { ShippingCost } from '@/components/product'
 import { ButtonSubmit, Card, Input, Select, Spinner2 } from '@/components/ui'
-import { IProduct, ISell } from '@/interfaces'
-import { NumberFormat } from '@/utils'
+import { IProduct, ISell, IVariation } from '@/interfaces'
+import { calcularPaquete, NumberFormat, offer } from '@/utils'
 import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -11,6 +11,11 @@ import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { IoClose } from 'react-icons/io5'
 import Image from 'next/image'
+import { io } from 'socket.io-client'
+
+const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
+  transports: ['websocket']
+})
 
 export default function Page () {
 
@@ -33,6 +38,9 @@ export default function Page () {
   const [submitLoading, setSubmitLoading] = useState(false)
   const [chilexpress, setChilexpress] = useState([])
   const [error, setError] = useState('')
+  const [dest, setDest] = useState({ countyCoverageCode: '', streetName: '', serviceDeliveryCode: '' })
+  const [streets, setStreets] = useState([])
+  const [serviceTypeCode, setServiceTypeCode] = useState()
 
   const router = useRouter()
 
@@ -93,7 +101,95 @@ export default function Page () {
         setSubmitLoading(false)
         return
       }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, sell)
+      const res2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`)
+      const dimentions = calcularPaquete(sell.cart)
+      if (sell.shippingState === 'No empaquetado' || sell.shippingState === 'Productos empaquetados') {
+        const shippingData = {
+          "header": {
+              "customerCardNumber": res.data.cardNumber ? res.data.cardNumber : "18578680",
+              "countyOfOriginCoverageCode": res2.data.locations?.length ? res2.data.locations[0].countyCoverageCode : '',
+              "labelType": 2
+          },
+          "details": [{
+              "addresses": [{
+                  "countyCoverageCode": dest.countyCoverageCode,
+                  "streetName": dest.streetName,
+                  "streetNumber": sell.number,
+                  "supplement": sell.details,
+                  "addressType": "DEST",
+                  "deliveryOnCommercialOffice": false
+              }, {
+                  "addressId": 0,
+                  "countyCoverageCode": res2.data.locations?.length ? res2.data.locations[0].countyCoverageCode : '',
+                  "streetName": res2.data.locations?.length ? res2.data.locations[0].streetName : '',
+                  "streetNumber": res2.data.locations?.length ? res2.data.locations[0].streetNumber : '',
+                  "supplement": res2.data.locations?.length ? res2.data.locations[0].details : '',
+                  "addressType": "DEV",
+                  "deliveryOnCommercialOffice": false
+              }],
+              "contacts": [{
+                  "name": res2.data.nameContact,
+                  "phoneNumber": res2.data.phone,
+                  "mail": res2.data.email,
+                  "contactType": "R"
+              }, {
+                  "name": `${sell.firstName} ${sell.lastName}`,
+                  "phoneNumber": sell.phone,
+                  "mail": sell.email,
+                  "contactType": "D"
+              }],
+              "packages": [{
+                  "weight": dimentions.weight,
+                  "height": dimentions.height,
+                  "width": dimentions.width,
+                  "length": dimentions.length,
+                  "serviceDeliveryCode": serviceTypeCode,
+                  "productCode": "3",
+                  "deliveryReference": "TEST-EOC-17",
+                  "groupReference": "GRUPO",
+                  "declaredValue": sell.cart.reduce((bef, curr) => curr.quantityOffers?.length ? bef + offer(curr) : bef + curr.price * curr.quantity, 0),
+                  "declaredContent": "5"
+              }]
+          }]
+        }
+        const request = await axios.post('http://testservices.wschilexpress.com/transport-orders/api/v1.0/transport-orders', shippingData, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Ocp-Apim-Subscription-Key': res.data.enviosKey
+          }
+        })
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, { ...sell, shippingLabel: request.data.data.detail[0].label.labelData })
+      } else {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/sells`, sell)
+      }
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/clients`, { ...sell, tags: sell.subscription ? ['Clientes', 'Suscriptores'] : ['Clientes'] })
+      sell.cart.map(async (product: any) => {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${product.slug}`)
+        let prod: IProduct = res.data
+        if (product.variation?.variation) {
+          if (product.variation.subVariation) {
+            if (product.variation.subVariation2) {
+              const variationIndex = prod.variations!.variations.findIndex((variation: IVariation) => variation.variation === product.variation?.variation && variation.subVariation === product.variation.subVariation && variation.subVariation2 === product.variation.subVariation2)
+              prod.variations!.variations[variationIndex].stock = prod.variations!.variations[variationIndex].stock - product.quantity!
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations })
+            } else {
+              const variationIndex = prod.variations!.variations.findIndex((variation: IVariation) => variation.variation === product.variation?.variation && variation.subVariation === product.variation.subVariation)
+              prod.variations!.variations[variationIndex].stock = prod.variations!.variations[variationIndex].stock - product.quantity!
+              await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations })
+            }
+          } else {
+            const variationIndex = prod.variations!.variations.findIndex((variation: IVariation) => variation.variation === product.variation?.variation)
+            prod.variations!.variations[variationIndex].stock = prod.variations!.variations[variationIndex].stock - product.quantity!
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity, variations: prod.variations })
+          }
+        } else {
+          await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/products/${product._id}`, { stock: prod.stock - product.quantity })
+        }
+      })
+      socket.emit('newNotification', { title: 'Nuevo pago recibido:', description: 'Venta de productos de la tienda', url: '/pagos', view: false })
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/notification`, { title: 'Nuevo pago recibido:', description: 'Venta de productos de la tienda', url: '/pagos', view: false })
       setSubmitLoading(false)
       router.push('/ventas')
     }
@@ -211,7 +307,7 @@ export default function Page () {
                   <Input placeholder='Email' name='email' change={inputChange} value={sell.email} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <p className='text-sm'>Telefono</p>
+                  <p className='text-sm'>Teléfono</p>
                   <div className='flex gap-2'>
                     <p className='m-auto text-sm rounded dark:border-neutral-600'>+56</p>
                     <Input placeholder='Teléfono' name='phone' change={inputChange} value={sell.phone!} />
@@ -220,14 +316,40 @@ export default function Page () {
               </Card>
               <Card title='Dirección'>
                 <div className='flex flex-col gap-2'>
-                  <p className='text-sm'>Calle</p>
-                  <Input placeholder='Calle' name='address' change={inputChange} value={sell.address} />
+                  <p className='text-sm'>Dirección</p>
+                  <Input placeholder='Dirección' name='address' change={inputChange} value={sell.address} />
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <p className='text-sm'>Departamento, local, etc. (Opcional)</p>
+                  <p className='text-sm'>Número</p>
+                  <Input placeholder='Número' name='number' change={inputChange} value={sell.number} />
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <p className='text-sm'>Detalles (Opcional)</p>
                   <Input placeholder='Detalles' name='details' change={inputChange} value={sell.details!} />
                 </div>
-                <ShippingCost setClientData={setSell} clientData={sell} setChilexpress={setChilexpress} />
+                <ShippingCost setClientData={setSell} clientData={sell} setChilexpress={setChilexpress} dest={dest} setDest={setDest} streets={streets} setStreets={setStreets} />
+                {
+                  streets.length
+                    ? (
+                      <div className='flex flex-col gap-2'>
+                        <p className='text-sm'>Se han detectado más de una calle con el nombre que ingresaste</p>
+                        <div className='flex gap-2 flex-wrap'>
+                          {
+                            streets.map((street: any) => (
+                              <button key={street.streetName} className='flex gap-2 p-2 border' onClick={(e: any) => {
+                                e.preventDefault()
+                                setDest({ ...dest, streetName: street.streetName })
+                              }}>
+                                <input type='radio' checked={street.streetName === dest.streetName} />
+                                <p className='text-sm'>{street.streetName}</p>
+                              </button>
+                            ))
+                          }
+                        </div>
+                      </div>
+                    )
+                    : ''
+                }
               </Card>
             </div>
             <div className='flex gap-6 flex-col w-full lg:w-1/3'>
@@ -241,15 +363,34 @@ export default function Page () {
                           <Select change={inputChange} name='shippingMethod'>
                             <option>Seleccionar metodo de envío</option>
                             <option>Chilexpress</option>
+                            <option>Entrega directa</option>
                           </Select>
                         </div>
                         <div className='flex flex-col gap-2'>
                           <p className='text-sm'>Estado del envío</p>
                           <Select change={inputChange} name='shippingState'>
                             <option>Seleccionar estado del envío</option>
-                            <option>No empaquetado</option>
-                            <option>Productos empaquetados</option>
-                            <option>Envío realizado</option>
+                            {
+                              sell.shippingMethod === 'Chilexpress'
+                                ? (
+                                  <>
+                                    <option>No empaquetado</option>
+                                    <option>Productos empaquetados</option>
+                                    <option>Envío realizado</option>
+                                  </>
+                                )
+                                : ''
+                            }
+                            {
+                              sell.shippingMethod === 'Entrega directa'
+                                ? (
+                                  <>
+                                    <option>No entregado</option>
+                                    <option>Entregado</option>
+                                  </>
+                                )
+                                : ''
+                            }
                           </Select>
                         </div>
                       </>
@@ -258,14 +399,17 @@ export default function Page () {
                 }
                 {
                   chilexpress.length
-                    ? sell.shippingMethod === 'Chilexpress'
+                    ? sell.shippingMethod === 'Chilexpress' && (sell.shippingState === 'No empaquetado' || sell.shippingState === 'Productos empaquetados')
                       ? (
                         <div className='flex flex-col gap-2'>
                           {
                             chilexpress.map((service: any) => (
                               <div className='flex gap-2 justify-between' key={service.serviceDescription}>
                                 <div className='flex gap-2'>
-                                  <input type='radio' name='shipping' onClick={() => setSell({...sell, shipping: service.serviceValue, total: Number(sell.cart.reduce((prev, curr) => prev + curr.price * curr.quantity, 0)) + Number(service.serviceValue)})} />
+                                  <input type='radio' name='shipping' onClick={() => {
+                                    setServiceTypeCode(service.serviceTypeCode)
+                                    setSell({...sell, shippingMethod: service.serviceDescription, shipping: service.serviceValue, total: sell.cart.reduce((bef, curr) => curr.quantityOffers?.length ? bef + offer(curr) : bef + curr.price * curr.quantity, 0) + Number(service.serviceValue)})
+                                  }} />
                                   <p className='text-sm'>{service.serviceDescription}</p>
                                 </div>
                                 <p className='text-sm'>${NumberFormat(service.serviceValue)}</p>
@@ -274,7 +418,14 @@ export default function Page () {
                           }
                         </div>
                       )
-                      : ''
+                      : sell.shippingMethod === 'Chilexpress' && sell.shippingState === 'Envío realizado'
+                        ? (
+                          <div className='flex flex-col gap-2'>
+                            <p>Ingresa el monto del envío</p>
+                            <Input change={(e: any) => setSell({ ...sell, shipping: e.target.value })} placeholder='Envío' value={sell.shipping} />
+                          </div>
+                        )
+                        : ''
                     : ''
                 }
               </Card>

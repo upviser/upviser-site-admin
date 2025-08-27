@@ -2,29 +2,36 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { City, Region, IShipping } from '../../interfaces'
 import { Select } from '../ui'
-import { calcularPaquete } from '@/utils'
+import { calcularPaquete, offer } from '@/utils'
 
 interface Props {
   setClientData: any
   clientData: any
   setChilexpress?: any
+  dest: any
+  setDest: any
+  streets: any
+  setStreets: any
 }
 
-export const ShippingCost: React.FC<Props> = ({setClientData, clientData, setChilexpress}) => {
+export const ShippingCost: React.FC<Props> = ({setClientData, clientData, setChilexpress, dest, setDest, streets, setStreets}) => {
 
   const [regions, setRegions] = useState<Region[]>()
   const [citys, setCitys] = useState<City[]>()
   const [shipping, setShipping] = useState<IShipping[]>()
   const [city, setCity] = useState('')
+  const [chile, setChile] = useState({ active: false, coberturaKey: '', cotizadorKey: '' })
 
     const requestRegions = async () => {
-        const request = await axios.get('https://testservices.wschilexpress.com/georeference/api/v1.0/regions', {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chilexpress`)  
+      const request = await axios.get('https://testservices.wschilexpress.com/georeference/api/v1.0/regions', {
           headers: {
             'Cache-Control': 'no-cache',
-            'Ocp-Apim-Subscription-Key': '4ebbe4e737b54bfe94307bca9e36ac4d'
+            'Ocp-Apim-Subscription-Key': res.data.coberturaKey
           }
         })
         setRegions(request.data.regions)
+        setChile(res.data)
       }
     
       useEffect(() => {
@@ -36,7 +43,7 @@ export const ShippingCost: React.FC<Props> = ({setClientData, clientData, setChi
         const request = await axios.get(`https://testservices.wschilexpress.com/georeference/api/v1.0/coverage-areas?RegionCode=${region?.regionId}&type=0`, {
           headers: {
             'Cache-Control': 'no-cache',
-            'Ocp-Apim-Subscription-Key': '4ebbe4e737b54bfe94307bca9e36ac4d'
+            'Ocp-Apim-Subscription-Key': chile.coberturaKey
           }
         })
         setCitys(request.data.coverageAreas)
@@ -56,14 +63,14 @@ export const ShippingCost: React.FC<Props> = ({setClientData, clientData, setChi
               "length": dimentions.length
           },
           "productType": 3,
-          "contentType": 1,
-          "declaredWorth": "2333",
+          "contentType": 5,
+          "declaredWorth": clientData.cart.reduce((bef: any, curr: any) => curr.quantityOffers?.length ? bef + offer(curr) : bef + curr.price * curr.quantity, 0),
           "deliveryTime": 0
         }, {
           headers: {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache',
-            'Ocp-Apim-Subscription-Key': '512b6b0ff709426d82968a33be83b4a1'
+            'Ocp-Apim-Subscription-Key': chile.cotizadorKey
           }
         })
         if (setChilexpress) {
@@ -71,6 +78,27 @@ export const ShippingCost: React.FC<Props> = ({setClientData, clientData, setChi
         }
         setCity(e.target.value)
         setClientData({...clientData, city: e.target.value})
+        const res = await axios.post('http://testservices.wschilexpress.com/georeference/api/v1.0/streets/search', {
+          "countyName": city?.countyName,
+          "streetName": clientData.address,
+          "pointsOfInterestEnabled": true,
+          "streetNameEnabled": true,
+          "roadType": 0
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Ocp-Apim-Subscription-Key': chile.coberturaKey
+          }
+        })
+        if (res.data.streets.length) {
+          if (res.data.streets.length === 1) {
+            setDest({ ...dest, streetName: res.data.streets[0].streetName, countyCoverageCode: city?.countyCode })
+          } else {
+            setDest({ ...dest, countyCoverageCode: city?.countyCode })
+            setStreets(res.data.streets)
+          }
+        }
       }
 
   return (

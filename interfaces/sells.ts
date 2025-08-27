@@ -22,4 +22,5 @@ export interface ISell {
     createdAt?: Date
     updatedAt?: Date
     shippingLabel?: string
+    subscription?: boolean
 }
