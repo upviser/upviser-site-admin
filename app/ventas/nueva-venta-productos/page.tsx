@@ -62,7 +62,7 @@ export default function Page () {
   const selectProduct = (e: any) => {
     const product = products.find(product => product.name === e.target.value)
     if (product) {
-      setSell({...sell, cart: sell.cart.concat({
+      const cart = sell.cart.concat({
         category: product.category.category,
         image: product.images[0],
         name: product.name,
@@ -72,8 +72,10 @@ export default function Page () {
         _id: product._id,
         beforePrice: product.beforePrice ? product.beforePrice : undefined,
         stock: product.stock,
-        dimentions: product.dimentions
-      })})
+        dimentions: product.dimentions,
+        quantityOffers: product.quantityOffers
+      })
+      setSell({...sell, total: cart.reduce((bef, curr) => curr.quantityOffers ? bef + offer(curr) : bef + curr.price * curr.quantity, 0), cart: cart })
     }
   }
 
@@ -81,7 +83,7 @@ export default function Page () {
     if (!submitLoading) {
       setSubmitLoading(true)
       setError('')
-      if (sell.email === '' || sell.address === '' || sell.firstName === '' || sell.city === '' || sell.region !== '') {
+      if (sell.email === '' || sell.address === '' || sell.firstName === '' || sell.city === '' || sell.region === '') {
         setError('Debes llenar todos los datos requeridos')
         setSubmitLoading(false)
         return
@@ -272,14 +274,14 @@ export default function Page () {
                             if (Number(product.stock) >= e.target.value && e.target.value >= 0) {
                               const updatedCart = [...sell.cart]
                               updatedCart[index].quantity = e.target.value
-                              setSell({...sell, cart: updatedCart})
+                              setSell({...sell, cart: updatedCart, total: updatedCart.reduce((bef, curr) => curr.quantityOffers ? bef + offer(curr) : bef + curr.price * curr.quantity, 0)})
                             }
                           }} config='w-20' />
                           <p className='mt-auto mb-auto'>${NumberFormat(product.price * Number(product.quantity))}</p>
                           <button onClick={(e: any) => {
                             e.preventDefault()
                             const updatedCart = sell.cart.filter(prod => prod.name !== product.name)
-                            setSell({...sell, cart: updatedCart})
+                            setSell({...sell, cart: updatedCart, total: updatedCart.reduce((bef, curr) => curr.quantityOffers ? bef + offer(curr) : bef + curr.price * curr.quantity, 0)})
                           }}><IoClose className='mt-auto mb-auto text-lg' /></button>
                         </div>
                       ))
