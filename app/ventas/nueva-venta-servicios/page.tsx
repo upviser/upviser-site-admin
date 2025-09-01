@@ -10,7 +10,7 @@ import { BiArrowBack } from "react-icons/bi";
 export default function Page () {
 
   const [pay, setPay] = useState({ firstName: '', lastName: '', email: '', phone: '', service: '', stepService: '', typeService: '', typePrice: '', plan: '', price: '', state: '', method: '' })
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [services, setServices] = useState<IService[]>([])
   const [selectService, setSelectService] = useState<IService>()
   const [state, setState] = useState('') 
