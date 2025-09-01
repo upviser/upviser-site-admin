@@ -20,6 +20,7 @@ export default function Page ({ params }: { params: { id: string } }) {
   const [loadingEdit, setLoadingEdit] = useState(false)
   const [shippingCode, setShippingCode] = useState('')
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opcity-0', mouse: false })
+  const [suscription, setSuscription] = useState<any>()
 
   const router = useRouter()
 
@@ -36,6 +37,15 @@ export default function Page ({ params }: { params: { id: string } }) {
       if (res.data.funnel) {
         const response2 = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/funnel/${res.data.funnel}`)
         setFunnel(response2.data)
+      }
+      if (res.data.suscriptionId && res.data.suscriptionId !== '') {
+        const resp = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/payment`)
+        const resp2 = await axios.get(`https://api.mercadopago.com/preapproval/${res.data.suscriptionId}`, {
+          headers: {
+            Authorization: `Bearer ${resp.data.suscription.accessToken}`
+          }
+        })
+        setSuscription({ state: resp2.data.status, lastPay: resp2.data.summarized.last_charged_date, nextPay: resp2.data.next_payment_date, quantity: resp2.data.summarized.charged_quantity })
       }
       setLoading(false)
     } else {
@@ -313,6 +323,30 @@ export default function Page ({ params }: { params: { id: string } }) {
                                 <p className="font-medium">Paso embudo</p>
                                 <p>{funnel?.steps.find(step => step._id === pay.step)?.step}</p>
                               </div>
+                            )
+                            : ''
+                        }
+                        {
+                          suscription?.state
+                            ? (
+                              <>
+                                <div className="flex flex-col gap-2">
+                                  <p className="font-medium">Estado suscripción</p>
+                                  <p>{suscription.state}</p>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  <p className="font-medium">Siguiente pago</p>
+                                  <p>{suscription.nextPay.toLocaleDateString("es-CL")}</p>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  <p className="font-medium">Ultimo pago</p>
+                                  <p>{suscription.lastPay.toLocaleDateString("es-CL")}</p>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  <p className="font-medium">Pagos realizados</p>
+                                  <p>{suscription.quantity}</p>
+                                </div>
+                              </>
                             )
                             : ''
                         }
