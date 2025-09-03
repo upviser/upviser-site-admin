@@ -24,7 +24,7 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
   const [description, setDescription] = useState('')
   const [imageGenerate, setImageGenerate] = useState('')
   const [loading, setLoading] = useState(false)
-  const [imageRef, setImageRef] = useState()
+  const [imageRef, setImageRef] = useState('')
   const [shopLogin, setShopLogin] = useState<any>()
   const [error, setError] = useState('')
   const [size, setSize] = useState('1:1')
