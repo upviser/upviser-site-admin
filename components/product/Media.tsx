@@ -1,10 +1,10 @@
 import { IProduct } from '@/interfaces'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { CiImageOn } from 'react-icons/ci'
 import { IoTrashOutline } from "react-icons/io5"
-import { Button2, ButtonAI, Card, Popup, Spinner, Textarea } from '../ui'
+import { Button2, ButtonAI, Card, Popup, Select, Spinner, Textarea } from '../ui'
 import Image from 'next/image'
 
 interface Props {
@@ -24,6 +24,19 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
   const [description, setDescription] = useState('')
   const [imageGenerate, setImageGenerate] = useState('')
   const [loading, setLoading] = useState(false)
+  const [imageRef, setImageRef] = useState()
+  const [shopLogin, setShopLogin] = useState<any>()
+  const [error, setError] = useState('')
+  const [size, setSize] = useState('1:1')
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const onDrop = (acceptedFiles: any) => {
     if (!loadingImage) {
@@ -51,16 +64,32 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
     }
   }
 
-  const imageChange = async (e: any) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file))
-      const data = new FormData()
-      data.append('image', file)
-      data.append('name', file.name)
-      setFormData(data)
+  const imageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return; // No se seleccionó nada
+
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('name', file.name);
+
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/image`,
+        formData,
+        {
+          headers: {
+            accept: 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+          },
+        }
+      );
+
+      setImageRef(data); // data expected to be a string con URL
+    } catch (error) {
+      console.error('Error al subir imagen:', file.name, error);
+      alert('Error al subir la imagen. Intenta nuevamente.');
     }
-  }
+  };
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
@@ -100,18 +129,42 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
           <p className='text-sm'>Descripción de la imagen</p>
           <Textarea placeholder={'Descripción de la imagen'} change={(e: any) => setDescription(e.target.value)} value={description} config='h-20' />
         </div>
+        <div className="flex flex-col gap-2">
+          <p className='text-sm'>Elige el formato de la imagen</p>
+          <Select change={(e: any) => setSize(e.target.value)} value={size}>
+            <option>21:9</option>
+            <option>16:9</option>
+            <option>4:3</option>
+            <option>1:1</option>
+            <option>3:4</option>
+            <option>9:16</option>
+            <option>16:21</option>
+          </Select>
+        </div>
+        {
+          error !== ''
+            ? <p className="w-fit p-2 bg-red-500 text-white">{error}</p>
+            : ''
+        }
         <ButtonAI click={async (e: any) => {
           e.preventDefault()
           if (!loading) {
             setLoading(true)
-            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-product`, formData, {
-              headers: {
-                accept: 'application/json',
-                'Accept-Language': 'en-US,en;q=0.8'
-              }
-            })
-            setImageGenerate(data)
+            setError('')
+            if (shopLogin.imagesAI === 0) {
+              setError('No tienes imagenes disponibles')
+              setLoadingImage(false)
+              return
+            }
+            if (description === '') {
+              setError('Debes describir la imagen que quieres generar')
+              setLoadingImage(false)
+              return
+            }
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: description, image: imageRef, size: size })
+            setImageGenerate(res.data)
             setLoading(false)
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin?.imagesAI - 1 })
           }
         }} text={'Generar imagen con IA'} loading={loading} config='min-h-9' />
         {
