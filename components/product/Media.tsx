@@ -121,8 +121,8 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
           <input type='file' onChange={imageChange} className='text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
         </div>
         {
-          imagePreview !== ''
-            ? <Image className='w-52 h-auto' src={imagePreview} alt={'Imagen de producto'} width={500} height={500} />
+          imageGenerate !== ''
+            ? <Image className='w-52 h-auto' src={imageGenerate} alt={'Imagen de producto'} width={500} height={500} />
             : ''
         }
         <div className='flex flex-col gap-2'>
