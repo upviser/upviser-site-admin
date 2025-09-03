@@ -20,6 +20,7 @@ import "swiper/css/pagination"
 import styles from  "./Slider.module.css"
 import { Pagination } from "swiper/modules"
 import { NumberFormat } from '@/utils'
+import { FaRegEye } from 'react-icons/fa'
 
 export default function Page () {
 
