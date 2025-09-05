@@ -63,7 +63,7 @@ export const Contact: React.FC<Props> = ({ edit, design, pages, setPages, index,
                     dangerouslySetInnerHTML={{ __html: design.info.description ? design.info.description : '' }}
                   />
                 </div>
-                <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2 pl-4'} w-full m-auto`}>
+                <div className={`${responsive === '400px' ? 'w-full' : 'w-1/2 pl-4'} m-auto`}>
                   <div className={`flex flex-col gap-4 p-6 sm:p-8`} style={{ boxShadow: style.design === 'Sombreado' ? `0px 3px 20px 3px ${style.borderColor}10` : '', borderRadius: style.form === 'Redondeadas' ? `${style.borderBlock}px` : '', color: design.info.textColor, border: style.design === 'Borde' ? `1px solid ${style.borderColor}` : '', backgroundColor: design.info.image }}>
                     {
                       index === 0
