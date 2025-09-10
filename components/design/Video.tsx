@@ -38,50 +38,63 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
   
   const handleUpload = async (e: any) => {
     if (!loadingVideo) {
-      setLoadingVideo(true)
-      setError('')
-      const formData = new FormData();
-      formData.append('video', e.target.files[0]);
-      formData.append('name', e.target.files[0].name.replace(' ', '-'));
+      const file = e.target.files[0];
+      if (!file) return;
+
+      setLoadingVideo(true);
+      setError("");
+      setMessage("");
+
       try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        if (response.status === 500) {
-          setError('Ha ocurrido un error al subir el video, intentalo nuevamente')
+        // 1. Pedir a tu backend el guid y token
+        const createRes = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/video`, {
+          name: file.name,
+        });
+
+        const { guid, uploadUrl, uploadToken, embedUrl } = createRes.data;
+
+        // 2. Subir el archivo directo a Bunny
+        await axios.put(uploadUrl, file, {
+          headers: {
+            "Content-Type": "application/octet-stream",
+            "Upload-Token": uploadToken, // 👈 Token en vez de AccessKey
+          },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
+        });
+
+        if (inde !== undefined) {
+          const oldFunnels = [...funnels!]
+          oldFunnels[inde].steps[ind].design![index].info.video = embedUrl
+          setFunnels(oldFunnels)
+        } else if (indx !== undefined) {
+          const oldServices = [...services!]
+          oldServices[indx].steps[ind].design![index].info.video = embedUrl
+          setServices(oldServices)
+        } else if (inx !== undefined) {
+          const oldPages = [...pages]
+          oldPages[inx].design[index].info.video = embedUrl
+          setPages(oldPages)
+        } else if (inxx !== undefined) {
+          const oldPages = [...pages]
+          oldPages[inxx].design[index].info.video = embedUrl
+          setPages(oldPages)
         } else {
-          if (inde !== undefined) {
-            const oldFunnels = [...funnels!]
-            oldFunnels[inde].steps[ind].design![index].info.video = response.data
-            setFunnels(oldFunnels)
-          } else if (indx !== undefined) {
-            const oldServices = [...services!]
-            oldServices[indx].steps[ind].design![index].info.video = response.data
-            setServices(oldServices)
-          } else if (inx !== undefined) {
-            const oldPages = [...pages]
-            oldPages[inx].design[index].info.video = response.data
-            setPages(oldPages)
-          } else if (inxx !== undefined) {
-            const oldPages = [...pages]
-            oldPages[inxx].design[index].info.video = response.data
-            setPages(oldPages)
-          } else {
-            const oldPages = [...pages]
-            oldPages[ind].design[index].info.video = response.data
-            setPages(oldPages)
-          }
+          const oldPages = [...pages]
+          oldPages[ind].design[index].info.video = embedUrl
+          setPages(oldPages)
         }
+
         setMessage('El video se subio con exito, dale en guardar aun que no se vea el video ya que este demorara unos minutos en ser procesado, pero si no se guarda se perdera el video')
         setLoadingVideo(false)
-      } catch (error) {
-        setLoadingVideo(false)
-        setError('Ha ocurrido un error al subir el video, intentalo nuevamente')
-      } 
+      } catch (err) {
+        console.error(err);
+        setError("❌ Error al subir el video.");
+      } finally {
+        setLoadingVideo(false);
+      }
     }
-  }
+  };
   
   return (
     <>
