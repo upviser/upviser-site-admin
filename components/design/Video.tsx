@@ -51,13 +51,13 @@ export const Video: React.FC<Props> = ({ edit, pages, setPages, design, index, i
           name: file.name,
         });
 
-        const { guid, uploadUrl, uploadToken, embedUrl } = createRes.data;
+        const { uploadUrl, embedUrl } = createRes.data;
 
         // 2. Subir el archivo directo a Bunny
         await axios.put(uploadUrl, file, {
           headers: {
             "Content-Type": "application/octet-stream",
-            "Upload-Token": uploadToken, // 👈 Token en vez de AccessKey
+            AccessKey: process.env.NEXT_PUBLIC_BUNNY_KEY, // ⚠️ aún expone la key
           },
           maxContentLength: Infinity,
           maxBodyLength: Infinity,
