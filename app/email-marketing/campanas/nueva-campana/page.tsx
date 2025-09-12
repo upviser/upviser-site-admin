@@ -1,7 +1,7 @@
 "use client"
 import { Config, Email, Segment } from '@/components/campaigns'
 import { ButtonSubmit, Spinner2 } from '@/components/ui'
-import { IClientTag, IEmail, IStoreData } from '@/interfaces'
+import { ICall, IClientTag, IEmail, IService, IStoreData } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -26,6 +26,8 @@ export default function Page () {
   const [clientTags, setClientTags] = useState<IClientTag[]>([])
   const [clientData, setClientData] = useState([])
   const [error, setError] = useState('')
+  const [services, setServices] = useState<IService[]>()
+  const [calls, setCalls] = useState<ICall[]>()
 
   const router = useRouter()
 
@@ -58,6 +60,24 @@ export default function Page () {
 
   useEffect(() => {
     getClientData()
+  }, [])
+
+  const getServices = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/services`)
+    setServices(res.data)
+  }
+
+  useEffect(() => {
+    getServices()
+  }, [])
+
+  const getCalls = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    setCalls(res.data)
+  }
+
+  useEffect(() => {
+    getCalls()
   }, [])
 
   const submit = async (e: any) => {
@@ -104,7 +124,7 @@ export default function Page () {
             <div className='w-full flex'>
               <div className='flex gap-6 m-auto w-full flex-wrap'>
                 <Email email={email} storeData={storeData} />
-                <Config setEmail={setEmail} email={email} setDate={setDate} date={date} clientData={clientData} setClientData={setClientData} />
+                <Config setEmail={setEmail} email={email} setDate={setDate} date={date} clientData={clientData} setClientData={setClientData} calls={calls} services={services} />
               </div>
             </div>
           </div>

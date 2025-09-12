@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Input, Select, Textarea } from '../ui'
 import axios from 'axios'
-import { Design, IFunnel } from '@/interfaces'
+import { Design, ICall, IFunnel, IService } from '@/interfaces'
 
 interface Props {
     setEmail: any
@@ -11,9 +11,11 @@ interface Props {
     date: any
     clientData: any
     setClientData: any
+    services?: IService[]
+    calls?: ICall[]
 }
 
-export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, clientData, setClientData }) => {
+export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, clientData, setClientData, services, calls }) => {
 
   const [titleData, setTitleData] = useState('')
   const [paragraphData, setParagraphData] = useState('')
@@ -93,6 +95,12 @@ export const Config: React.FC<Props> = ({ setEmail, email, setDate, date, client
             }
             {
               funnels.map(funnel => funnel.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${process.env.NEXT_PUBLIC_WEB_URL}/${step.slug}`}>{funnel.funnel} - {step.step}</option>))
+            }
+            {
+              services?.map(service => service.steps.filter(step => step.slug && step.slug !== '').map(step => <option key={step._id} value={`${process.env.NEXT_PUBLIC_WEB_URL}/${step.slug}`}>Servicio: {service.name} - {step.step}</option>))
+            }
+            {
+              calls?.map(call => <option key={call._id} value={`${process.env.NEXT_PUBLIC_WEB_URL}/llamadas/${call.nameMeeting.replaceAll(' ', '-')}`}>Llamada: {call.nameMeeting}</option>)
             }
           </Select>
         </div>
