@@ -116,7 +116,7 @@ export default function Page () {
                                   setChatId(chat.senderId)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
                                   getChats()
-                                }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between`}>
+                                }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <p>{chat.senderId}</p>
                                     <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
@@ -138,7 +138,7 @@ export default function Page () {
                                   setChatId(chat.senderId)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/chat/${chat.senderId}`)
                                   getChats()
-                                }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between`}>
+                                }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <p>{chat.senderId}</p>
                                     <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
@@ -158,7 +158,7 @@ export default function Page () {
               }
             </div>
             <div className='w-full lg:w-1/2'>
-              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-[70vh] dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <div ref={containerRef} className='w-full h-full flex flex-col pr-4' style={{ overflow: 'overlay' }}>
                   {
                     messages?.map(message => {

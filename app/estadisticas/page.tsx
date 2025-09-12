@@ -92,7 +92,7 @@ export default function Page () {
               <Button action={handleFilter} config='mt-auto'>Filtrar</Button>
             </div>
           </div>
-          <div className='flex gap-6 w-full flex-wrap max-w-[1280px] mx-auto overflow-auto min-h-[550px]'>
+          <div className='flex gap-6 w-full flex-wrap max-w-[1280px] mx-auto overflow-auto'>
             {
               loading
                 ? (
