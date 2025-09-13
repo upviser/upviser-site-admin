@@ -4,6 +4,7 @@ import { IWhatsappId, IWhatsappMessage, IWhatsappTemplate } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
+import { FaTag } from 'react-icons/fa'
 import io from 'socket.io-client'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`)
@@ -24,6 +25,7 @@ export default function Page () {
   const [loading, setLoading] = useState(false)
   const [templates, setTemplates] = useState([])
   const [loadingDelete, setLoadingDelete] = useState(false)
+  const [chatTags, setChatTags] = useState<any>()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const messagesRef = useRef(messages)
@@ -56,6 +58,15 @@ export default function Page () {
 
   useEffect(() => {
     getTemplates()
+  }, [])
+
+  const getChatTags = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`)
+    setChatTags(res.data)
+  }
+
+  useEffect(() => {
+    getChatTags()
   }, [])
 
   useEffect(() => {
@@ -417,7 +428,11 @@ export default function Page () {
                                   getMessages()
                                 }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 border border-border transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{phone.phone}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{phone.phone}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === phone.tag)?.color }}><FaTag className='my-auto' />{phone.tag}</p>
+                                    </div>
+                                    <p>{phone.message}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -439,7 +454,11 @@ export default function Page () {
                                   getMessages()
                                 }} key={phone.phone} className={`${phone.phone === selectedPhone ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} bg-white w-full flex gap-2 border border-border transition-colors duration-150 justify-between text-left h-20 p-2 rounded-xl dark:bg-neutral-700/60 hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{phone.phone}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{phone.phone}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === phone.tag)?.color }}><FaTag className='my-auto' />{phone.tag}</p>
+                                    </div>
+                                    <p>{phone.message}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {

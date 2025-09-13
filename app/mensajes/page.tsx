@@ -4,6 +4,7 @@ import { IChatId, IChatMessage } from '@/interfaces'
 import axios from 'axios'
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from 'react'
+import { FaTag } from 'react-icons/fa'
 import io from 'socket.io-client'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
@@ -19,6 +20,7 @@ export default function Page () {
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState('')
   const [shopLogin, setShopLogin] = useState<any>()
+  const [chatTags, setChatTags] = useState<any>()
 
   const chatIdRef = useRef(chatId)
   const messagesRef = useRef(messages)
@@ -42,6 +44,15 @@ export default function Page () {
 
   useEffect(() => {
     getShopLogin()
+  }, [])
+
+  const getChatTags = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat-tags`)
+    setChatTags(res.data)
+  }
+
+  useEffect(() => {
+    getChatTags()
   }, [])
 
   useEffect(() => {
@@ -118,8 +129,12 @@ export default function Page () {
                                   getChats()
                                 }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{chat.senderId}</p>
-                                    <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{chat.senderId}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === chat.tag)?.color }}><FaTag className='my-auto' />{chat.tag}</p>
+                                    </div>
+                                    <p>{chat.message}</p>
+                                    <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
                                     chat.adminView === false
@@ -140,8 +155,12 @@ export default function Page () {
                                   getChats()
                                 }} key={i} className={`${chat.senderId === chatId ? 'bg-main text-white' : 'bg-white dark:bg-neutral-800 dark:border-neutral-700 dark:hover:bg-neutral-700 hover:bg-neutral-200/40'} w-full border border-border transition-colors duration-150 text-left h-20 p-2 rounded-xl flex gap-4 justify-between dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{chat.senderId}</p>
-                                    <p className={`text-sm ${chat.senderId === chatId ? 'text-neutral-200' : 'text-neutral-400'} dark:text-neutral-400`}>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{chat.senderId}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === chat.tag)?.color }}><FaTag className='my-auto' />{chat.tag}</p>
+                                    </div>
+                                    <p>{chat.message}</p>
+                                    <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
                                     chat.adminView === false

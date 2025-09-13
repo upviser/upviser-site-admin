@@ -12,5 +12,7 @@ export interface IInstagramMessage {
 export interface IInstagramId {
     instagramId: string
     view: boolean
+    tag: string
+    message: string
     createdAt?: Date
 }

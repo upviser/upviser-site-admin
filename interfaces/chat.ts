@@ -14,5 +14,7 @@ export interface IChatMessage {
 export interface IChatId {
     senderId: string
     adminView: boolean
+    tag: string
+    message: string
     createdAt?: Date
 }
