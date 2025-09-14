@@ -92,14 +92,14 @@ export default function Page () {
       <Head>
         <title>Mensajes</title>
       </Head>
-        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto h-full bg-bg dark:bg-neutral-900'>
-          <div className='w-full flex flex-col gap-4 max-w-[1280px] mx-auto'>
-            <h1 className='text-lg font-medium'>Mensajes</h1>
-            <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
-            <MessagesCategories />
-          </div>
-          <div className='w-full max-w-[1280px] flex mx-auto gap-6 flex-col lg:flex-row'>
-            <div className='w-full lg:w-1/2 flex flex-col gap-2'>
+       <div className='p-4 lg:p-6 w-full flex flex-col md:flex-row gap-6 overflow-y-auto h-full bg-bg dark:bg-neutral-900'>
+          <div className='flex flex-col gap-6 w-full lg:w-1/2'>
+            <div className='w-full flex flex-col gap-4 max-w-[1280px] mx-auto'>
+              <h1 className='text-lg font-medium'>Mensajes</h1>
+              <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
+              <MessagesCategories />
+            </div>
+            <div className='w-full flex flex-col gap-2'>
               {
                 chatIds === undefined
                   ? (
@@ -176,59 +176,76 @@ export default function Page () {
                     : <p className='text-sm'>No hay chats</p>
               }
             </div>
-            <div className='w-full lg:w-1/2'>
-              <div className='bg-white pt-4 pb-4 pl-4 flex flex-col gap-4 justify-between border border-black/5 rounded-xl w-full h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-                <div ref={containerRef} className='w-full h-full flex flex-col pr-4' style={{ overflow: 'overlay' }}>
-                  {
-                    messages?.map(message => {
-                      const createdAt = new Date(message.createdAt!)
-                      return (
-                        <div key={message._id} className='flex flex-col gap-2 mb-2 w-full'>
-                          {
-                            message.message
-                              ? (
-                                <div className='bg-neutral-200 p-1.5 rounded-lg w-fit text-black'>
-                                  <p>{message.message}</p>
-                                  <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+          </div>
+          <div className='w-full lg:w-1/2'>
+            <div className='bg-white flex flex-col justify-between border border-black/5 rounded-xl w-full h-[60vh] md:h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+              {
+                chatId
+                  ? (
+                    <div className='flex gap-4 border-b px-4 py-6'>
+                      <p className='my-auto'>{chatId}</p>
+                      <select onChange={async (e: any) => {
+                        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/chat-tag/${chatId}`, { tag: e.target.value })
+                        getChats()
+                      }} className='px-2 py-1 rounded-lg' style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === chatIds?.find(id => chatId === id.senderId)?.tag)?.color, color: '#ffffff' }} value={chatTags?.find((chatTag: any) => chatTag.tag === chatIds?.find(id => chatId === id.senderId)?.tag)?.tag}>
+                        {
+                          chatTags?.map((chatTag: any) => <option key={chatTag.tag}>{chatTag.tag}</option>)
+                        }
+                      </select>
+                    </div>
+                  )
+                  : ''
+              }
+              <div ref={containerRef} className='w-full h-full flex flex-col p-4' style={{ overflow: 'overlay' }}>
+                {
+                  messages?.map(message => {
+                    const createdAt = new Date(message.createdAt!)
+                    return (
+                      <div key={message._id} className='flex flex-col gap-2 mb-2'>
+                        {
+                          message.message
+                            ? (
+                              <div className='bg-neutral-200 p-1.5 rounded-lg w-fit text-black'>
+                                <p>{message.message}</p>
+                                <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
+                              </div>
+                            )
+                            : ''
+                        }
+                        {
+                          message.response
+                            ? (
+                              <div className='flex ml-4'>
+                                <div className='bg-main flex flex-col text-white p-1.5 rounded-lg w-fit ml-auto'>
+                                  <p>{message.response}</p>
+                                  <p className='text-sm ml-auto dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                 </div>
-                              )
-                              : ''
-                          }
-                          {
-                            message.response
-                              ? (
-                                <div className='flex ml-4'>
-                                  <div className='bg-main flex flex-col text-white p-1.5 rounded-lg w-fit ml-auto'>
-                                    <p>{message.response}</p>
-                                    <p className='text-sm ml-auto dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
-                                  </div>
-                                </div>
-                              )
-                              : ''
-                          }
-                        </div>
-                      )
-                    })
-                  }
-                  {
-                    messages.length
-                      ? ''
-                      : <p className='m-auto text-black/60 dark:text-white'>Selecciona un chat</p>
-                  }
-                </div>
-                <form onSubmit={async (e: any) => {
-                  e.preventDefault()
-                  setMessages(messages.concat({senderId: chatId, response: newMessage, agent: true, adminView: true, createdAt: new Date()}))
-                  const newMe = newMessage
-                  setNewMessage('')
-                  socket.emit('messageAdmin', { senderId: chatId, response: newMe, adminView: true })
-                  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chat/create`, {senderId: chatId, response: newMe, agent: true, adminView: true})
-                  getChats()
-                }} className='flex gap-2 pr-4'>
-                  <input onChange={(e: any) => setNewMessage(e.target.value)} value={newMessage} type='text' placeholder='Escribe tu mensaje' className='border border-black/5 px-3 py-2 text-sm w-full rounded-xl dark:border-neutral-600 focus:outline-none focus:border-main focus:ring-1 focus:ring-main hover:border-main/80' />
-                  <Button type='submit'>Envíar</Button>
-                </form>
+                              </div>
+                            )
+                            : ''
+                        }
+                      </div>
+                    )
+                  })
+                }
+                {
+                  messages.length
+                    ? ''
+                    : <p className='m-auto text-black/60 dark:text-white'>Selecciona un chat</p>
+                }
               </div>
+              <form onSubmit={async (e: any) => {
+                e.preventDefault()
+                setMessages(messages.concat({senderId: chatId, response: newMessage, agent: true, adminView: true, createdAt: new Date()}))
+                const newMe = newMessage
+                setNewMessage('')
+                socket.emit('messageAdmin', { senderId: chatId, response: newMe, adminView: true })
+                axios.post(`${process.env.NEXT_PUBLIC_API_URL}/chat/create`, {senderId: chatId, response: newMe, agent: true, adminView: true})
+                getChats()
+              }} className='flex gap-2 p-4'>
+                <input onChange={(e: any) => setNewMessage(e.target.value)} value={newMessage} type='text' placeholder='Escribe tu mensaje' className='border border-black/5 px-3 py-2 text-sm w-full rounded-xl dark:border-neutral-600 focus:outline-none focus:border-main focus:ring-1 focus:ring-main hover:border-main/80' />
+                <Button type='submit'>Envíar</Button>
+              </form>
             </div>
           </div>
         </div>
