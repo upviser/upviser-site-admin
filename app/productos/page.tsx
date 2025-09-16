@@ -61,7 +61,7 @@ export default function Page () {
             }} className='text-sm'>Cancelar</button>
           </div>
         </Popup>
-        <div className='p-6 flex flex-col gap-6 w-full h-full bg-bg dark:bg-neutral-900'>
+        <div className='p-6 flex flex-col gap-6 w-full h-full bg-bg overflow-y-auto dark:bg-neutral-900'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg my-auto font-medium'>Productos</h1>
             <ButtonLink href='/productos/nuevo-producto'>Nuevo producto</ButtonLink>

@@ -73,7 +73,7 @@ export default function Page () {
             }} className='text-sm'>Cancelar</button>
           </div>
         </Popup>
-        <div className='p-6 w-full flex flex-col gap-6 min-h-full bg-bg dark:bg-neutral-900'>
+        <div className='p-6 w-full flex flex-col gap-6 min-h-full bg-bg overflow-y-auto dark:bg-neutral-900'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg font-medium my-auto'>Categorías</h1>
             <ButtonLink href='/productos/categorias/nueva-categoria'>Nueva categoría</ButtonLink>

@@ -392,7 +392,7 @@ export default function Page () {
           }} loading={loading} config='w-full'>{template.id ? 'Editar' : 'Crear'} plantilla</Button>
         </Popup>
         <div className='p-4 lg:p-6 w-full h-full flex gap-6 flex-col md:flex-row overflow-y-auto bg-bg dark:bg-neutral-900'>
-          <div className='flex flex-col gap-6 w-full lg:w-1/2'>
+          <div className='flex flex-col gap-6 w-full overflow-y-auto lg:w-1/2'>
             <div className='w-full max-w-[1280px] mx-auto flex flex-col gap-4'>
               <h1 className='text-lg font-medium'>Mensajes</h1>
               <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
