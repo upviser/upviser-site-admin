@@ -77,7 +77,7 @@ export default function Page () {
             <h1 className='text-lg font-medium my-auto'>Automatizaciones</h1>
             {
               session?.user.type === 'Administrador'
-                ? <ButtonLink href='/email-marketing/automatizaciones/nueva-automatizacion' >Crear automatización</ButtonLink>
+                ? <ButtonLink href='/automatizaciones/nueva-automatizacion' >Crear automatización</ButtonLink>
                 : ''
             }
           </div>
@@ -99,10 +99,10 @@ export default function Page () {
                         automatizations.map((automatization, index) => {
                           return (
                             <tr className={`${index + 1 < automatizations.length ?  'border-b border-border': ''} text-sm bg-white cursor-pointer transition-colors duration-150 dark:bg-neutral-800 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={automatization.name}>
-                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/email-marketing/automatizaciones/${automatization._id}`)}>{automatization.name}</td>
-                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/email-marketing/automatizaciones/${automatization._id}`)}>{automatization.startType}</td>
-                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/email-marketing/automatizaciones/${automatization._id}`)}>{automatization.startValue}</td>
-                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/email-marketing/automatizaciones/${automatization._id}`)}>{automatization.automatization.length}</td>
+                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/automatizaciones/${automatization._id}`)}>{automatization.name}</td>
+                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/automatizaciones/${automatization._id}`)}>{automatization.startType}</td>
+                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/automatizaciones/${automatization._id}`)}>{automatization.startValue}</td>
+                              <td className='p-3 dark:border-neutral-700' onClick={() => router.push(`/automatizaciones/${automatization._id}`)}>{automatization.automatization.length}</td>
                               {
                                 session?.user.type === 'Administrador'
                                   ? (

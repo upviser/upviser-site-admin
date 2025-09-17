@@ -21,6 +21,7 @@ import { LiaClipboardListSolid } from 'react-icons/lia'
 import { MdOutlinePayment, MdOutlineCall, MdOutlineLocalOffer } from 'react-icons/md'
 import { PiSuitcaseSimple } from 'react-icons/pi'
 import { TfiWrite } from 'react-icons/tfi'
+import { TiFlowMerge } from 'react-icons/ti'
 
 const socket = io(`${process.env.NEXT_PUBLIC_API_URL}/`, {
   transports: ['websocket']
@@ -280,37 +281,13 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                 : ''
             }
             {
-              session?.user.permissions?.includes('Email marketing') || session?.user.type === 'Administrador'
-                ? <Link href='/email-marketing' onClick={() => {
-                  setMenu2(false)
-                  setTimeout(() => {
-                    setMenu('hidden')
-                  }, 200);
-                }} className={`transition-all duration-150 ${pathname.includes('/email-marketing') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><AiOutlineNotification className={`mt-auto mb-auto text-lg ${pathname.includes('/email-marketing') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/email-marketing') ? 'text-white' : ''} text-sm`}>Email marketing</p></Link>
+              session?.user.permissions?.includes('Automatizaciones') || session?.user.type === 'Administrador'
+                ? <Link href='/automatizaciones' className={`transition-all duration-150 ${pathname.includes('/automatizaciones') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><TiFlowMerge className={`mt-auto mb-auto text-lg ${pathname.includes('/automatizaciones') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/automatizaciones') ? 'text-white' : ''} text-sm`}>Automatizaciones</p></Link>
                 : ''
             }
             {
-              pathname.includes('email-marketing')
-                ? (
-                  <>
-                    <div className='flex flex-col gap-2'>
-                      <Link href='/email-marketing/campanas' onClick={() => {
-                        setMenu2(false)
-                        setTimeout(() => {
-                          setMenu('hidden')
-                        }, 200);
-                      }} className={`transition-all duration-150 ${pathname.includes('/campanas') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} flex gap-2 py-1.5 px-3 rounded-xl`}><p className={`${pathname.includes('/campanas') ? '' : ''} text-sm`}>Campañas</p></Link>
-                    </div>
-                    <div className='flex flex-col gap-2'>
-                      <Link href='/email-marketing/automatizaciones' onClick={() => {
-                        setMenu2(false)
-                        setTimeout(() => {
-                          setMenu('hidden')
-                        }, 200);
-                      }} className={`transition-all duration-150 ${pathname.includes('/automatizaciones') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} flex gap-2 py-1.5 px-3 rounded-xl`}><p className={`${pathname.includes('/automatizaciones') ? '' : ''} text-sm`}>Automatizaciones</p></Link>
-                    </div>
-                  </>
-                )
+              session?.user.permissions?.includes('Campañas') || session?.user.type === 'Administrador'
+                ? <Link href='/campanas' className={`transition-all duration-150 ${pathname.includes('/campanas') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><AiOutlineNotification className={`mt-auto mb-auto text-lg ${pathname.includes('/campanas') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/campanas') ? 'text-white' : ''} text-sm`}>Campañas</p></Link>
                 : ''
             }
             {

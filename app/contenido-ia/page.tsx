@@ -225,7 +225,7 @@ export default function Page() {
                         <div className="flex flex-col gap-4 w-full sm:w-1/2">
                           <div className="flex flex-col gap-2">
                             <p className="text-sm">Sube la imagen de referencia</p>
-                            <input type="file" className="text-sm" onChange={imageChange} />
+                            <input type="file" className="text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20" onChange={imageChange} />
                           </div>
                           {
                             imageRef !== ''
@@ -301,7 +301,7 @@ export default function Page() {
                           <div className="flex flex-col gap-4 w-full sm:w-1/2">
                             <div className="flex flex-col gap-2">
                               <p className="text-sm">Sube la imagen de referencia</p>
-                              <input type="file" className="text-sm" onChange={imageVideoChange} />
+                              <input type="file" className="text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20" onChange={imageVideoChange} />
                             </div>
                             {
                               video.image !== ''

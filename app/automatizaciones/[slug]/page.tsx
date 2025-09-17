@@ -122,7 +122,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
       setLoading(true)
       console.log(automatization)
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/automatization/${automatization._id}`, { startType: automatization?.startType, startValue: automatization.startValue, name: automatization?.name, date: new Date(), automatization: automatization?.automatization })
-      router.push('/email-marketing/automatizaciones')
+      router.push('/automatizaciones')
     }
   }
 
@@ -186,7 +186,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
             </div>
             <div className='flex gap-6 w-fit'>
               <ButtonSubmit action={handleSubmit} color='main' submitLoading={loading} textButton='Editar automatización' config='w-52' />
-              <Link className='m-auto text-sm' href='/email-marketing/automatizaciones'><p className='m-auto'>Descartar</p></Link>
+              <Link className='m-auto text-sm' href='/automatizaciones'><p className='m-auto'>Descartar</p></Link>
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                 <>
                   <div className='flex gap-3 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
                     <div className='flex gap-3'>
-                      <Link href='/email-marketing/automatizaciones' className='border rounded-xl h-fit my-auto p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
+                      <Link href='/automatizaciones' className='border rounded-xl h-fit my-auto p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
                       <h1 className='text-2xl my-auto font-medium'>Automatización: {automatization?.name}</h1>
                     </div>
                     <Button2 action={(e: any) => {

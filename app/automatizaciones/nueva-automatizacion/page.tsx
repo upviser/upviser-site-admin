@@ -126,7 +126,7 @@ export default function Page() {
       }
       setLoading(true)
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/automatization`, { startType: automatization.startType, startValue: automatization.startValue, name: automatization.name, date: new Date(), automatization: automatization.automatization })
-      router.push('/email-marketing/automatizaciones')
+      router.push('/automatizaciones')
     }
   }
 
@@ -194,14 +194,14 @@ export default function Page() {
           }
           <div className='flex gap-6 w-fit'>
             <ButtonSubmit action={handleSubmit} color='main' submitLoading={loading} textButton='Crear automatización' config='w-48 my-auto' />
-            <Link className='my-auto text-sm' href='/email-marketing/automatizaciones'><p className='m-auto text-sm'>Descartar</p></Link>
+            <Link className='my-auto text-sm' href='/automatizaciones'><p className='m-auto text-sm'>Descartar</p></Link>
           </div>
         </div>
       </div>
       <div className='overflow-y-auto bg-bg dark:bg-neutral-900 h-[calc(100%-125px)] lg:h-[calc(100%-73px)] lg:pb-0'>
         <div className='p-4 lg:p-6 flex flex-col gap-6 bg-bg dark:bg-neutral-900'>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
-            <Link href='/email-marketing/automatizaciones' className='border rounded-xl p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
+            <Link href='/automatizaciones' className='border rounded-xl p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
             <h1 className='text-lg my-auto font-medium'>Nueva automatización</h1>
           </div>
           <div className='w-full flex max-w-[1280px] mx-auto'>

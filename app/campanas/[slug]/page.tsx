@@ -83,7 +83,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
     if (!loading) {
       setLoading(true)
       await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/campaign/${email?._id}`, email)
-      router.push('/email-marketing/campanas')
+      router.push('/campanas')
     }
   }
 
@@ -97,7 +97,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
           <div className='flex m-auto w-full max-w-[1280px]'>
             <div className='flex gap-6 ml-auto w-fit'>
               <ButtonSubmit action={submit} color='main' submitLoading={loading} textButton='Editar campaña' config='w-40' />
-              <Link className='my-auto text-sm' href='/email-marketing/campanas'>Descartar</Link>
+              <Link className='my-auto text-sm' href='/campanas'>Descartar</Link>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                 <>
                   <div className='flex gap-3 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
                     <div className='flex gap-3'>
-                      <Link href='/email-marketing/campanas' className='border rounded-xl p-2 h-fit my-auto transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
+                      <Link href='/campanas' className='border rounded-xl p-2 h-fit my-auto transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
                       <h1 className='text-lg font-medium mt-auto mb-auto'>Campaña: {email?._id}</h1>
                     </div>
                     <Button2 action={(e: any) => {

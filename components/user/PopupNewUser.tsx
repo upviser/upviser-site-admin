@@ -162,12 +162,22 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                   <div className="flex gap-1">
                     <input type="checkbox" onChange={(e: any) => {
                       const oldPermissions = [...user.permissions ? [...user.permissions] : []]
-                      const permissions = oldPermissions.includes('Email marketing')
-                        ? oldPermissions.filter(permission => permission !== 'Email marketing')
-                        : [...oldPermissions, 'Email marketing']
+                      const permissions = oldPermissions.includes('Automtizaciones')
+                        ? oldPermissions.filter(permission => permission !== 'Automtizaciones')
+                        : [...oldPermissions, 'Automtizaciones']
                       setUser({ ...user, permissions: permissions })
-                    }} checked={user.permissions?.find(permission => permission === 'Email marketing') ? true : false} />
-                    <p>Email marketing</p>
+                    }} checked={user.permissions?.find(permission => permission === 'Automtizaciones') ? true : false} />
+                    <p>Automtizaciones</p>
+                  </div>
+                  <div className="flex gap-1">
+                    <input type="checkbox" onChange={(e: any) => {
+                      const oldPermissions = [...user.permissions ? [...user.permissions] : []]
+                      const permissions = oldPermissions.includes('Campañas')
+                        ? oldPermissions.filter(permission => permission !== 'Campañas')
+                        : [...oldPermissions, 'Campañas']
+                      setUser({ ...user, permissions: permissions })
+                    }} checked={user.permissions?.find(permission => permission === 'Campañas') ? true : false} />
+                    <p>Campañas</p>
                   </div>
                   <div className="flex gap-1">
                     <input type="checkbox" onChange={(e: any) => {

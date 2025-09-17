@@ -78,7 +78,7 @@ export default function Page () {
             <h1 className='text-lg font-medium my-auto'>Campañas</h1>
             {
               session?.user.type === 'Administrador'
-                ? <ButtonLink href='/email-marketing/campanas/nueva-campana'>Crear campaña</ButtonLink>
+                ? <ButtonLink href='/campanas/nueva-campana'>Crear campaña</ButtonLink>
                 : ''
             }
           </div>
@@ -105,10 +105,10 @@ export default function Page () {
                           const year = String(campaignDate.getUTCFullYear())
                           return (
                             <tr key={campaign._id} className={`${index + 1 < campaigns.length ? 'border-b border-border' : ''} text-sm bg-white border-neutral-300 transition-colors duration-150 cursor-pointer dark:bg-neutral-800 hover:bg-neutral-100 dark:border-neutral-600 dark:hover:bg-neutral-700`}>
-                              <td className='p-3' onClick={() => router.push(`/email-marketing/campanas/${campaign._id}`)}>{campaign.address}</td>
-                              <td className='p-3' onClick={() => router.push(`/email-marketing/campanas/${campaign._id}`)}>{campaign.affair}</td>
-                              <td className='p-3' onClick={() => router.push(`/email-marketing/campanas/${campaign._id}`)}>{`${day}/${month}/${year}`}</td>
-                              <td className='p-3' onClick={() => router.push(`/email-marketing/campanas/${campaign._id}`)}>{campaignDate < date ? 'Completado' : 'No completado'}</td>
+                              <td className='p-3' onClick={() => router.push(`/campanas/${campaign._id}`)}>{campaign.address}</td>
+                              <td className='p-3' onClick={() => router.push(`/campanas/${campaign._id}`)}>{campaign.affair}</td>
+                              <td className='p-3' onClick={() => router.push(`/campanas/${campaign._id}`)}>{`${day}/${month}/${year}`}</td>
+                              <td className='p-3' onClick={() => router.push(`/campanas/${campaign._id}`)}>{campaignDate < date ? 'Completado' : 'No completado'}</td>
                               {
                                 session?.user.type === 'Administrador'
                                   ? (

@@ -91,7 +91,7 @@ export default function Page () {
         return
       }
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/new-campaign`, email)
-      router.push('/email-marketing/campanas')
+      router.push('/campanas')
     }
   }
 
@@ -109,14 +109,14 @@ export default function Page () {
           }
           <div className='flex gap-6 ml-auto w-fit'>
             <ButtonSubmit action={submit} color='main' submitLoading={loading} textButton='Crear campaña' config='w-40' />
-            <Link className='my-auto text-sm' href='/email-marketing/campanas'>Descartar</Link>
+            <Link className='my-auto text-sm' href='/campanas'>Descartar</Link>
           </div>
         </div>
       </div>
       <div className='bg-bg flex flex-col gap-6 overflow-y-auto dark:bg-neutral-900' style={{ height: 'calc(100% - 69px)' }}>
         <div className='p-4 lg:p-6 flex flex-col gap-4 w-full dark:bg-neutral-900'>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
-            <Link href='/email-marketing/campanas' className='border border-black/5 rounded-xl p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
+            <Link href='/campanas' className='border border-black/5 rounded-xl p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
             <h1 className='text-lg font-medium my-auto'>Nueva campaña</h1>
           </div>
           <div className='flex flex-col gap-6 w-full max-w-[1280px] mx-auto'>
