@@ -59,7 +59,7 @@ export const NewCategoryModal: React.FC<Props> = ({ newCategory, setNewCategory,
   }
 
   return (
-    <div className={`fixed right-0 w-full flex flex-col gap-4 h-full top-0 left-0 z-50 bg-black/30 ${newCategory.view} ${newCategory.opacity} transition-opacity duration-200 dark:bg-black/40`} onClick={() => {
+    <div className={`fixed right-0 w-full flex flex-col gap-4 h-full top-0 left-0 z-50 bg-black/30 ${newCategory.view} ${newCategory.opacity} transition-opacity duration-200 dark:bg-black/40 px-4`} onClick={() => {
       if (!newCategory.mouse) {
         setNewCategory({ ...newCategory, view: 'flex', opacity: 'opacity-0' })
         setTimeout(() => {

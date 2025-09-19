@@ -219,7 +219,7 @@ export default function Page () {
             </div>
           </div>
         </div>
-        <div className='p-6 bg-bg flex flex-col gap-6 w-full overflow-y-scroll dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
+        <div className='p-4 lg:p-6 bg-bg flex flex-col gap-6 w-full overflow-y-scroll dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
             <Link href='/ventas' className='border border-border rounded-lg p-2 bg-white transition-colors duration-150 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
             <h1 className='text-xl mt-auto mb-auto font-medium'>Nueva venta de productos</h1>

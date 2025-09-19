@@ -61,7 +61,7 @@ export default function Page () {
             }} className='text-sm'>Cancelar</button>
           </div>
         </Popup>
-        <div className='p-6 flex flex-col gap-6 w-full h-full bg-bg overflow-y-auto dark:bg-neutral-900'>
+        <div className='p-4 lg:p-6 flex flex-col gap-6 w-full h-full bg-bg overflow-y-auto dark:bg-neutral-900'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg my-auto font-medium'>Productos</h1>
             <ButtonLink href='/productos/nuevo-producto'>Nuevo producto</ButtonLink>
@@ -82,7 +82,7 @@ export default function Page () {
                       {
                         products.map((product: any, index) => (
                           <tr className={`${index + 1 < products.length ? 'border-b border-border' : ''} text-sm cursor-pointer w-full transition-colors bg-white duration-150 dark:bg-neutral-800 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={product._id}>
-                            <td className='flex gap-2 p-2' style={{width: '100%'}} onClick={() => router.push(`/productos/${product.slug}`)}>
+                            <td className='flex gap-2 p-2 min-w-48' style={{width: '100%'}} onClick={() => router.push(`/productos/${product.slug}`)}>
                               {
                                 product.images.length && product.images[0] && product.images[0] !== ''
                                   ? <Image className='w-20 object-contain' src={product.images[0]} alt={`Imagen producto ${product.name}`} width={100} height={100} />

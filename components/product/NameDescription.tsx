@@ -59,7 +59,7 @@ export const NameDescription: React.FC<Props> = ({information, setInformation}) 
             setDescriptionAiView({ ...descriptionAiView, view: 'hidden', opacity: 'opacity-0' })
           }, 200)
         }
-      }} className={`${descriptionAiView.view} ${descriptionAiView.opacity} transition-opacity duration-200 bg-black/30 flex fixed w-full h-full top-0 left-0 z-50`}>
+      }} className={`${descriptionAiView.view} ${descriptionAiView.opacity} transition-opacity duration-200 bg-black/30 flex fixed w-full h-full top-0 left-0 z-50 px-4`}>
         <div onMouseMove={() => setDescriptionAiView({ ...descriptionAiView, mouse: true })} onMouseEnter={() => setDescriptionAiView({ ...descriptionAiView, mouse: true })} onMouseLeave={() => setDescriptionAiView({ ...descriptionAiView, mouse: false })} className={`${descriptionAiView.opacity === 'opacity-1' ? 'scale-1' : 'scale-90'} transition-transform duration-200 bg-white m-auto p-6 flex flex-col gap-4 dark:bg-neutral-800 w-[500px] rounded-xl border shadow-popup dark:shadow-popup-dark dark:border-neutral-700`}>
           <h3 className='font-medium'>Generar descripción del producto con IA</h3>
           <div className='flex flex-col gap-2'>

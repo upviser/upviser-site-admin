@@ -73,7 +73,7 @@ export default function Page () {
             }} className='text-sm'>Cancelar</button>
           </div>
         </Popup>
-        <div className='p-6 w-full flex flex-col gap-6 min-h-full bg-bg overflow-y-auto dark:bg-neutral-900'>
+        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 min-h-full bg-bg overflow-y-auto dark:bg-neutral-900'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
             <h1 className='text-lg font-medium my-auto'>Categorías</h1>
             <ButtonLink href='/productos/categorias/nueva-categoria'>Nueva categoría</ButtonLink>
@@ -94,7 +94,7 @@ export default function Page () {
                       {
                         categories.map((category: any, index) => (
                           <tr key={category._id} className={`${index + 1 < categories.length ? 'border-b border-border' : ''} text-sm bg-white cursor-pointer transition-colors duration-150 w-full dark:bg-neutral-800 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-700`}>
-                            <td className='flex gap-2 p-2' onClick={() => router.push(`/productos/categorias/${category.slug}`)}>
+                            <td className='flex gap-2 p-2 min-w-48' onClick={() => router.push(`/productos/categorias/${category.slug}`)}>
                               {
                                 category.image && category.image !== ''
                                   ? <Image className='w-20 object-contain' src={category.image} alt={category.category} width={100} height={100} />

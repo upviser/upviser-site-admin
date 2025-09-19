@@ -77,7 +77,7 @@ export default function Page () {
             <h1 className='text-lg font-medium my-auto'>Automatizaciones</h1>
             {
               session?.user.type === 'Administrador'
-                ? <ButtonLink href='/automatizaciones/nueva-automatizacion' >Crear automatización</ButtonLink>
+                ? <ButtonLink href='/automatizaciones/nueva-automatizacion' config='w-fit'>Crear automatización</ButtonLink>
                 : ''
             }
           </div>

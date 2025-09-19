@@ -282,12 +282,24 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
             }
             {
               session?.user.permissions?.includes('Automatizaciones') || session?.user.type === 'Administrador'
-                ? <Link href='/automatizaciones' className={`transition-all duration-150 ${pathname.includes('/automatizaciones') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><TiFlowMerge className={`mt-auto mb-auto text-lg ${pathname.includes('/automatizaciones') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/automatizaciones') ? 'text-white' : ''} text-sm`}>Automatizaciones</p></Link>
+                ? <Link href='/automatizaciones' onClick={() => {
+                  setMessages(false)
+                  setMenu2(false)
+                  setTimeout(() => {
+                    setMenu('hidden')
+                  }, 200);
+                }} className={`transition-all duration-150 ${pathname.includes('/automatizaciones') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><TiFlowMerge className={`mt-auto mb-auto text-lg ${pathname.includes('/automatizaciones') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/automatizaciones') ? 'text-white' : ''} text-sm`}>Automatizaciones</p></Link>
                 : ''
             }
             {
               session?.user.permissions?.includes('Campañas') || session?.user.type === 'Administrador'
-                ? <Link href='/campanas' className={`transition-all duration-150 ${pathname.includes('/campanas') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><AiOutlineNotification className={`mt-auto mb-auto text-lg ${pathname.includes('/campanas') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/campanas') ? 'text-white' : ''} text-sm`}>Campañas</p></Link>
+                ? <Link href='/campanas' onClick={() => {
+                  setMessages(false)
+                  setMenu2(false)
+                  setTimeout(() => {
+                    setMenu('hidden')
+                  }, 200);
+                }} className={`transition-all duration-150 ${pathname.includes('/campanas') ? 'bg-main' : 'hover:bg-neutral-100 dark:hover:bg-main/30'} flex gap-2 py-1.5 px-3 rounded-xl`}><AiOutlineNotification className={`mt-auto mb-auto text-lg ${pathname.includes('/campanas') ? 'text-white' : 'text-main'}`} /><p className={`${pathname.includes('/campanas') ? 'text-white' : ''} text-sm`}>Campañas</p></Link>
                 : ''
             }
             {

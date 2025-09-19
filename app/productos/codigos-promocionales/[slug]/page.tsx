@@ -80,7 +80,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <div className='p-6 bg-bg flex flex-col gap-6 overflow-y-auto dark:bg-neutral-900' style={{ height: 'calc(100% - 65px)' }}>
+        <div className='p-4 lg:p-6 bg-bg flex flex-col gap-6 overflow-y-auto dark:bg-neutral-900' style={{ height: 'calc(100% - 65px)' }}>
           {
             codeInfo
               ? (

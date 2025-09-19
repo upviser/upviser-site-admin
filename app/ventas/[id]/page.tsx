@@ -93,7 +93,7 @@ export default function Page ({ params }: { params: { id: string } }) {
           }}>Cancelar</button>
         </div>
       </Popup>
-      <div className='bg-bg p-6 overflow-y-auto dark:bg-neutral-900 h-full'>
+      <div className='bg-bg p-4 lg:p-6 overflow-y-auto dark:bg-neutral-900 h-full'>
         <div className='flex flex-col gap-6 w-full max-w-[1280px] m-auto'>
           <div className='flex gap-3 w-full justify-between m-auto'>
             <div className='flex gap-3 my-auto'>

@@ -159,7 +159,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
             setPopupPrice({ ...popupPrice, view: 'hidden', opacity: 'opacity-0' })
           }, 200)
         }
-      }} className={`${popupPrice.view} ${popupPrice.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30`}>
+      }} className={`${popupPrice.view} ${popupPrice.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30 px-4`}>
         <div onMouseEnter={() => setPopupPrice({ ...popupPrice, mouse: true })} onMouseLeave={() => setPopupPrice({ ...popupPrice, mouse: false })} onMouseMove={() => setPopupPrice({ ...popupPrice, mouse: true })} className={`${popupPrice.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[500px] p-5 flex flex-col gap-2 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
           <p className='text-sm'>Asignar precio</p>
           <Input change={(e: any) => setPrice(e.target.value)} placeholder='Precio' value={price} />
@@ -197,7 +197,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               }
-            }} className={`${popup.view} ${popup.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30`}>
+            }} className={`${popup.view} ${popup.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30 px-4`}>
               <div onMouseEnter={() => setPopup({ ...popup, mouse: true })} onMouseLeave={() => setPopup({ ...popup, mouse: false })} className={`${popup.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[500px] p-5 flex flex-col gap-2 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <p>Estas seguro que deseas eliminar el cliente <span className='font-semibold'>{clientData!.email}</span></p>
                 <div className='flex gap-6'>
@@ -224,7 +224,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   setPopupEmail({ ...popupEmail, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               }
-            }} className={`${popupEmail.view} ${popupEmail.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30`}>
+            }} className={`${popupEmail.view} ${popupEmail.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/30 px-4`}>
               <div onMouseEnter={() => setPopupEmail({ ...popupEmail, mouse: true })} onMouseLeave={() => setPopupEmail({ ...popupEmail, mouse: false })} className={`${popupEmail.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-6 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <h3 className='font-medium'>Enviar email</h3>
                 <div className='flex flex-col gap-2'>
@@ -262,7 +262,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   setPopupForm({ ...popupForm, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               }
-            }} className={`${popupForm.view} ${popupForm.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
+            }} className={`${popupForm.view} ${popupForm.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40 px-4`}>
               <div onMouseEnter={() => setPopupForm({ ...popupForm, mouse: true })} onMouseLeave={() => setPopupForm({ ...popupForm, mouse: false })} className={`${popupForm.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-8 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <h3 className='font-medium'>Formulario {selectForm?.nameForm}</h3>
                 {
@@ -288,7 +288,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
                   setPopupContact({ ...popupContact, view: 'hidden', opacity: 'opacity-0' })
                 }, 200)
               }
-            }} className={`${popupContact.view} ${popupContact.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40`}>
+            }} className={`${popupContact.view} ${popupContact.opacity} transition-opacity duration-200 w-full h-full top-0 left-0 z-50 right-0 fixed flex bg-black/20 dark:bg-black/40 px-4`}>
               <div onMouseEnter={() => setPopupContact({ ...popupContact, mouse: true })} onMouseLeave={() => setPopupContact({ ...popupContact, mouse: false })} className={`${popupContact.opacity === 'opacity-1' ? 'scale-100' : 'scale-90'} transition-transform duration-200 w-[700px] p-8 flex flex-col gap-4 rounded-xl border bg-white m-auto dark:bg-neutral-800 dark:border-neutral-700`} style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
                 <h3 className='font-medium'>Formulario de contacto</h3>
                 <div className="flex flex-col gap-2">
@@ -308,7 +308,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
           )
           : ''
       }
-      <div className='bg-bg p-6 overflow-y-auto dark:bg-neutral-900 h-full'>
+      <div className='bg-bg p-4 lg:p-6 overflow-y-auto dark:bg-neutral-900 h-full'>
         <div className='flex flex-col gap-6 w-full max-w-[1280px] m-auto'>
           {
             clientData

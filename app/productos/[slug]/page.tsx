@@ -99,7 +99,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
               setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
             }, 200)
           }
-        }} className={`${popup.view} ${popup.opacity} ${popup} transition-opacity duration-200 right-0 w-full h-full top-0 z-50 left-0 fixed flex bg-black/30`}>
+        }} className={`${popup.view} ${popup.opacity} ${popup} transition-opacity duration-200 right-0 w-full h-full top-0 z-50 left-0 fixed flex bg-black/30 px-4`}>
           <div onMouseEnter={() => setPopup({ ...popup, mouse: true })} onMouseLeave={() => setPopup({ ...popup, mouse: false })} className={`${popup.opacity === 'opacity-1' ? 'scale-1' : 'scale-90'} transition-transform duration-200 w-[500px] p-5 flex flex-col gap-2 rounded-xl bg-white border border-border m-auto dark:bg-neutral-800 dark:border-neutral-700`}>
             <p>Estas seguro que deseas eliminar el producto: <span className='font-semibold'>{information?.name}</span></p>
             <div className='flex gap-6'>

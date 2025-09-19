@@ -146,7 +146,7 @@ export default function AvaliableCallsPage () {
           <Button type='submit' loading={loading} config="w-full">Crear calendario</Button>
         </form>
       </div>
-      <main className="flex flex-col gap-6 p-6 bg-bg overflow-y-auto dark:bg-neutral-900" style={{ height: 'calc(100% - 73px)' }}>
+      <main className="flex flex-col gap-6 p-4 lg:p-6 bg-bg overflow-y-auto dark:bg-neutral-900" style={{ height: 'calc(100% - 73px)' }}>
         <div className="flex flex-col gap-6 w-full mx-auto max-w-[1280px]">
           <div className="w-full flex flex-col gap-4">
             <div className="flex gap-4">

@@ -107,7 +107,7 @@ export default function Page () {
           </div>
         </div>
         <NewCategoryModal setCategories={setCategories} newCategory={newCategory} newCategoryData={newCategoryData} setNewCategory={setNewCategory} setNewCategoryData={setNewCategoryData} />
-        <div className='p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg mb-16 dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
+        <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg mb-16 dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
             <Link href='/productos' className='border rounded-lg p-2 bg-white transition-colors duration-150 hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
             <h1 className='text-lg my-auto font-medium'>Nuevo Producto</h1>
