@@ -380,7 +380,7 @@ export default function Page () {
                     </div>
                     <div className='flex flex-col gap-2'>
                       {
-                        pages.map((page, index) => (
+                        pages.filter(page => page.page !== 'Blog').map((page, index) => (
                           <div key={page.slug} className='flex flex-col gap-2'>
                             <div className='flex gap-4'>
                               <button onClick={() => {
@@ -1186,7 +1186,7 @@ export default function Page () {
                   </div>
                   <div className='flex flex-col gap-2'>
                     {
-                      pages.map((page, index) => {
+                      pages.filter(page => page.page !== 'Blog').map((page, index) => {
                         if (page.page !== 'Tienda' || (page.page === 'Tienda' && productsOrder?.length)) {
                           return (
                             <div key={page.slug} className='flex flex-col gap-2'>
