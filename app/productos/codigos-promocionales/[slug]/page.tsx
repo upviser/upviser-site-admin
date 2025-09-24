@@ -61,9 +61,9 @@ export default function Page ({ params }: { params: { slug: string } }) {
         <title>{codeInfo?.promotionalCode}</title>
       </Head>
         <Popup popup={popup} setPopup={setPopup}>
-          <p>Estas seguro que deseas eliminar el codigo: <span className='font-semibold'>{codeInfo?.promotionalCode}</span></p>
+          <p>Estas seguro que deseas eliminar el código: <span className='font-semibold'>{codeInfo?.promotionalCode}</span></p>
           <div className='flex gap-6'>
-            <ButtonSubmit action={deleteCode} color='red-500' submitLoading={loading} textButton='Eliminar codigo' config='w-40' />
+            <ButtonSubmit action={deleteCode} color='red-500' submitLoading={loading} textButton='Eliminar código' config='w-40' />
             <button onClick={() => {
               setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
               setTimeout(() => {
@@ -75,7 +75,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
             <div className='flex gap-6 ml-auto w-fit'>
-              <ButtonSubmit action={handleSubmit} color='main' submitLoading={submitLoading} textButton='Modificar codigo' config='w-40' />
+              <ButtonSubmit action={handleSubmit} color='main' submitLoading={submitLoading} textButton='Modificar código' config='w-40' />
               <Link className='my-auto text-sm' href='/productos/codigos-promocionales'>Descartar</Link>
             </div>
           </div>

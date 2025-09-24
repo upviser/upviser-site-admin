@@ -16,8 +16,8 @@ export const Content: React.FC<Props> = ({ setContentData, contentData, setConte
   return (
     <Card title='Información'>
       <div className='flex flex-col gap-2'>
-        <p className='text-sm'>Titulo</p>
-        <Input placeholder='Titulo del post' change={(e: any) => setContentData({ ...contentData, title: e.target.value })} value={contentData.title} />
+        <p className='text-sm'>Título</p>
+        <Input placeholder='Título del post' change={(e: any) => setContentData({ ...contentData, title: e.target.value })} value={contentData.title} />
       </div>
       <div className='flex flex-col gap-2'>
         <p className='text-sm'>Descripción</p>

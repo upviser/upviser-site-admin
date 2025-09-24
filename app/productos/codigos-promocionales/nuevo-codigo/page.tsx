@@ -48,7 +48,7 @@ export default function Page () {
   return (
     <>
       <Head>
-        <title>Nuevo codigo promocional</title>
+        <title>Nuevo código promocional</title>
       </Head>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 dark:bg-neutral-800 dark:border-neutral-700 w-full lg:w-[calc(100%-250px)]'>
           <div className='flex m-auto w-full max-w-[1280px]'>
@@ -60,8 +60,8 @@ export default function Page () {
             <div className='flex gap-6 ml-auto w-fit'>
               {
                 codeInfo.promotionalCode === promotionalCode
-                  ? <button onClick={(e: any) => e.preventDefault()} className='bg-main/50 cursor-not-allowed w-36 h-10 text-white text-sm rounded-xl'>Crear codigo</button>
-                  : <button onClick={handleSubmit} className='bg-main border border-main transition-colors duration-200 text-white text-sm rounded-xl w-36 h-10 hover:bg-transparent hover:text-main'>{submitLoading ? <Spinner2 /> : 'Crear codigo'}</button>
+                  ? <button onClick={(e: any) => e.preventDefault()} className='bg-main/50 cursor-not-allowed w-36 h-10 text-white text-sm rounded-xl'>Crear código</button>
+                  : <button onClick={handleSubmit} className='bg-main border border-main transition-colors duration-200 text-white text-sm rounded-xl w-36 h-10 hover:bg-transparent hover:text-main'>{submitLoading ? <Spinner2 /> : 'Crear código'}</button>
               }
               <Link className='text-sm my-auto' href='/productos/codigos-promocionales'>Descartar</Link>
             </div>
@@ -70,7 +70,7 @@ export default function Page () {
         <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900' style={{ height: 'calc(100% - 73px)' }}>
           <div className='flex gap-3 w-full max-w-[1280px] mx-auto'>
             <Link href='/productos/codigos-promocionales' className='border rounded-lg p-2 transition-colors duration-150 bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700'><BiArrowBack className='text-xl' /></Link>
-            <h1 className='text-lg font-medium my-auto'>Nuevo codigo promocional</h1>
+            <h1 className='text-lg font-medium my-auto'>Nuevo código promocional</h1>
           </div>
           <form className='flex gap-6 w-full max-w-[1280px] mx-auto flex-col lg:flex-row'>
             <div className='flex gap-6 flex-col w-full lg:w-2/3'>

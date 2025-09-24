@@ -62,7 +62,7 @@ export default function Page () {
         <title>Categorías</title>
       </Head>
         <Popup popup={popup} setPopup={setPopup}>
-          <p>Estas seguro que deseas eliminar la categoria: <span className='font-semibold'>{categorySelect.name}</span></p>
+          <p>Estas seguro que deseas eliminar la categoría: <span className='font-semibold'>{categorySelect.name}</span></p>
           <div className='flex gap-6'>
             <ButtonSubmit action={deleteCategory} color='red-500' submitLoading={loading} textButton='Eliminar categoría' config='w-44' />
             <button onClick={() => {
@@ -125,7 +125,7 @@ export default function Page () {
                       }
                     </Table>
                   )
-                  : <p>No hay categorias</p>
+                  : <p>No hay categorías</p>
             }
           </div>
         </div>

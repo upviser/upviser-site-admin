@@ -206,7 +206,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                       setTimeout(() => {
                         setMenu('hidden')
                       }, 200);
-                    }} className={`${pathname.includes('/productos/categorias') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Categorias</Link>
+                    }} className={`${pathname.includes('/productos/categorias') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Categorías</Link>
                     </div>
                     <div className='flex flex-col gap-2'>
                       <Link href='/productos/codigos-promocionales' onClick={() => {
@@ -214,7 +214,7 @@ export const Navbar: React.FC<PropsWithChildren> = ({ children }) => {
                         setTimeout(() => {
                           setMenu('hidden')
                         }, 200);
-                      }} className={`${pathname.includes('/productos/codigos-promocionales') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Codigos</Link>
+                      }} className={`${pathname.includes('/productos/codigos-promocionales') ? 'bg-neutral-200 dark:bg-neutral-700' : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'} transition-all duration-150 flex gap-2 py-1.5 px-3 rounded-lg text-sm`}>Códigos</Link>
                     </div>
                   </>
                 )

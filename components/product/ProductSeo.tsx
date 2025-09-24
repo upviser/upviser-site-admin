@@ -53,8 +53,8 @@ export const ProductSeo: React.FC<Props> = ({information, setInformation}) => {
         </button>
         <div className={`${rotate === 'rotate-90' ? 'hidden' : 'flex'} flex flex-col gap-4 bg-white p-5 rounded-b-xl dark:bg-neutral-800`}>
           <div className='flex flex-col gap-2'>
-            <p className='text-sm'>Titulo SEO</p>
-            <Input placeholder='Titulo SEO' name='titleSeo' change={inputChange} value={information.titleSeo} />
+            <p className='text-sm'>Título SEO</p>
+            <Input placeholder='Título SEO' name='titleSeo' change={inputChange} value={information.titleSeo} />
           </div>
           <div className='flex flex-col gap-2'>
             <p className='text-sm'>Descripción SEO</p>
@@ -104,7 +104,7 @@ export const ProductSeo: React.FC<Props> = ({information, setInformation}) => {
                 titleSeo !== ''
                   ? (
                     <div className='flex flex-col gap-2'>
-                      <Input placeholder='Titulo generado por la inteligencia artificial' value={titleSeo} change={(e: any) => setTitleSeo(e.target.value)} />
+                      <Input placeholder='Título generado por la inteligencia artificial' value={titleSeo} change={(e: any) => setTitleSeo(e.target.value)} />
                       <Button2 action={(e: any) => {
                         e.preventDefault()
                         setInformation({...information, titleSeo: titleSeo})
@@ -112,7 +112,7 @@ export const ProductSeo: React.FC<Props> = ({information, setInformation}) => {
                         setTimeout(() => {
                           setAiView({ ...aiView, view: 'hidden', opacity: 'opacity-0' })
                         }, 200)
-                      }}>Usar titulo SEO</Button2>
+                      }}>Usar título SEO</Button2>
                     </div>
                   )
                   : ''

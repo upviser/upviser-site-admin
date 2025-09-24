@@ -52,7 +52,7 @@ export default function Page () {
           <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
             <Nav />
             <div className='w-full lg:w-3/4 flex flex-col gap-6'>
-              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Pasarela de pago</h2>
+              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Envíos</h2>
               <div className='flex flex-col gap-4'>
                 <p className='text-sm font-medium'>Selecciona los metodos de envío para tu tienda</p>
                 <div className='flex gap-2'>
@@ -64,20 +64,20 @@ export default function Page () {
                     ? (
                       <div className='flex flex-col gap-2'>
                         <div className='flex flex-col gap-2'>
-                          <p className='text-sm'>Codigo de cobertura</p>
-                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, coberturaKey: e.target.value })} value={chilexpress.coberturaKey} placeholder='Codigo de cobertura' />
+                          <p className='text-sm'>Código de cobertura</p>
+                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, coberturaKey: e.target.value })} value={chilexpress.coberturaKey} placeholder='Código de cobertura' />
                         </div>
                         <div className='flex flex-col gap-2'>
-                          <p className='text-sm'>Codigo de cotizador</p>
-                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, cotizadorKey: e.target.value })} value={chilexpress.cotizadorKey} placeholder='Codigo de cotizador' />
+                          <p className='text-sm'>Código de cotizador</p>
+                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, cotizadorKey: e.target.value })} value={chilexpress.cotizadorKey} placeholder='Código de cotizador' />
                         </div>
                         <div className='flex flex-col gap-2'>
-                          <p className='text-sm'>Codigo de envíos</p>
-                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, enviosKey: e.target.value })} value={chilexpress.enviosKey} placeholder='Codigo de cotizador' />
+                          <p className='text-sm'>Código de envíos</p>
+                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, enviosKey: e.target.value })} value={chilexpress.enviosKey} placeholder='Código de cotizador' />
                         </div>
                         <div className='flex flex-col gap-2'>
-                          <p className='text-sm'>Numero tarjeta cliente</p>
-                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, cardNumber: e.target.value })} value={chilexpress.cardNumber} placeholder='Numero tarjeta cliente' />
+                          <p className='text-sm'>Número tarjeta cliente</p>
+                          <Input change={(e: ChangeEvent<HTMLInputElement>) => setChilexpress({ ...chilexpress, cardNumber: e.target.value })} value={chilexpress.cardNumber} placeholder='Número tarjeta cliente' />
                         </div>
                       </div>
                     )

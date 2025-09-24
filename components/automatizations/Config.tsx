@@ -57,7 +57,7 @@ export const Config: React.FC<Props> = ({ setTempEmail, automatization, tempEmai
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex gap-2 justify-between'>
-              <p className='text-sm mt-auto mb-auto'>Titulo:</p>
+              <p className='text-sm mt-auto mb-auto'>Título:</p>
               <Select change={(e: any) => {
                 e.preventDefault()
                 setTempEmail({...tempEmail, title: tempEmail.title + e.target.value})
@@ -94,7 +94,7 @@ export const Config: React.FC<Props> = ({ setTempEmail, automatization, tempEmai
             <Textarea change={(e: ChangeEvent<HTMLTextAreaElement>) => setTempEmail({ ...tempEmail, paragraph: e.target.value })} value={tempEmail.paragraph} placeholder='Parrafo' />
           </div>
           <div className='flex gap-2'>
-            <p className='text-sm mt-auto mb-auto w-32'>Texto boton:</p>
+            <p className='text-sm mt-auto mb-auto w-32'>Texto botón:</p>
             <Input change={(e: ChangeEvent<HTMLInputElement>) => setTempEmail({ ...tempEmail, buttonText: e.target.value })} value={tempEmail.buttonText} type='text' placeholder='Boton' />
           </div>
           <div className='flex flex-col gap-2 w-full'>
@@ -120,7 +120,7 @@ export const Config: React.FC<Props> = ({ setTempEmail, automatization, tempEmai
           </div>
           <div className='flex gap-4 w-full flex-col lg:flex-row'>
             <div className='flex flex-col gap-2'>
-              <p className='text-sm'>Seleccionar servicio si la url es un Checkout: (Selecciona primero la url de la página del Checkout)</p>
+              <p className='text-sm'>Si la url es una página de pago y el valor es variable debes seleccionar el servicio despues de agregar la url de la página de pago.</p>
               <Select change={(e: any) => setTempEmail({ ...tempEmail, url: e.target.value })}>
                 <option value=''>Selecciona un servicio</option>
                 {

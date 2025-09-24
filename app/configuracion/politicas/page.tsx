@@ -51,7 +51,7 @@ export default function Page () {
   return (
     <>
       <Head>
-        <title>Politicas de la tienda</title>
+        <title>Políticas de la tienda</title>
       </Head>
         <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 w-full lg:w-[calc(100%-250px)] dark:bg-neutral-800 dark:border-neutral-700'>
           <div className='flex m-auto w-full max-w-[1280px]'>
@@ -70,7 +70,7 @@ export default function Page () {
           <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
             <Nav />
             <div className='w-full lg:w-3/4 flex flex-col gap-4'>
-              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Politicas de la tienda</h2>
+              <h2 className='font-medium mt-3 pb-3 border-b dark:border-neutral-700'>Políticas de la tienda</h2>
               <div className='flex flex-col gap-2'>
                 <p className='text-sm'>Terminos y condiciones</p>
                 <Textarea change={handleChange} name='terms' value={politics.terms} placeholder='Términos y Condiciones' config='h-40' />

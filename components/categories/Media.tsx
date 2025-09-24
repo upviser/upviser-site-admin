@@ -62,7 +62,7 @@ export const Media: React.FC<Props> = ({ setCategoryInfo, categoryInfo }) => {
   return (
     <Card title='Elementos multimedia'>
       <div className='flex flex-col gap-2'>
-        <p className='text-sm'>Imagen categoria</p>
+        <p className='text-sm'>Imagen categoría</p>
         <input type='file' onChange={imageChange} name='image' className='text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
         {
           loadingImage
@@ -83,7 +83,7 @@ export const Media: React.FC<Props> = ({ setCategoryInfo, categoryInfo }) => {
         }
       </div>
       <div className='flex flex-col gap-2'>
-        <p className='text-sm'>Banner categoria</p>
+        <p className='text-sm'>Banner categoría</p>
         <input type='file' onChange={imageChange2} name='banner' className='text-sm block w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-main/10 file:text-main hover:file:bg-main/20' />
         {
           loadingImage2

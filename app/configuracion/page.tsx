@@ -245,7 +245,7 @@ export default function Page () {
                 </div>
               </Card>
               <Card title='Ubicación del negocio'>
-                <p className='text-sm text-neutral-700 dark:text-neutral-300'>*Si el sitio web se utilizara para la venta de productos fisicos debe haber al menos una dirección para la devolución en caso de no recepción.</p>
+                <p className='text-sm text-neutral-700 dark:text-neutral-300'>*Si el sitio web se utilizará para la venta de productos físicos debe haber al menos una dirección para la devolución en caso de no recepción de los productos.</p>
                 {
                   storeData.locations?.map((location, index) => (
                     <>
@@ -275,12 +275,12 @@ export default function Page () {
                         }} placeholder='Dirección' />
                       </div>
                        <div className='flex flex-col gap-2'>
-                        <p className='text-sm'>Numero</p>
-                        <Input name='address' value={location.streetNumber} change={(e: any) => {
+                        <p className='text-sm'>Número</p>
+                        <Input name='number' value={location.streetNumber} change={(e: any) => {
                           const beforeLocations = [...storeData.locations!]
                           beforeLocations[index].streetNumber = e.target.value
                           setStoreData({ ...storeData, locations: beforeLocations })
-                        }} placeholder='Dirección' />
+                        }} placeholder='Número' />
                       </div>
                       <div className='flex flex-col gap-2'>
                         <p className='text-sm'>Departamento, local, etc. (opcional)</p>

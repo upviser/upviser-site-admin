@@ -8,7 +8,7 @@ interface Props {
 
 export const Visibility: React.FC<Props> = ({ setContentData, contentData }) => {
   return (
-    <Card title='Visibilidad del producto'>
+    <Card title='Visibilidad del post'>
       <Select change={(e: any) => {
         setContentData({...contentData, state: e.target.value === 'Activo' ? true : false})
       }} value={contentData.state ? 'Activo' : 'En borrador'}>

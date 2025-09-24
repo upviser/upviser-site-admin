@@ -62,7 +62,7 @@ export default function Page () {
                   ? (
                     <>
                       <div className='flex flex-col gap-2'>
-                        <p className='text-sm'>Segmentar por tags</p>
+                        <p className='text-sm'>Filtrar por tags</p>
                         <Select change={(e: any) => setSelectedTag(e.target.value)} config='w-fit'>
                           <option value=''>Seleccionar tag</option>
                           {

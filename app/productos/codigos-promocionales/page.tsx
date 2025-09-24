@@ -49,12 +49,12 @@ export default function Page () {
   return (
     <>
       <Head>
-        <title>Codigos Promocionales</title>
+        <title>Códigos Promocionales</title>
       </Head>
         <Popup popup={popup} setPopup={setPopup}>
-          <p>Estas seguro que deseas eliminar el codigo: <span className='font-semibold'>{codeSelect.name}</span></p>
+          <p>Estas seguro que deseas eliminar el código: <span className='font-semibold'>{codeSelect.name}</span></p>
           <div className='flex gap-6'>
-            <ButtonSubmit action={deleteCode} color='red-500' submitLoading={loading} textButton='Eliminar codigo' config='w-40' />
+            <ButtonSubmit action={deleteCode} color='red-500' submitLoading={loading} textButton='Eliminar código' config='w-40' />
             <button onClick={() => {
               setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
               setTimeout(() => {
@@ -65,8 +65,8 @@ export default function Page () {
         </Popup>
         <div className='p-4 lg:p-6 bg-bg flex flex-col gap-6 min-h-full overflow-y-auto w-full dark:bg-neutral-900'>
           <div className='flex justify-between w-full max-w-[1280px] mx-auto'>
-            <h1 className='text-lg font-medium my-auto'>Codigos promocionales</h1>
-            <ButtonLink href='/productos/codigos-promocionales/nuevo-codigo'>Nuevo codigo</ButtonLink>
+            <h1 className='text-lg font-medium my-auto'>Códigos promocionales</h1>
+            <ButtonLink href='/productos/codigos-promocionales/nuevo-codigo'>Nuevo código</ButtonLink>
           </div>
           <div className='w-full max-w-[1280px] mx-auto'>
             {
@@ -80,7 +80,7 @@ export default function Page () {
                   )
                 : codes.length
                   ? (
-                    <Table th={['Codigo promocional', 'Tipo de descuento', 'Valor del descuento', 'Precio minimo', 'Estado']}>
+                    <Table th={['Código promocional', 'Tipo de descuento', 'Valor del descuento', 'Precio minimo', 'Estado']}>
                       {
                         codes.map((promotionalCode: any, index) => (
                           <tr className={`${index + 1 < codes.length ? 'border-b border-border' : ''} text-sm bg-white transition-colors duration-150 cursor-pointer w-full dark:bg-neutral-800 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-700`} key={promotionalCode._id}>
@@ -120,7 +120,7 @@ export default function Page () {
                       }
                     </Table>
                   )
-                  : <p>No hay codigos promocionales</p>
+                  : <p>No tienes códigos promocionales</p>
             }
           </div>
         </div>

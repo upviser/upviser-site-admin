@@ -77,7 +77,7 @@ export const CategoryProduct: React.FC<Props> = ({information, setInformation, c
           setTimeout(() => {
             setNewCategory({ ...newCategory, view: 'flex', opacity: 'opacity-1' })
           }, 10)
-        }}>Crear nueva categoria</Button2>
+        }}>Crear nueva categoría</Button2>
       </div>
       <div className='flex flex-col gap-4'>
         <p className='text-sm'>Dimensiones</p>

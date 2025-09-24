@@ -16,7 +16,7 @@ export const Segment: React.FC<Props> = ({ setAutomatization, automatization, cl
   return (
     <div className='w-full max-w-[500px] p-5 flex flex-col gap-4 bg-white m-auto rounded-xl border border-black/5 dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
       <div className='flex flex-col gap-2'>
-        <p className='text-sm'>Selecciona cual sera la acción que inicie la automatización</p>
+        <p className='text-sm'>Selecciona cual será la acción que inicie la automatización</p>
         <Select change={(e: any) => setAutomatization({ ...automatization, startType: e.target.value })} value={automatization.startType}>
           <option>Seleccionar acción</option>
           <option>Formulario completado</option>

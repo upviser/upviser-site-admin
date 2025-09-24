@@ -80,7 +80,7 @@ export const Step: React.FC<Props> = ({ email, index, setAutomatization, automat
       }
       <div className='h-[40px] w-[2px] bg-black/5 m-auto dark:bg-neutral-700' />
       <div key={email.affair} className='w-full max-w-[500px] p-5 flex flex-col gap-2 bg-white m-auto rounded-xl border border-black/5 dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
-        <p className='text-sm font-medium'>Enviar correo</p>
+        <p className='text-sm font-medium'>Envíar correo</p>
         <p className='text-sm'>Asunto: {email.affair}</p>
         <Button2 action={(e: any) => editEmail(email, index, e)}>Editar Correo</Button2>
       </div>

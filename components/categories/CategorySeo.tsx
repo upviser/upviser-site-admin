@@ -42,7 +42,7 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
       <Popup popup={popup} setPopup={setPopup}>
         <p className='font-medium'>Generar metadatos con IA</p>
         <div className='flex flex-col gap-2'>
-          <p className='text-sm'>Descripción del producto</p>
+          <p className='text-sm'>Descripción de la categoría</p>
           <Textarea change={(e: any) => setDescription(e.target.value)} value={description} placeholder='Descripción del producto' config='h-20' />
         </div>
         <div className='flex flex-col gap-2'>
@@ -68,7 +68,7 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
           titleSeo !== ''
             ? (
               <div className='flex flex-col gap-2'>
-                <Input placeholder='Titulo generado por la inteligencia artificial' value={titleSeo} change={(e: any) => setTitleSeo(e.target.value)} />
+                <Input placeholder='Título generado por la inteligencia artificial' value={titleSeo} change={(e: any) => setTitleSeo(e.target.value)} />
                 <Button2 action={(e: any) => {
                   e.preventDefault()
                   categoryInfo.descriptionSeo
@@ -77,7 +77,7 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
                   setTimeout(() => {
                     setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
                   }, 200)
-                }}>Usar titulo SEO</Button2>
+                }}>Usar título SEO</Button2>
               </div>
             )
             : ''
@@ -116,8 +116,8 @@ export const CategorySeo: React.FC<Props> = ({setCategoryInfo, categoryInfo}) =>
       </Popup>
       <Card title='Configuración SEO'>
         <div className='flex flex-col gap-2'>
-          <p className='text-sm'>Titulo SEO</p>
-          <Input placeholder='Titulo SEO' name='titleSeo' change={inputChange} value={categoryInfo.titleSeo} />
+          <p className='text-sm'>Título SEO</p>
+          <Input placeholder='Título SEO' name='titleSeo' change={inputChange} value={categoryInfo.titleSeo} />
         </div>
         <div className='flex flex-col gap-2'>
           <p className='text-sm'>Descripción SEO</p>

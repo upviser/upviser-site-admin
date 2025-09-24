@@ -151,7 +151,7 @@ export default function Page() {
             <h1 className='text-lg font-medium my-auto'>Generación de contenido con IA</h1>
           </div>
           <div className="flex p-2 border rounded-xl w-fit bg-white divide-x dark:border-neutral-700 dark:bg-neutral-800 dark:divide-neutral-700">
-            <p className="px-2">Imagenes: {shopLogin?.imagesAI}</p>
+            <p className="px-2">Imágenes: {shopLogin?.imagesAI}</p>
             <p className="px-2">Videos: {shopLogin?.videosAI}</p>
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -162,7 +162,7 @@ export default function Page() {
             <button onClick={() => {
               setType('Generación de imagenes')
               setError('')
-            }} className={`${type === 'Generación de imagenes' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de imagenes</button>
+            }} className={`${type === 'Generación de imagenes' ? 'bg-main text-white border-main' : 'bg-white dark:bg-neutral-700 dark:border-neutral-600'} px-4 py-2 rounded-xl border`}>Generación de imágenes</button>
             <button onClick={() => {
               setType('Generación de videos')
               setError('')
@@ -220,7 +220,7 @@ export default function Page() {
                 : type === 'Generación de imagenes'
                   ? (
                     <>
-                      <h2 className="font-medium">Generación de imagenes con inteligencia artificial</h2>
+                      <h2 className="font-medium">Generación de imágenes con inteligencia artificial</h2>
                       <div className="flex gap-6 flex-col sm:flex-row">
                         <div className="flex flex-col gap-4 w-full sm:w-1/2">
                           <div className="flex flex-col gap-2">
