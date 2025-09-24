@@ -39,6 +39,11 @@ export default function Page () {
       setLoading(true)
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postSelect._id}`)
       router.refresh()
+      setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+      setTimeout(() => {
+        setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+      }, 200)
+      setLoading(false)
     }
   }
 
