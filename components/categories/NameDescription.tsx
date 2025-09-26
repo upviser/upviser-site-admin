@@ -1,6 +1,6 @@
 "use client"
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ICategory } from '../../interfaces'
 import { Button, ButtonAI, Card, Input, Popup, Select, Textarea } from '../ui'
 
@@ -18,6 +18,17 @@ export const NameDescription: React.FC<Props> = ({setCategoryInfo, categoryInfo}
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
   const [newType, setNewType] = useState('')
+  const [shopLogin, setShopLogin] = useState<any>()
+  const [error, setError] = useState('')
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const inputChange = (e: any) => {
     setCategoryInfo({...categoryInfo, [e.target.name]: e.target.value})
@@ -26,9 +37,17 @@ export const NameDescription: React.FC<Props> = ({setCategoryInfo, categoryInfo}
   const generateDescription = async () => {
     if (!descriptionLoading) {
       setDecriptionLoading(true)
+      setError('')
+      if (shopLogin.textAI === 0) {
+        setError('No tienes textos disponibles')
+        setDecriptionLoading(false)
+        return
+      }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/description-category`, { description: description, type: type === 'Personalizado' ? newType : type })
       setDescriptionAi(response.data)
       setDecriptionLoading(false)
+      const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - 1 })
+      setShopLogin(res2.data)
     }
   }
 

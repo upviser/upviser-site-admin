@@ -1,6 +1,6 @@
 import { IProduct } from '@/interfaces'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, ButtonAI, Card, Input, Select, Spinner2, Textarea } from '../ui'
 
 interface Props {
@@ -16,6 +16,17 @@ export const NameDescription: React.FC<Props> = ({information, setInformation}) 
   const [type, setType] = useState('')
   const [description, setDescription] = useState('')
   const [newType, setNewType] = useState('')
+  const [shopLogin, setShopLogin] = useState<any>()
+  const [error, setError] = useState('')
+
+  const getShopLogin = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`)
+    setShopLogin(res.data)
+  }
+
+  useEffect(() => {
+    getShopLogin()
+  }, [])
 
   const inputChange = async (e: any) => {
     setInformation({ ...information, [e.target.name]: e.target.value })
@@ -25,9 +36,17 @@ export const NameDescription: React.FC<Props> = ({information, setInformation}) 
     e.preventDefault()
     if (!descriptionAiLoading) {
       setDescriptionAiLoading(true)
+      setError('')
+      if (shopLogin.textAI === 0) {
+        setError('No tienes textos disponibles')
+        setDescriptionAiLoading(false)
+        return
+      }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/description-product`, { description: description, type: type === 'Personalizado' ? newType : type })
       setDescriptionAi(response.data)
       setDescriptionAiLoading(false)
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { textAI: shopLogin.textAI - 1 })
+      setShopLogin(res.data)
     }
   }
 

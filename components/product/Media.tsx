@@ -164,7 +164,8 @@ export const Media: React.FC<Props> = ({ information, setInformation }) => {
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/image-ia`, { promt: description, image: imageRef, size: size })
             setImageGenerate(res.data)
             setLoading(false)
-            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin?.imagesAI - 1 })
+            const res2 = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/shop-login-admin`, { imagesAI: shopLogin?.imagesAI - 1 })
+            setShopLogin(res2.data)
           }
         }} text={'Generar imagen con IA'} loading={loading} config='min-h-9' />
         {
