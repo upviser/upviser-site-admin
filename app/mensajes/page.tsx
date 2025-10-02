@@ -99,7 +99,7 @@ export default function Page () {
               <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
               <MessagesCategories />
             </div>
-            <div className='w-full flex flex-col gap-2 max-h-[100vh] h-full overflow-y-auto'>
+            <div className='w-full flex flex-col gap-2 max-h-[100vh] min-h-[40vh] h-full overflow-y-auto'>
               {
                 chatIds === undefined
                   ? (
