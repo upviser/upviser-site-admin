@@ -131,7 +131,11 @@ export default function Page () {
                                   getMessages()
                                 }} key={instagram.instagramId} className={`${instagram.instagramId === selectedInstagramId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left border border-border transition-colors duration-150 flex gap-2 justify-between h-20 p-2 rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
-                                    <p>{instagram.instagramId}</p>
+                                    <div className='flex gap-2'>
+                                      <p className='my-auto'>{instagram.instagramId}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === instagram.tag)?.color }}><FaTag className='my-auto' />{instagram.tag}</p>
+                                    </div>
+                                    <p>{instagram.message.slice(0, 40)}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -151,7 +155,7 @@ export default function Page () {
                                   setSelectedInstagramId(instagram.instagramId)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/instagram/${instagram.instagramId}`)
                                   getMessages()
-                                }} key={instagram.instagramId} className={`${instagram.instagramId === selectedInstagramId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border flex gap-2 justify-between h-20 p-2 rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
+                                }} key={instagram.instagramId} className={`${instagram.instagramId === selectedInstagramId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border flex gap-2 justify-between h-24 p-2 rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <div className='flex gap-2'>
                                       <p className='my-auto'>{instagram.instagramId}</p>

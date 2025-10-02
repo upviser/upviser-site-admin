@@ -129,13 +129,13 @@ export default function Page () {
                                   setSelectedMessengerId(messenger.messengerId)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
                                   getMessages()
-                                }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
+                                }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-24 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <div className='flex gap-2'>
                                       <p className='my-auto'>{messenger.messengerId}</p>
                                       <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === messenger.tag)?.color }}><FaTag className='my-auto' />{messenger.tag}</p>
                                     </div>
-                                    <p>{messenger.message}</p>
+                                    <p>{messenger.message.slice(0, 40)}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -155,7 +155,7 @@ export default function Page () {
                                   setSelectedMessengerId(messenger.messengerId)
                                   await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/messenger/${messenger.messengerId}`)
                                   getMessages()
-                                }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-20 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
+                                }} key={messenger.messengerId} className={`${messenger.messengerId === selectedMessengerId ? 'bg-main/50' : 'bg-white dark:bg-neutral-700/60'} w-full text-left transition-colors duration-150 border border-border h-24 p-2 flex gap-2 justify-between rounded-xl hover:bg-neutral-200/40 dark:hover:bg-neutral-700 dark:border-neutral-700`}>
                                   <div className='mt-auto mb-auto'>
                                     <div className='flex gap-2'>
                                       <p className='my-auto'>{messenger.messengerId}</p>
