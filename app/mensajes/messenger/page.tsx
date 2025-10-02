@@ -101,7 +101,7 @@ export default function Page () {
               <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
               <MessagesCategories />
             </div>
-            <div className='w-full flex flex-col gap-2 max-h-[100vh] min-h-[40vh] h-full overflow-y-auto'>
+            <div className='w-full flex flex-col gap-2 max-h-[100vh] h-full overflow-y-auto'>
               {
                 messengerIds === undefined
                   ? (
@@ -135,7 +135,7 @@ export default function Page () {
                                       <p className='my-auto'>{messenger.messengerId}</p>
                                       <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === messenger.tag)?.color }}><FaTag className='my-auto' />{messenger.tag}</p>
                                     </div>
-                                    <p>{messenger.message.slice(0, 40)}</p>
+                                    <p>{messenger.message?.slice(0, 40)}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -161,7 +161,7 @@ export default function Page () {
                                       <p className='my-auto'>{messenger.messengerId}</p>
                                       <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === messenger.tag)?.color }}><FaTag className='my-auto' />{messenger.tag}</p>
                                     </div>
-                                    <p>{messenger.message.slice(0, 40)}</p>
+                                    <p>{messenger.message?.slice(0, 40)}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
@@ -180,7 +180,7 @@ export default function Page () {
             </div>
           </div>
           <div className='w-full lg:w-1/2'>
-            <div className='bg-white flex flex-col justify-between border border-black/5 rounded-xl w-full h-[60vh] md:h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+            <div className='bg-white flex flex-col justify-between border border-black/5 rounded-xl w-full h-[40vh] md:h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
               {
                 selectedMessengerId
                   ? (
