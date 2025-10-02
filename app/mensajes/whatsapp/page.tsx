@@ -398,7 +398,7 @@ export default function Page () {
               <p className='p-2 border rounded-xl bg-white w-fit dark:border-neutral-700 dark:bg-neutral-800'>Agente IA: {shopLogin?.conversationsAI} conversaciones</p>
               <MessagesCategories />
             </div>
-            <div className='w-full flex flex-col gap-2 max-h-[100vh] min-h-[40vh] h-full overflow-y-auto'>
+            <div className='w-full flex flex-col gap-2 max-h-[100vh] h-full overflow-y-auto'>
               {
                 phones === undefined
                   ? (
@@ -477,7 +477,7 @@ export default function Page () {
             </div>
           </div>
           <div className='w-full lg:w-1/2'>
-            <div className='bg-white flex flex-col justify-between border border-black/5 rounded-xl w-full h-[60vh] md:h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
+            <div className='bg-white flex flex-col justify-between border border-black/5 rounded-xl w-full h-[40vh] md:h-full dark:bg-neutral-800 dark:border-neutral-700' style={{ boxShadow: '0px 3px 10px 3px #11111108' }}>
               {
                 selectedPhone
                   ? (
