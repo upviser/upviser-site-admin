@@ -155,9 +155,9 @@ export default function Page () {
                                   <div className='mt-auto mb-auto'>
                                     <div className='flex gap-2'>
                                       <p className='my-auto'>{instagram.instagramId}</p>
-                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === instagram.tag)?.color }}><FaTag className='my-auto' />{instagram.tag}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === instagram.tag)?.color }}><FaTag className='my-auto' />{instagram.tag}</p>
                                     </div>
-                                    <p>{instagram.message}</p>
+                                    <p>{instagram.message.slice(0, 40)}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {

@@ -430,7 +430,7 @@ export default function Page () {
                                   <div className='mt-auto mb-auto'>
                                     <div className='flex gap-2'>
                                       <p className='my-auto'>{phone.phone}</p>
-                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === phone.tag)?.color }}><FaTag className='my-auto' />{phone.tag}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === phone.tag)?.color }}><FaTag className='my-auto' />{phone.tag}</p>
                                     </div>
                                     <p>{phone.message}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
@@ -456,9 +456,9 @@ export default function Page () {
                                   <div className='mt-auto mb-auto'>
                                     <div className='flex gap-2'>
                                       <p className='my-auto'>{phone.phone}</p>
-                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags.find((chatTag: any) => chatTag.tag === phone.tag)?.color }}><FaTag className='my-auto' />{phone.tag}</p>
+                                      <p className={`px-2 py-1 rounded-lg text-white flex gap-2`} style={{ backgroundColor: chatTags?.find((chatTag: any) => chatTag.tag === phone.tag)?.color }}><FaTag className='my-auto' />{phone.tag}</p>
                                     </div>
-                                    <p>{phone.message}</p>
+                                    <p>{phone.message.slice(0, 40)}</p>
                                     <p className='text-sm text-neutral-600 dark:text-neutral-400'>{createdAt.getDay()}/{createdAt.getMonth() + 1} {createdAt.getHours()}:{createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes()}</p>
                                   </div>
                                   {
