@@ -147,7 +147,7 @@ export default function Page() {
             <div className='flex gap-4 flex-wrap'>
               {
                 clientTags.map(tag => (
-                  <div key={tag.tag} className='flex gap-2'>
+                  <div key={ tag.tag } className='flex gap-2'>
                     <input type='checkbox' checked={automatization.automatization[selectStep!].condition?.includes(tag.tag)} onChange={(e: any) => {
                       const isChecked = e.target.checked;
                       const oldAutomatizations = [...automatization.automatization];
