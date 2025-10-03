@@ -4,6 +4,9 @@ export interface IAutomatization {
     startValue: string
     name: string
     automatization: IEmailAutomatization[]
+    text?: string
+    replyPromt?: string
+    message?: string
 }
 
 export interface IEmailAutomatization {
