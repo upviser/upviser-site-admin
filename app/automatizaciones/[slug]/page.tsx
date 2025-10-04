@@ -121,7 +121,7 @@ export default function Page ({ params }: { params: { slug: string } }) {
     if (!loading) {
       setLoading(true)
       console.log(automatization)
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/automatization/${automatization._id}`, { startType: automatization?.startType, startValue: automatization.startValue, name: automatization?.name, date: new Date(), automatization: automatization?.automatization })
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/automatization/${automatization._id}`, { ...automatization, date: new Date() })
       router.push('/automatizaciones')
     }
   }
