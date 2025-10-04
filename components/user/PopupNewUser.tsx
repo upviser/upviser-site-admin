@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
-import { Select, Button, Input } from '../ui'
+import { Select, Button, Input, ButtonRed, Popup, Spinner2 } from '../ui'
 import { IUser } from '@/interfaces'
 
 interface Props {
@@ -11,9 +11,11 @@ interface Props {
     getUsers: any
     shopLogin: any
     setShopLogin: any
+    popup2: any
+    setPopup2: any
 }
 
-export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, getUsers, shopLogin, setShopLogin }) => {
+export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, getUsers, shopLogin, setShopLogin, popup2, setPopup2 }) => {
 
   const [users, setUsers] = useState<IUser[]>([])
   const [loadingUser, setLoadingUser] = useState(false)
@@ -242,7 +244,21 @@ export const PopupNewUser: React.FC<Props> = ({ popup, setPopup, user, setUser, 
                 setLoadingUser(false)
               }, 200)
             }
-          }} loading={loadingUser} config="w-44">{user?._id ? 'Editar' : 'Crear'} usuario</Button>
+          }} loading={loadingUser} config="w-44 min-w-44">{user?._id ? 'Editar' : 'Crear'} usuario</Button>
+          {
+            user?._id && user.type === 'Usuario'
+              ? <ButtonRed action={() => {
+                setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })
+                setTimeout(() => {
+                  setPopup({ ...popup, view: 'hidden', opacity: 'opacity-0' })
+                }, 200)
+                setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+                setTimeout(() => {
+                  setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-1' })
+                }, 10)
+              }}>Eliminar usuario</ButtonRed>
+              : ''
+          }
           <button className="my-auto text-sm" onClick={(e: any) => {
             e.preventDefault()
             setPopup({ ...popup, view: 'flex', opacity: 'opacity-0' })

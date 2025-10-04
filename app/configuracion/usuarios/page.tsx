@@ -1,6 +1,6 @@
 "use client"
 import { Nav } from "@/components/configuration"
-import { Button2, Table } from "@/components/ui"
+import { Button2, ButtonRed, Popup, Spinner2, Table } from "@/components/ui"
 import { PopupNewUser } from "@/components/user"
 import { IUser } from "@/interfaces"
 import axios from "axios"
@@ -12,6 +12,8 @@ export default function Page() {
   const [popup, setPopup] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [user, setUser] = useState<IUser>()
   const [shopLogin, setShopLogin] = useState<any>()
+  const [popup2, setPopup2] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [loading, setLoading] = useState(false)
 
   const getUsers = async () => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/accounts`)
@@ -33,7 +35,30 @@ export default function Page() {
 
   return (
     <>
-    <PopupNewUser popup={popup} setPopup={setPopup} user={user} setUser={setUser} getUsers={getUsers} shopLogin={shopLogin} setShopLogin={setShopLogin} />
+    <Popup popup={popup2} setPopup={setPopup2}>
+      <p>¿Estas seguro que deseas eliminar el usuario {user?.name}?</p>
+      <div className="flex gap-2">
+        <ButtonRed action={async () => {
+          if (!loading) {
+            setLoading(true)
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/shop-login/${user?._id}`)
+            getUsers()
+            setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+            setTimeout(() => {
+              setPopup2({ ...popup2, view: 'hidden', opacity: 'opacity-0' })
+            }, 200)
+            setLoading(false)
+          }
+        }}>{loading ? <Spinner2 /> : 'Eliminar usuario'}</ButtonRed>
+        <button onClick={() => {
+          setPopup2({ ...popup2, view: 'flex', opacity: 'opacity-0' })
+          setTimeout(() => {
+            setPopup2({ ...popup2, view: 'hidden', opacity: 'opacity-0' })
+          }, 200)
+        }}>Cancelar</button>
+      </div>
+    </Popup>
+    <PopupNewUser popup={popup} setPopup={setPopup} user={user} setUser={setUser} getUsers={getUsers} shopLogin={shopLogin} setShopLogin={setShopLogin} popup2={popup2} setPopup2={setPopup2} />
     <div className='p-4 lg:p-6 w-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900 mb-16 h-full'>
       <div className='flex w-full max-w-[1280px] mx-auto gap-6 flex-col lg:flex-row'>
         <Nav />
