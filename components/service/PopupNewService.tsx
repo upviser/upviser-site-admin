@@ -131,7 +131,7 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
                 design?.pages.map(page => <option key={page._id} value={page.slug}>{page.page}</option>)
               }
               {
-                calls?.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>{call.nameMeeting}</option>)
+                calls?.map(call => <option key={call._id} value={`/llamadas/${encodeURIComponent(call.nameMeeting)}`}>{call.nameMeeting}</option>)
               }
             </Select>
           </div>
