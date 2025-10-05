@@ -117,7 +117,7 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
           </div>
           <div className="flex flex-col gap-2">
             <p className='text-sm'>Primer paso</p>
-            <Select change={(e: any) => setNewService({ ...newService, firstStep: { ...newService.firstStep, type: e.target.value } })} value={newService.typePay}>
+            <Select change={(e: any) => setNewService({ ...newService, firstStep: { ...newService.firstStep, type: e.target.value } })} value={newService.firstStep?.type}>
               <option>Pago directo</option>
               <option>Agendar llamada</option>
               <option>Agendar visita a domicilio</option>
@@ -126,7 +126,7 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
           </div>
           <div className="flex flex-col gap-2">
             <p className='text-sm'>Página primer paso</p>
-            <Select change={(e: any) => setNewService({ ...newService, firstStep: { ...newService.firstStep, type: e.target.value } })} value={newService.typePay}>
+            <Select change={(e: any) => setNewService({ ...newService, firstStep: { ...newService.firstStep, slug: e.target.value } })} value={newService.firstStep?.slug}>
               {
                 design?.pages.map(page => <option key={page._id} value={page.slug}>{page.page}</option>)
               }
