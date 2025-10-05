@@ -129,6 +129,7 @@ export default function Page () {
   const [indexCategory, setIndexCategory] = useState(-1)
   const [cartPage, setCartPage] = useState({ bgColor: '#ffffff', textColor: '#111111', detailsColor: '#ffffff' })
   const [checkoutPage, setCheckoutPage] = useState({ bgColor: '#ffffff', textColor: '#111111', detailsColor: '#ffffff' })
+  const [design, setDesign] = useState<Design>()
 
   const getStoreData = async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/store-data`)
@@ -141,6 +142,7 @@ export default function Page () {
 
   const getDesign = async () => {
     const { data }: { data: Design } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    setDesign(data)
     setId(data._id)
     if (data.pages) {
       setPages(data.pages)
@@ -347,7 +349,7 @@ export default function Page () {
       <PopupNewCall popupCall={popupCall} setPopupCall={setPopupCall} titleMeeting={titleMeeting} newCall={newCall} setNewCall={setNewCall} getCalls={getCalls} tags={tags} getTags={getTags} error={error} setError={setError} funnels={funnels} newData={newData} setNewData={setNewData} loadingNewData={loadingNewData} setLoadingNewData={setLoadingNewData} clientData={clientData} getClientData={getClientData} calls={calls} storeData={storeData} />
       <PopupDeleteFunnel popupDeleteFunnel={popupDeleteFunnel} setPopupDeleteFunnel={setPopupDeleteFunnel} selectFunnel={selectFunnel!} setFunnels={setFunnels} getFunnels={getFunnels} />
       <PopupDeletePage popupDeletePage={popupDeletePage} setPopupDeletePage={setPopupDeletePage} getPages={getDesign} page={selectPage} pages={pages} header={header} color={color} popupWeb={popupWeb} />
-      <PopupNewService popupService={popupService} setPopupService={setPopupService} newService={newService} setNewService={setNewService} loadingService={loadingService} setLoadingService={setLoadingService} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={services} setError={setError} />
+      <PopupNewService popupService={popupService} setPopupService={setPopupService} newService={newService} setNewService={setNewService} loadingService={loadingService} setLoadingService={setLoadingService} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={services} setError={setError} calls={calls!} design={design} />
       <PopupDeleteService getServices={getServices} setServices={setServices} popupDeleteService={popupDeleteService} setPopupDeleteService={setPopupDeleteService} selectService={selectService} />
       <div className='flex h-full bg-white dark:bg-neutral-900'>
         <div className='p-4 fixed flex lg:hidden'>

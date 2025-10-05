@@ -10,6 +10,7 @@ export interface IService {
     typePay: string
     price?: string
     anualPrice?: string
+    firstStep?: { type: string, slug: string }
     plans?: IPlans
     tags?: string[]
 

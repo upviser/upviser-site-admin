@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Button2, ButtonSubmit2, Input, Select, Textarea } from '../ui'
 import axios from 'axios'
-import { IService, ITag } from '@/interfaces'
+import { Design, ICall, IService, ITag } from '@/interfaces'
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl'
 import { IoMdClose } from 'react-icons/io'
 import { useSession } from 'next-auth/react'
@@ -23,9 +23,11 @@ interface Props {
     getTags: any
     services: IService[]
     setError: any
+    design?: Design
+    calls?: ICall[]
 }
 
-export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService, newService, setNewService, loadingService, setLoadingService, getServices, error, title, newFunctionality, setNewFunctionality, tags, getTags, services, setError }) => {
+export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService, newService, setNewService, loadingService, setLoadingService, getServices, error, title, newFunctionality, setNewFunctionality, tags, getTags, services, setError, design, calls }) => {
   
   const [newTag, setNewTag] = useState('')
   const [loadingTag, setLoadingTag] = useState(false)
@@ -111,6 +113,26 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
             <Select change={(e: any) => setNewService({ ...newService, typePay: e.target.value })} value={newService.typePay}>
               <option>El precio incluye el IVA</option>
               <option>Hay que agregarle el IVA al precio</option>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className='text-sm'>Primer paso</p>
+            <Select change={(e: any) => setNewService({ ...newService, firstStep: { ...newService.firstStep, type: e.target.value } })} value={newService.typePay}>
+              <option>Pago directo</option>
+              <option>Agendar llamada</option>
+              <option>Agendar visita a domicilio</option>
+              <option>Agendar visita en local</option>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className='text-sm'>Página primer paso</p>
+            <Select change={(e: any) => setNewService({ ...newService, firstStep: { ...newService.firstStep, type: e.target.value } })} value={newService.typePay}>
+              {
+                design?.pages.map(page => <option key={page._id} value={page.slug}>{page.page}</option>)
+              }
+              {
+                calls?.map(call => <option key={call._id} value={`/llamadas/${call.nameMeeting}`}>{call.nameMeeting}</option>)
+              }
             </Select>
           </div>
           {

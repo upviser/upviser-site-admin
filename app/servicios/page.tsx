@@ -1,7 +1,7 @@
 "use client"
 import { PopupNewService } from "@/components/service"
 import { Button, ButtonSubmit, Popup, Spinner, Table } from "@/components/ui"
-import { IService, ITag } from "@/interfaces"
+import { Design, ICall, IService, ITag } from "@/interfaces"
 import axios from "axios"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -20,6 +20,8 @@ export default function Page() {
   const [popupDelete, setPopupDelete] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
   const [loadingDelete, setLoadingDelete] = useState(false)
   const [tags, setTags] = useState<ITag[]>([])
+  const [design, setDesign] = useState<Design>()
+  const [calls, setCalls] = useState<ICall[]>([])
 
   const { data: session } = useSession()
 
@@ -45,6 +47,24 @@ export default function Page() {
     getTags()
   }, [])
 
+  const getDesign = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    setDesign(res.data)
+  }
+
+  useEffect(() => {
+    getDesign()
+  }, [])
+
+  const getCalls = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    setCalls(res.data)
+  }
+
+  useEffect(() => {
+    getCalls()
+  }, [])
+
   return (
     <>
       <Popup popup={popupDelete} setPopup={setPopupDelete}>
@@ -66,7 +86,7 @@ export default function Page() {
           <button className="text-sm">Cancelar</button>
         </div>
       </Popup>
-      <PopupNewService popupService={popup} setPopupService={setPopup} newService={newService} setNewService={setNewService} loadingService={loading} setLoadingService={setLoading} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={services} setError={setError} />
+      <PopupNewService popupService={popup} setPopupService={setPopup} newService={newService} setNewService={setNewService} loadingService={loading} setLoadingService={setLoading} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={services} setError={setError} design={design} calls={calls} />
       <div className='p-4 lg:p-6 w-full min-h-full max-h-full flex flex-col gap-6 overflow-y-auto bg-bg dark:bg-neutral-900'>
         <div className='w-full flex gap-4 justify-between max-w-[1280px] mx-auto'>
           <h1 className='text-lg font-medium my-auto'>Servicios</h1>

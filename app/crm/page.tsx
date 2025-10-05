@@ -1,7 +1,7 @@
 "use client"
 import { PopupNewService } from "@/components/service"
 import { Button, Button2, Button2Secondary, ButtonSecondary2, Select, Spinner } from "@/components/ui"
-import { IClient, IService, ITag } from "@/interfaces"
+import { Design, ICall, IClient, IService, ITag } from "@/interfaces"
 import axios from "axios"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
@@ -22,6 +22,8 @@ export default function Page() {
   const [tags, setTags] = useState<ITag[]>([])
   const [selectClient, setSelectClient] = useState<IClient>()
   const [popupStadistics, setPopupStadistics] = useState({ view: 'hidden', opacity: 'opacity-0', mouse: false })
+  const [design, setDesign] = useState<Design>()
+  const [calls, setCalls] = useState<ICall[]>([])
 
   const { data: session } = useSession()
 
@@ -54,9 +56,27 @@ export default function Page() {
     getTags()
   }, [])
 
+  const getDesign = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/design`)
+    setDesign(res.data)
+  }
+
+  useEffect(() => {
+    getDesign()
+  }, [])
+
+  const getCalls = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/calls`)
+    setCalls(res.data)
+  }
+
+  useEffect(() => {
+    getCalls()
+  }, [])
+
   return (
     <>
-      <PopupNewService popupService={popup} setPopupService={setPopup} newService={newService} setNewService={setNewService} loadingService={loadingService} setLoadingService={setLoadingService} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={[]} setError={setError} />
+      <PopupNewService popupService={popup} setPopupService={setPopup} newService={newService} setNewService={setNewService} loadingService={loadingService} setLoadingService={setLoadingService} getServices={getServices} error={error} title={title} newFunctionality={newFunctionality} setNewFunctionality={setNewFunctionality} tags={tags} getTags={getTags} services={[]} setError={setError} calls={calls} design={design} />
       <div onClick={() => {
         if (!popup.mouse) {
           setPopupStadistics({ ...popupStadistics, view: 'flex', opacity: 'opacity-0' })
