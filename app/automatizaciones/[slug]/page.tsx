@@ -213,22 +213,30 @@ export default function Page ({ params }: { params: { slug: string } }) {
                       <div className='flex flex-col h-fit'>
                         <Segment setAutomatization={setAutomatization} automatization={automatization} clientTags={clientTags} forms={forms} calls={calls} services={services} funnels={funnels} />
                         {
-                          automatization.automatization?.map((email, index) => (
-                            <Step key={email.affair} email={email} index={index} setAutomatization={setAutomatization} automatization={automatization} setTempEmail={setTempEmail} selectStep={selectStep} setSelectStep={setSelectStep} popupCondition={popupCondition} setPopupCondition={setPopupCondition} />
-                          ))
+                          automatization.startType === 'Comentario en post de Instagram'
+                            ? ''
+                            : (
+                              <>
+                                {
+                                  automatization.automatization?.map((email, index) => (
+                                    <Step key={email.affair} email={email} index={index} setAutomatization={setAutomatization} automatization={automatization} setTempEmail={setTempEmail} selectStep={selectStep} setSelectStep={setSelectStep} popupCondition={popupCondition} setPopupCondition={setPopupCondition} />
+                                  ))
+                                }
+                                <Button2 action={(e: any) => {
+                                  e.preventDefault()
+                                  setAutomatization({ ...automatization, automatization: automatization.automatization?.concat({
+                                    affair: '',
+                                    title: 'Lorem ipsum',
+                                    paragraph: 'Lorem ipsum',
+                                    buttonText: 'Lorem ipsum',
+                                    url: '',
+                                    number: 0,
+                                    time: 'Días'
+                                  }) })
+                                }} config='m-auto mt-4'>Agregar paso</Button2>
+                              </>
+                            )
                         }
-                        <Button2 action={(e: any) => {
-                          e.preventDefault()
-                          setAutomatization({ ...automatization, automatization: automatization.automatization?.concat({
-                            affair: '',
-                            title: 'Lorem ipsum',
-                            paragraph: 'Lorem ipsum',
-                            buttonText: 'Lorem ipsum',
-                            url: '',
-                            number: 0,
-                            time: 'Días'
-                          }) })
-                        }} config='m-auto mt-4'>Agregar paso</Button2>
                       </div>
                       {
                         (tempEmail.buttonText !== '' || tempEmail.paragraph !== '' || tempEmail.title !== '')
