@@ -659,7 +659,7 @@ export const Blocks: React.FC<Props> = ({ edit, pages, setPages, design, index, 
                                       />
                                     )
                                 }
-                                <p className='text-center' style={{ color: design.info.textColor }}>{block.description}</p>
+                                <p className='text-center' style={{ color: design.info.textColor }} dangerouslySetInnerHTML={{ __html: block.description ? block.description  : '' }} />
                                 {
                                   block.buttonLink && block.buttonLink !== '' && block.buttonText && block.buttonText !== ''
                                     ? <ButtonDesign style={style} text={block.buttonText} config='m-auto' />
