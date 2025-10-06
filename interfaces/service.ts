@@ -25,6 +25,7 @@ export interface IPlans {
 
 export interface IPlan {
     _id?: string
+    recommended?: boolean
     name: string
     description?: string
     price: string

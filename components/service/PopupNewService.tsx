@@ -187,6 +187,14 @@ export const PopupNewService: React.FC<Props> = ({ popupService, setPopupService
                       <IoMdClose className="text-xl" />
                     </button>
                   </div>
+                  <div className="flex gap-2">
+                    <input type='checkbox' onChange={(e: any) => {
+                      const oldPlans = [...newService.plans!.plans]
+                      oldPlans[index].recommended = e.target.checked
+                      setNewService({ ...newService, plans: { functionalities: newService.plans!.functionalities, plans: oldPlans } })
+                    }} checked={plan.recommended} />
+                    <p className='text-sm'>Plan más recomendado</p>
+                  </div>
                   <div className="flex flex-col gap-2">
                     <p className='text-sm'>Nombre del plan</p>
                     <Input change={(e: any) => {
