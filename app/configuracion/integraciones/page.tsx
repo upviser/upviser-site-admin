@@ -182,6 +182,18 @@ export default function Page () {
     return () => window.removeEventListener('message', handleInstagramMessage);
   }, []);
 
+  useEffect(() => {
+    function handleZoomMessage(event: any) {
+      if (event.origin !== window.location.origin) return;
+      if (event.data.type === 'ZOOM_AUTH_SUCCESS') {
+        getIntegrations();
+      }
+    }
+
+    window.addEventListener('message', handleZoomMessage);
+    return () => window.removeEventListener('message', handleZoomMessage);
+  }, []);
+
   return (
     <>
       <div className='fixed flex bg-white border-t bottom-0 right-0 p-4 w-full lg:w-[calc(100%-250px)] dark:bg-neutral-800 dark:border-neutral-700'>
@@ -249,7 +261,6 @@ export default function Page () {
                   }}>Desconectar Instagram</Button>
                   : !connecting
                     ? <Button action={async () => {
-                      setConnecting(true)
                       window.open(
                         `https://www.instagram.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_IG_APP_ID}&redirect_uri=${process.env.NEXT_PUBLIC_FB_REDIRECT_URI}&response_type=code&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments`,
                         'Conectar Instagram',
@@ -271,13 +282,16 @@ export default function Page () {
               }
               {
                 integrations.zoomToken && integrations.zoomToken !== '' && integrations.zoomAccountId && integrations.zoomAccountId !== ''
-                  ? <Button>Desconectar Zoom</Button>
+                  ? <Button action={async () =>{
+                      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/integrations`, { zoomAccountId: '', zoomToken: '', zoomRefreshToken: '', zoomCreateToken: '', zoomExpiresIn: '' })
+                      getIntegrations()
+                    }}>Desconectar Zoom</Button>
                   : (
                     <Button action={async () => {
                       window.open(
                         `${process.env.NEXT_PUBLIC_API_URL}/auth/zoom`,
                         'Conectar Zoom',
-                        'width=600,height=800,resizable=yes,scrollbars=yes,noopener,noreferrer'
+                        'width=600,height=800,resizable=yes,scrollbars=yes'
                       );
                     }}>Conectar Zoom</Button>
                   )
